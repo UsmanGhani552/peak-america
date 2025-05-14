@@ -28,7 +28,7 @@ function App() {
                         </div>
                         <div className="col-9 main-content">
                             <Routes>
-                                <Route path="/step1" element={<Step1PersonalDetail />} />
+                                <Route path="/" element={<Step1PersonalDetail />} />
                                 <Route path="/step2" element={<Step2FinancialStrategy />} />
                                 <Route path="/step3" element={<Step3NeedsAndhealthCare />} />
                                 <Route path="/step4" element={<Step4WantsAndNeeds />} />
