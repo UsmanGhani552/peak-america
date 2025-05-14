@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Outfit", sans-serif;
+}
+
+/* --------------------------------------------------------------sidebar-------------------------------------------------------------------- */
+.main-content{
+    height: 100vh;
+    overflow-y: auto;
+}
+
+
+.siderbar {
+    background: url('../js/assets/images/sidebar-image.png') no-repeat;
+    background-size: cover;
+    position: sticky;
+    height: 100vh;
+    overflow-y: auto;
+}
+.logo{
+    text-align: center;
+    padding: 3rem;
+}
+
+.siderbar::-webkit-scrollbar,.main-content::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  /* Track */
+  .siderbar::-webkit-scrollbar-track,.main-content::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  .siderbar::-webkit-scrollbar-thumb,.main-content::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  .siderbar::-webkit-scrollbar-thumb:hover,.main-content::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+.sidebar-content {
+    padding: 20px;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 75px;
+}
+
+.step-icon-circle {
+    /* Responsive sizing */
+    width: clamp(40px, 4vw, 50px);
+    height: clamp(40px, 4vw, 50px);
+    
+    /* Fixed visual properties */
+    border: 0.89px solid #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: clamp(13px, 1.5vw, 15px); /* Responsive font */
+    position: relative;
+  }
+
+.step-text h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+}
+
+.step-text h4 {
+    margin: 0;
+    font-size: 16px;
+    color: white;
+}
+
+
+.step-line {
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background-color: white;
+  }
+
+.selected {
+    background-color: #5C80B2;
+}
+
+/* -------------------------------end sidebar------------------------------------------------------------- */
+
+
+
+
+/* --------------------------------------------------------------personal-detail-------------------------------------------------------------------- */
+.col-6{
+    padding: 4px;
+}
+.col{
+    padding: 10px;
+}
+.personal-detail-container{
+    padding: 50px;
+}
+
+.personal-detail-header h2{
+    font-weight: 700;
+    font-size: 40px;
+    text-align: center;
+    color: #101E59;
+    padding: 50px 0px;
+}
+
+.personal-detail-label{
+    padding-top: 100px;
+}
+.personal-detail-label label{
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
+    margin: 0px 0px;
+    height: 78px;
+    display: flex;
+    align-items: center;
+}
+.personal-detail-input-container{
+    
+}
+.personal-detail-input{
+    background-color: #101E59;
+    border-radius: 20px;
+    height: 100%;
+    padding: 20px;
+    text-align: center;
+}
+.personal-detail-input input{
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 22px 0px;
+}
+.personal-detail-input select{
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 22px 0px;
+}
+.personal-detail-input h2{
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+    padding: 30px 0px 10px 0px;
+    color: #FFFFFF;
+}
+.personal-detail-input-container > .col-md-6:nth-child(2) > .personal-detail-input {
+    background-color: #5C80B2;
+}
+
+.form-textarea{
+    /* padding: 0; */
+}
+
+.form-textarea textarea{
+    background-color: #F5F5F5;
+    height: 153px;
+    border-radius: 20px;
+    padding: 10px 20px;
+}
+
+.next-btn{
+    background-color: #101E59;
+    color: #FFFFFF;
+    border-radius: 20px;
+    padding: 15px 75px;
+    text-decoration: none;
+}   
+
+
+.rental-property-btn, .vacation-property-btn{
+    background-color: #2D429B;
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    border: none;
+    width: 100%;
+}
+.personal-detail-input-container .col-md-6:nth-child(2) .rental-property-btn,
+.personal-detail-input-container .col-md-6:nth-child(2) .vacation-property-btn{
+    background-color: #2F5181; /* for spouse side */
+}
+
+.value-radio{
+    padding: 25px 25px !important;
+    border-radius: 10px !important;
+    margin: 26px auto !important;
+    display: block;
+}
+
+.financial-assets-label{
+    padding-top: 46px;
+}
+.financial-assets-input{
+    background-color: #5C80B2;
+}
+
+
+@media only screen and (max-width: 800px) {
+    .logo{
+        padding: 2rem;
+    }
+    .personal-detail-label{
+        display: none !important;
+    }
+    .personal-detail-container {
+        padding: 10px;
+    }
+    .personal-detail-input-container {
+        gap: 10px;
+    }
+    .text-area-label{
+        display: none !important;   
+    }
+    .form-textarea{
+        padding: 12px;
+    }
+  }
