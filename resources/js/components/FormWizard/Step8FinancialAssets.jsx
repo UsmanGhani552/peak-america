@@ -23,16 +23,22 @@ function Step8FinancialAssets() {
                         <label className="form-label" htmlFor="">How long have you been investing?</label>
                         <label className="form-label" htmlFor="">How much time do you spend per week reviewing your investments?</label>
                     </div>
-                    <div className="col-6">
+                    <div className="col-md-6">
                         <form action="" className="container-fluid">
                             <div className="row gx-5 personal-detail-input-container financial-assets">
                                 <div className="col">
                                     <div className="personal-detail-input financial-assets-input">
+                                        <label className="form-label responsive-label" htmlFor="">What is the estimated value of your investable financial assets</label>
                                         <input type="text" className="form-control" placeholder="Enter value" />
+                                        <label className="form-label responsive-label" htmlFor="">When you think of the word "risk" in a financial context, which word best describes your thinking?</label>
                                         <input type="text" className="form-control" placeholder="Enter value" />
+                                        <label className="form-label responsive-label" htmlFor="">When faced with a major financial decision, on which outcome are you most focused?</label>
                                         <input type="text" className="form-control" placeholder="Enter value" />
+                                        <label className="form-label responsive-label" htmlFor="">After you have made a major financial decision, how do you typically feel?</label>
                                         <input type="text" className="form-control" placeholder="Enter value" />
+                                        <label className="form-label responsive-label" htmlFor="">During market declines, you typically sell portions of your riskier assets and invest the money in safer assets.</label>
                                         <input type="text" className="form-control" placeholder="Enter value" />
+                                        <label className="form-label responsive-label" htmlFor="">What percentage of loss over the course of a year would make you AWARE, WORRIED, and ALARMED?</label>
                                         <div className="row">
                                             <div className="col-4 pr-0">
                                                 <input type="number" className="form-control m-0" placeholder="Aware" />
@@ -44,15 +50,19 @@ function Step8FinancialAssets() {
                                                 <input type="number" className="form-control m-0" placeholder="Alarmed" />
                                             </div>
                                         </div>
+                                        <label className="form-label responsive-label" htmlFor="">How much money could you lose in total before needing to adjust your life-style spending?</label>
                                         <input type="text" className="form-control" placeholder="Enter value" />
+                                        <label className="form-label responsive-label" htmlFor="">How well do you understand the market?</label>
                                         <select name="" id="" className="form-select" placeholder="Select Marital Status">
                                             <option value="">Single</option>
                                             <option value="">Married</option>
                                         </select>
+                                        <label className="form-label responsive-label" htmlFor="">How long have you been investing?</label>
                                         <select name="" id="" className="form-select" placeholder="Select Marital Status">
                                             <option value="">Single</option>
                                             <option value="">Married</option>
                                         </select>
+                                        <label className="form-label responsive-label" htmlFor="">How much time do you spend per week reviewing your investments?</label>
                                         <select name="" id="" className="form-select" placeholder="Select Marital Status">
                                             <option value="">Single</option>
                                             <option value="">Married</option>
@@ -64,7 +74,7 @@ function Step8FinancialAssets() {
                     </div>
                 </div>
                 <div className="row">
-                <div className="col-md-2 my-4 text-area-label">
+                    <div className="col-md-2 my-4 text-area-label">
                         <label className="form-label" htmlFor="">Note</label>
                     </div>
                     <div className="col-md-10 my-4 form-textarea">

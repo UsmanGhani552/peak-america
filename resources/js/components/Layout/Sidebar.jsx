@@ -3,13 +3,13 @@ import logo from '../../assets/images/logo.png';
 
 const steps = [
     { step: 1, title: 'Personal Detail', path: '/step1' },
-    { step: 2, title: 'Financial Strategy' , path: '/step2' },
-    { step: 3, title: 'Needs and Healthcare' , path: '/step3' },
-    { step: 4, title: 'Wants and Dreams' , path: '/step4' },
-    { step: 5, title: 'Property & Market' , path: '/step5' },
-    { step: 6, title: 'Value' , path: '/step6' },
-    { step: 7, title: 'Retirement' , path: '/step7' },
-    { step: 8, title: 'Financial Assets' , path: '/step8' },
+    { step: 2, title: 'Financial Strategy', path: '/step2' },
+    { step: 3, title: 'Needs and Healthcare', path: '/step3' },
+    { step: 4, title: 'Wants and Dreams', path: '/step4' },
+    { step: 5, title: 'Property & Market', path: '/step5' },
+    { step: 6, title: 'Value', path: '/step6' },
+    { step: 7, title: 'Retirement', path: '/step7' },
+    { step: 8, title: 'Financial Assets', path: '/step8' },
 ];
 const Sidebar = () => {
     const location = useLocation();
@@ -17,24 +17,25 @@ const Sidebar = () => {
     console.log(currentStep);
     return (
         <>
-                <div className="logo">
-                    <img src={logo} alt="Logo" className="img-fluid" />
-                </div>
+           
+            <div className="logo">
+                <img src={logo} alt="Logo" className="img-fluid" />
+            </div>
 
-                <div className="sidebar-content">
-                    {steps.map((item, index) => (
-                        <div key={index} className="sidebar-item">
-                            <div className={`step-icon-circle ${currentStep >= item.step ? 'selected' : ''}`}>
-                                <i className="fa-solid fa-angles-right"></i>
-                                {item.step <= steps.length - 1 ? <div className="step-line"></div> : ''}
-                            </div>
-                            <div className="step-text">
-                                <h3>Step {item.step}</h3>
-                                <h4>{item.title}</h4>
-                            </div>
+            <div className="sidebar-content">
+                {steps.map((item, index) => (
+                    <div key={index} className="sidebar-item">
+                        <div className={`step-icon-circle ${currentStep >= item.step ? 'selected' : ''}`}>
+                            <i className="fa-solid fa-angles-right"></i>
+                            {item.step <= steps.length - 1 ? <div className="step-line"></div> : ''}
                         </div>
-                    ))}
-                </div>
+                        <div className="step-text">
+                            <h3>Step {item.step}</h3>
+                            <h4>{item.title}</h4>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </>
     )
 };

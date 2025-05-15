@@ -8,7 +8,7 @@
 }
 
 /* --------------------------------------------------------------sidebar-------------------------------------------------------------------- */
-.main-content{
+.main-content {
     height: 100vh;
     overflow-y: auto;
 }
@@ -21,29 +21,78 @@
     height: 100vh;
     overflow-y: auto;
 }
-.logo{
+
+.sidebar-toggle-btn {
+    display: none;
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    width: 50px;
+    text-align: center;
+    padding: 0;
+    cursor: pointer;
+    background-color: #101E59;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.sidebar-toggle-btn span {
+    width: 100%;
+    height: 4px;
+    background: #FFFFFF;
+    display: block;
+    margin-bottom: 5px; /* Space below each span */
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+.sidebar-toggle-btn span:nth-child(1) {
+    transform: none;
+}
+.sidebar-toggle-btn span:nth-child(2) {
+    opacity: 1;
+}
+.sidebar-toggle-btn span:nth-child(3) {
+    transform: none;
+    margin-bottom: 0;
+}
+
+/* X state when active */
+.sidebar-toggle-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 7px);
+}
+.sidebar-toggle-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+.sidebar-toggle-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+.logo {
     text-align: center;
     padding: 3rem;
 }
 
-.siderbar::-webkit-scrollbar,.main-content::-webkit-scrollbar {
+.siderbar::-webkit-scrollbar,
+.main-content::-webkit-scrollbar {
     width: 0px;
-  }
-  
-  /* Track */
-  .siderbar::-webkit-scrollbar-track,.main-content::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-  }
-   
-  /* Handle */
-  .siderbar::-webkit-scrollbar-thumb,.main-content::-webkit-scrollbar-thumb {
-    background: #888; 
-  }
-  
-  /* Handle on hover */
-  .siderbar::-webkit-scrollbar-thumb:hover,.main-content::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-  }
+}
+
+/* Track */
+.siderbar::-webkit-scrollbar-track,
+.main-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.siderbar::-webkit-scrollbar-thumb,
+.main-content::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+.siderbar::-webkit-scrollbar-thumb:hover,
+.main-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
 
 .sidebar-content {
     padding: 20px;
@@ -58,9 +107,9 @@
 
 .step-icon-circle {
     /* Responsive sizing */
-    width: clamp(40px, 4vw, 50px);
-    height: clamp(40px, 4vw, 50px);
-    
+    width: 50px;
+    height: 50px;
+
     /* Fixed visual properties */
     border: 0.89px solid #FFFFFF;
     border-radius: 50%;
@@ -68,9 +117,10 @@
     align-items: center;
     justify-content: center;
     color: #FFFFFF;
-    font-size: clamp(13px, 1.5vw, 15px); /* Responsive font */
+    font-size: clamp(13px, 1.5vw, 15px);
+    /* Responsive font */
     position: relative;
-  }
+}
 
 .step-text h3 {
     margin: 0;
@@ -94,7 +144,7 @@
     width: 1px;
     height: 60px;
     background-color: white;
-  }
+}
 
 .selected {
     background-color: #5C80B2;
@@ -106,17 +156,19 @@
 
 
 /* --------------------------------------------------------------personal-detail-------------------------------------------------------------------- */
-.col-6{
+.col-6 {
     padding: 4px;
 }
-.col{
+
+.col {
     padding: 10px;
 }
-.personal-detail-container{
+
+.personal-detail-container {
     padding: 50px;
 }
 
-.personal-detail-header h2{
+.personal-detail-header h2 {
     font-weight: 700;
     font-size: 40px;
     text-align: center;
@@ -124,10 +176,11 @@
     padding: 50px 0px;
 }
 
-.personal-detail-label{
+.personal-detail-label {
     padding-top: 100px;
 }
-.personal-detail-label label{
+
+.personal-detail-label label {
     font-weight: 400;
     font-size: 16px;
     color: #000000;
@@ -136,58 +189,69 @@
     display: flex;
     align-items: center;
 }
-.personal-detail-input-container{
-    
+
+.responsive-label{
+    display: none;
+    color: #FFFFFF;
+    float: left !important;
 }
-.personal-detail-input{
+
+.personal-detail-input-container {}
+
+.personal-detail-input {
     background-color: #101E59;
     border-radius: 20px;
     height: 100%;
     padding: 20px;
     text-align: center;
 }
-.personal-detail-input input{
+
+.personal-detail-input input {
     padding: 15px 20px;
     border-radius: 10px;
     margin: 22px 0px;
 }
-.personal-detail-input select{
+
+.personal-detail-input select {
     padding: 15px 20px;
     border-radius: 10px;
     margin: 22px 0px;
 }
-.personal-detail-input h2{
+
+.personal-detail-input h2 {
     font-weight: 700;
     font-size: 18px;
     text-align: center;
     padding: 30px 0px 10px 0px;
     color: #FFFFFF;
 }
-.personal-detail-input-container > .col-md-6:nth-child(2) > .personal-detail-input {
+
+.personal-detail-input-container>.col-md-6:nth-child(2)>.personal-detail-input {
     background-color: #5C80B2;
 }
 
-.form-textarea{
+.form-textarea {
     /* padding: 0; */
 }
 
-.form-textarea textarea{
+.form-textarea textarea {
     background-color: #F5F5F5;
     height: 153px;
     border-radius: 20px;
     padding: 10px 20px;
 }
 
-.next-btn{
+.next-btn {
     background-color: #101E59;
     color: #FFFFFF;
     border-radius: 20px;
     padding: 15px 75px;
     text-decoration: none;
-}   
+}
 
 
-.rental-property-btn, .vacation-property-btn{
+.rental-property-btn,
+.vacation-property-btn {
     background-color: #2D429B;
     padding: 15px 20px;
     border-radius: 10px;
@@ -195,43 +259,85 @@
     border: none;
     width: 100%;
 }
+
 .personal-detail-input-container .col-md-6:nth-child(2) .rental-property-btn,
-.personal-detail-input-container .col-md-6:nth-child(2) .vacation-property-btn{
-    background-color: #2F5181; /* for spouse side */
+.personal-detail-input-container .col-md-6:nth-child(2) .vacation-property-btn {
+    background-color: #2F5181;
+    /* for spouse side */
 }
 
-.value-radio{
+.value-radio {
     padding: 25px 25px !important;
     border-radius: 10px !important;
     margin: 26px auto !important;
     display: block;
 }
 
-.financial-assets-label{
+.financial-assets-label {
     padding-top: 46px;
 }
-.financial-assets-input{
+
+.financial-assets-input {
     background-color: #5C80B2;
 }
 
 
-@media only screen and (max-width: 800px) {
-    .logo{
+@media only screen and (max-width: 768px) {
+    .siderbar {
+        position: absolute;
+        left: -25%;
+        width: 300px;
+    }
+
+    .sidebar-toggle-btn {
+        display: block;
+    }
+
+    .sidebar-item {
+        margin-bottom: 46px;
+    }
+
+    .step-line{
+        height: 30px;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+    .logo {
         padding: 2rem;
     }
-    .personal-detail-label{
+
+    .personal-detail-label {
         display: none !important;
     }
+
     .personal-detail-container {
         padding: 10px;
     }
+
+    .personal-detail-container .row .col-md-10 {
+        width: 100%;
+    }
+
+    .responsive-label{
+        display: block;
+    }
+
     .personal-detail-input-container {
         gap: 10px;
     }
-    .text-area-label{
-        display: none !important;   
+
+    .personal-detail-input-container .col-md-6 {
+        width: 100%;
     }
-    .form-textarea{
+
+    .text-area-label {
+        display: none !important;
+    }
+
+    .form-textarea {
         padding: 12px;
     }
-  }
+}

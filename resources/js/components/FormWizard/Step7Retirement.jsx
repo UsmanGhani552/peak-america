@@ -24,7 +24,7 @@ function Step7Retirement() {
                     <div className="col-4">
                         <form action="" className="container-fluid">
                             <div className="row gx-5 personal-detail-input-container">
-                            <div className="col-6">
+                            <div className="col-md-6">
                                     <div className="personal-detail-input">
                                         <h2>Yes</h2>
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault1" />
@@ -37,7 +37,7 @@ function Step7Retirement() {
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault8" />
                                     </div>
                                 </div>
-                                <div className="col-6">
+                                <div className="col-md-6">
                                     <div className="personal-detail-input">
                                         <h2>No</h2>
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault1" />
