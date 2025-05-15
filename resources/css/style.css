@@ -317,10 +317,14 @@
         padding: 10px;
     }
 
-    .personal-detail-container .row .col-md-10 {
+    .personal-detail-container .row .col-md-10,
+    .personal-detail-container .row:nth-child(2) .col-md-6:nth-child(2) 
+    {
         width: 100%;
     }
-
+    .full-width {
+        width: 100%;
+    }   
     .responsive-label{
         display: block;
     }
