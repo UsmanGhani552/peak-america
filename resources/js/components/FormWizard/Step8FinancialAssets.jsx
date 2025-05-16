@@ -54,18 +54,15 @@ function Step8FinancialAssets() {
                                         <input type="text" className="form-control" placeholder="Enter value" />
                                         <label className="form-label responsive-label" htmlFor="">How well do you understand the market?</label>
                                         <select name="" id="" className="form-select" placeholder="Select Marital Status">
-                                            <option value="">Single</option>
-                                            <option value="">Married</option>
+                                            <option value="" selected disabled>Select option</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">How long have you been investing?</label>
                                         <select name="" id="" className="form-select" placeholder="Select Marital Status">
-                                            <option value="">Single</option>
-                                            <option value="">Married</option>
+                                            <option value="" selected disabled>Select option</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">How much time do you spend per week reviewing your investments?</label>
                                         <select name="" id="" className="form-select" placeholder="Select Marital Status">
-                                            <option value="">Single</option>
-                                            <option value="">Married</option>
+                                            <option value="" selected disabled>Select option</option>
                                         </select>
                                     </div>
                                 </div>
