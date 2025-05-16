@@ -161,14 +161,15 @@ function Step2FinancialStrategy() {
                         <div className="col-md-10 my-4 form-textarea">
                             <textarea className="form-control" placeholder="Enter note here..."></textarea>
 
-                            <div className="text-end mt-3">
+                            <div className="d-flex justify-content-between mt-3">
                                 {currentStep === 1 ? (
                                     <>
+                                        <Link className="next-btn" type="submit" to='/step1'>Previous</Link>
                                         <button className="next-btn" type="submit" onClick={goToNextStep}>Next</button>
                                     </>
                                 ) : (
                                     <>
-                                        <button className="next-btn" type="submit pe-3" onClick={goToPreviousStep}>Previous</button>
+                                        <button className="next-btn b-0" type="submit pe-3" onClick={goToPreviousStep}>Previous</button>
                                         <Link className="next-btn" type="submit" to='/step3'>Next</Link>
                                     </>
                                 )}

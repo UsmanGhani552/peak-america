@@ -121,7 +121,8 @@ function Step5PropertyAndMarket() {
                         <div className="col-md-10 my-4 form-textarea">
                             <textarea className="form-control" placeholder="Enter note here..."></textarea>
 
-                            <div className="text-end mt-3">
+                            <div className="d-flex justify-content-between mt-3">
+                            <Link className="next-btn" type="submit" to='/step4'>Previous</Link>
                                 <Link to={'/step6'} className="next-btn" type="submit">Next</Link>
                             </div>
                         </div>

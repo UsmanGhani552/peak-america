@@ -80,8 +80,9 @@ function Step8FinancialAssets() {
                     <div className="col-md-10 my-4 form-textarea">
                         <textarea className="form-control" placeholder="Enter note here..."></textarea>
 
-                        <div className="text-end mt-3">
-                            <Link className="next-btn" type="submit">Next</Link>
+                        <div className="d-flex justify-content-between mt-3">
+                        <Link className="next-btn" type="submit" to='/step7'>Previous</Link>
+                            <Link className="next-btn" type="submit">Submit</Link>
                         </div>
                     </div>
                 </div>

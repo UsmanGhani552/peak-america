@@ -39,11 +39,13 @@ function Step1PersonalDetail() {
                                         <input type="text" className="form-control" placeholder="Enter Email Address" />
                                         <label className="form-label responsive-label" htmlFor="">Marital Status</label>
                                         <select name="" id="" className="form-select" placeholder="Select Marital Status">
+                                            <option value="">Select marital status</option>
                                             <option value="">Single</option>
                                             <option value="">Married</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Kids</label>
                                         <select name="" id="" className="form-select" placeholder="Select Kids">
+                                            <option value="" selected disabled>Select Kids</option>
                                             <option value="">1</option>
                                             <option value="">2</option>
                                             <option value="">3</option>
@@ -51,7 +53,14 @@ function Step1PersonalDetail() {
                                             <option value="">5</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Kids Age</label>
-                                        <input type="date" className="form-control" placeholder="" />
+                                        <select name="" id="" className="form-select" placeholder="Select age">
+                                            <option value="" selected disabled>Select age</option>
+                                            <option value="">1</option>
+                                            <option value="">2</option>
+                                            <option value="">3</option>
+                                            <option value="">4</option>
+                                            <option value="">5</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="col-md-6 child-two">
@@ -69,11 +78,13 @@ function Step1PersonalDetail() {
                                         <input type="text" className="form-control" placeholder="Enter Email Address" />
                                         <label className="form-label responsive-label" htmlFor="">Marital Status</label>
                                         <select name="" id="" className="form-select" placeholder="Select Marital Status">
+                                            <option value="">Select marital status</option>
                                             <option value="">Single</option>
                                             <option value="">Married</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Kids</label>
                                         <select name="" id="" className="form-select" placeholder="Select Kids">
+                                            <option value="" selected disabled>Select Kids</option>
                                             <option value="">1</option>
                                             <option value="">2</option>
                                             <option value="">3</option>
@@ -81,7 +92,14 @@ function Step1PersonalDetail() {
                                             <option value="">5</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Kids Age</label>
-                                        <input type="date" className="form-control" placeholder="" />
+                                        <select name="" id="" className="form-select" placeholder="Select age">
+                                            <option value="" selected disabled>Select age</option>
+                                            <option value="">1</option>
+                                            <option value="">2</option>
+                                            <option value="">3</option>
+                                            <option value="">4</option>
+                                            <option value="">5</option>
+                                        </select>
                                     </div>
                                 </div>
 
