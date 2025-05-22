@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 function Step1PersonalDetail() {
-    const [inputYou, setYouValue] = useState("");
-    const [inputSpouse, setSpouseValue] = useState("");
+    const [inputYou, setYouValue] = useState("1");
+    const [inputSpouse, setSpouseValue] = useState("1");
 
     const handleYouChange = (event) => {
         setYouValue(event.target.value);
@@ -63,9 +63,11 @@ function Step1PersonalDetail() {
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Kids</label>
                                         <input type="number" className="form-control" onChange={handleYouChange} placeholder="Select Kids" />
-                                        <label className="form-label responsive-label" htmlFor="">Kids Age</label>
                                         {youValue.map((index, value) => (
-                                            <input type="number" className="form-control" placeholder="Select Kids Age" />
+                                            <>
+                                                <label className="form-label responsive-label" htmlFor="">Kids Age</label>
+                                                <input type="number" className="form-control" placeholder="Select Kids Age" />
+                                            </>
                                         ))}
                                     </div>
                                 </div>
