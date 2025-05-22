@@ -4,14 +4,55 @@ import { Link } from "react-router-dom";
 function Step2FinancialStrategy() {
 
     const [currentStep, setCurrentStep] = useState(1);
+    const [youInputArray, setYouInputArray] = useState([0, 0, 0, 0, 0, 0, 0]);
+    const handleYouChange = index => (e) => {
+        setYouInputArray(prevArray => {
+            const newArray = [...prevArray];
+            newArray[index] = Number(e.target.value);
+            return newArray;
+        });
+    }
+    const youTotal = youInputArray.reduce((a, b) => a + b, 0);
+    const [spouseInputArray, setSpouseInputArray] = useState([0, 0, 0, 0, 0, 0, 0]);
+    const handleSpouseChange = index => (e) => {
+        setSpouseInputArray(prevArray => {
+            const newArray = [...prevArray];
+            newArray[index] = Number(e.target.value);
+            return newArray;
+        });
+    }
+    const spouseTotal = spouseInputArray.reduce((a, b) => a + b, 0);
+
+    //step 2
+    const [youAssetArray, setYouAssetArray] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
+    const handleAssetYouChange = index => (e) => {
+        setYouAssetArray(prevArray => {
+            const newArray = [...prevArray];
+            newArray[index] = Number(e.target.value);
+            return newArray;
+        });
+    }
+    const youAssetTotal = youAssetArray.reduce((a, b) => a + b, 0);
+    const [spouseAssetArray, setSpouseAssetArray] = useState([0, 0, 0, 0, 0, 0, 0, 0]);
+    const handleAssetSpouseChange = index => (e) => {
+        setSpouseAssetArray(prevArray => {
+            const newArray = [...prevArray];
+            newArray[index] = Number(e.target.value);
+            return newArray;
+        });
+    }
+    const spouseAssetTotal = spouseAssetArray.reduce((a, b) => a + b, 0);
+
     const goToNextStep = (e) => {
         e.preventDefault();
         setCurrentStep(2);
     }
+
     const goToPreviousStep = (e) => {
         e.preventDefault();
         setCurrentStep(1);
     }
+
     return (
         <>
             <div className="personal-detail-container">
@@ -20,10 +61,10 @@ function Step2FinancialStrategy() {
                         <h2>Let’s make sure we understand where you are at today financially so we can design a financial strategy to achieve your goals</h2>
                     </div>
                 </div>
-                <form>
-                    <div className="row ">
-                        <div className="col-md-2 d-flex flex-column personal-detail-label">
-                            {currentStep === 1 ? (
+                {currentStep === 1 ? (
+                    <form>
+                        <div className="row ">
+                            <div className="col-md-2 d-flex flex-column personal-detail-label">
                                 <>
                                     <label className="form-label" htmlFor="">Check/ Savings/ Money Market</label>
                                     <label className="form-label" htmlFor="">CD's</label>
@@ -34,149 +75,160 @@ function Step2FinancialStrategy() {
                                     <label className="form-label" htmlFor="">Qualified Retirement Accounts (401k, 403B, TSA)</label>
                                     <label className="form-label" htmlFor="">Total</label>
                                 </>
-                            ) : (
-                                <>
-                                    <label className="form-label" htmlFor="">Home Value</label>
-                                    <label className="form-label" htmlFor="">Vacation Homes</label>
-                                    <label className="form-label" htmlFor="">Rental Properties</label>
-                                    <label className="form-label" htmlFor="">Lump Sum Pension (Pre-tax)</label>
-                                    <label className="form-label" htmlFor="">Long-Term Care Insurance</label>
-                                    <label className="form-label" htmlFor="">Life Insurance</label>
-                                    <label className="form-label" htmlFor="">Business Interest</label>
-                                    <label className="form-label" htmlFor="">Other Assets</label>
-                                    <label className="form-label" htmlFor="">Total</label>
-                                </>
-                            )}
-                        </div>
-                        <div className="col-md-10">
-                            <div className="row gx-4 personal-detail-input-container">
-                                {currentStep === 1 ? (
+                            </div>
+                            <div className="col-md-10">
+                                <div className="row gx-4 personal-detail-input-container">
                                     <>
                                         <div className="col-md-6">
                                             <div className="personal-detail-input">
                                                 <h2>You</h2>
-                                                <label className="form-label responsive-label" htmlFor="">Check/ Savings/ Money Market</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">CD's</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Stock/ Bonds/ Brokerage</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">IRAs (Pre-tax)</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Roth IRAs</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Other Fund/SMA's</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Qualified Retirement Accounts (401k, 403B, TSA)</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Total</label>
-                                                <input type="text" className="form-control" placeholder="$00.00" />
+                                                <label className="form-label responsive-label">Check/ Savings/ Money Market</label>
+                                                <input type="number" onChange={handleYouChange(0)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">CD's</label>
+                                                <input type="number" onChange={handleYouChange(1)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Stock/ Bonds/ Brokerage</label>
+                                                <input type="number" onChange={handleYouChange(2)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">IRAs (Pre-tax)</label>
+                                                <input type="number" onChange={handleYouChange(3)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Roth IRAs</label>
+                                                <input type="number" onChange={handleYouChange(4)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Other Fund/SMA's</label>
+                                                <input type="number" onChange={handleYouChange(5)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Qualified Retirement Accounts (401k, 403B, TSA)</label>
+                                                <input type="number" onChange={handleYouChange(6)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Total</label>
+                                                <input type="number" className="form-control" value={youTotal} placeholder="$00.00" />
                                             </div>
                                         </div>
 
                                         <div className="col-md-6">
                                             <div className="personal-detail-input">
                                                 <h2>Spouse</h2>
-                                                <label className="form-label responsive-label" htmlFor="">Check/ Savings/ Money Market</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">CD's</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Stock/ Bonds/ Brokerage</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">IRAs (Pre-tax)</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Roth IRAs</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Other Fund/SMA's</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Qualified Retirement Accounts (401k, 403B, TSA)</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Total</label>
-                                                <input type="text" className="form-control" placeholder="$00.00" />
+                                                <label className="form-label responsive-label">Check/ Savings/ Money Market</label>
+                                                <input type="number" onChange={handleSpouseChange(0)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">CD's</label>
+                                                <input type="number" onChange={handleSpouseChange(1)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Stock/ Bonds/ Brokerage</label>
+                                                <input type="number" onChange={handleSpouseChange(2)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">IRAs (Pre-tax)</label>
+                                                <input type="number" onChange={handleSpouseChange(3)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Roth IRAs</label>
+                                                <input type="number" onChange={handleSpouseChange(4)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Other Fund/SMA's</label>
+                                                <input type="number" onChange={handleSpouseChange(5)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Qualified Retirement Accounts (401k, 403B, TSA)</label>
+                                                <input type="number" onChange={handleSpouseChange(6)} className="form-control" placeholder="Enter Amount" />
+                                                <label className="form-label responsive-label">Total</label>
+                                                <input type="number" className="form-control" value={spouseTotal} placeholder="$00.00" />
                                             </div>
                                         </div>
                                     </>
-                                ) : (
-                                    <>
-                                        <div className="col-md-6">
-                                            <div className="personal-detail-input">
-                                                <h2>You</h2>
-                                                <label className="form-label responsive-label" htmlFor="">Home Value</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Vacation Homes</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Rental Properties</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Lump Sum Pension (Pre-tax)</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Long-Term Care Insurance</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Life Insurance</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Business Interest</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Other Assets</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Total</label>
-                                                <input type="text" className="form-control" placeholder="$00.00" />
-                                            </div>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <div className="personal-detail-input">
-                                                <h2>Spouse</h2>
-                                                <label className="form-label responsive-label" htmlFor="">Home Value</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Vacation Homes</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Rental Properties</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Lump Sum Pension (Pre-tax)</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Long-Term Care Insurance</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Life Insurance</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Business Interest</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Other Assets</label>
-                                                <input type="text" className="form-control" placeholder="Enter Amount" />
-                                                <label className="form-label responsive-label" htmlFor="">Total</label>
-                                                <input type="text" className="form-control" placeholder="$00.00" />
-                                            </div>
-                                        </div>
-                                    </>
-                                )}
-
-
+                                </div>
 
                             </div>
-
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-2 my-4 text-area-label">
-                            <label className="form-label" htmlFor="">Note</label>
-                        </div>
-                        <div className="col-md-10 my-4 form-textarea">
-                            <textarea className="form-control" placeholder="Enter note here..."></textarea>
+                        <div className="row">
+                            <div className="col-md-2 my-4 text-area-label">
+                                <label className="form-label" htmlFor="">Note</label>
+                            </div>
+                            <div className="col-md-10 my-4 form-textarea">
+                                <textarea className="form-control" placeholder="Enter note here..."></textarea>
 
-                            <div className="d-flex justify-content-between mt-3">
-                                {currentStep === 1 ? (
-                                    <>
-                                        <Link className="next-btn" type="submit" to='/step1'>Previous</Link>
-                                        <button className="next-btn" type="submit" onClick={goToNextStep}>Next</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button className="next-btn b-0" type="submit pe-3" onClick={goToPreviousStep}>Previous</button>
-                                        <Link className="next-btn" type="submit" to='/step3'>Next</Link>
-                                    </>
-                                )}
+                                <div className="d-flex justify-content-between mt-3">
+                                    <Link className="next-btn" type="submit" to='/step1'>Previous</Link>
+                                    <button className="next-btn" type="submit" onClick={goToNextStep}>Next</button>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                ) : (
+                    <form>
+                        <div className="row ">
+                            <div className="col-md-2 d-flex flex-column personal-detail-label">
+
+                                <label className="form-label" htmlFor="">Home Value</label>
+                                <label className="form-label" htmlFor="">Vacation Homes</label>
+                                <label className="form-label" htmlFor="">Rental Properties</label>
+                                <label className="form-label" htmlFor="">Lump Sum Pension (Pre-tax)</label>
+                                <label className="form-label" htmlFor="">Long-Term Care Insurance</label>
+                                <label className="form-label" htmlFor="">Life Insurance</label>
+                                <label className="form-label" htmlFor="">Business Interest</label>
+                                <label className="form-label" htmlFor="">Other Assets</label>
+                                <label className="form-label" htmlFor="">Total</label>
+                            </div>
+                            <div className="col-md-10">
+                                <div className="row gx-4 personal-detail-input-container">
+
+                                    <div className="col-md-6">
+                                        <div className="personal-detail-input">
+                                            <h2>You</h2>
+                                            <label className="form-label responsive-label">Home Value</label>
+                                            <input type="number" onChange={handleAssetYouChange(0)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Vacation Homes</label>
+                                            <input type="number" onChange={handleAssetYouChange(1)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Rental Properties</label>
+                                            <input type="number" onChange={handleAssetYouChange(2)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Lump Sum Pension (Pre-tax)</label>
+                                            <input type="number" onChange={handleAssetYouChange(3)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Long-Term Care Insurance</label>
+                                            <input type="number" onChange={handleAssetYouChange(4)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Life Insurance</label>
+                                            <input type="number" onChange={handleAssetYouChange(5)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Business Interest</label>
+                                            <input type="number" onChange={handleAssetYouChange(6)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Other Assets</label>
+                                            <input type="number" onChange={handleAssetYouChange(7)} value={youAssetArray[7] === 0 ? "" : youAssetArray[7]} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Total</label>
+                                            <input type="number" className="form-control" readOnly value={youAssetTotal} placeholder="$00.00" />
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <div className="personal-detail-input">
+                                            <h2>Spouse</h2>
+                                            <label className="form-label responsive-label">Home Value</label>
+                                            <input type="number" onChange={handleAssetSpouseChange(0)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Vacation Homes</label>
+                                            <input type="number" onChange={handleAssetSpouseChange(1)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Rental Properties</label>
+                                            <input type="number" onChange={handleAssetSpouseChange(2)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Lump Sum Pension (Pre-tax)</label>
+                                            <input type="number" onChange={handleAssetSpouseChange(3)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Long-Term Care Insurance</label>
+                                            <input type="number" onChange={handleAssetSpouseChange(4)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Life Insurance</label>
+                                            <input type="number" onChange={handleAssetSpouseChange(5)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Business Interest</label>
+                                            <input type="number" onChange={handleAssetSpouseChange(6)} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Other Assets</label>
+                                            <input type="number" onChange={handleAssetSpouseChange(7)} value={spouseAssetArray[7] === 0 ? "" : spouseAssetArray[7]} className="form-control" placeholder="Enter Amount" />
+                                            <label className="form-label responsive-label">Total</label>
+                                            <input type="number" className="form-control" readOnly value={spouseAssetTotal} placeholder="$00.00" />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-2 my-4 text-area-label">
+                                <label className="form-label" htmlFor="">Note</label>
+                            </div>
+                            <div className="col-md-10 my-4 form-textarea">
+                                <textarea className="form-control" placeholder="Enter note here..."></textarea>
+
+                                <div className="d-flex justify-content-between mt-3">
+
+                                    <button className="next-btn b-0" type="submit pe-3" onClick={goToPreviousStep}>Previous</button>
+                                    <Link className="next-btn" type="submit" to='/step3'>Next</Link>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                )}
             </div>
         </>
     )

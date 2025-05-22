@@ -41,16 +41,20 @@
     height: 4px;
     background: #FFFFFF;
     display: block;
-    margin-bottom: 5px; /* Space below each span */
+    margin-bottom: 5px;
+    /* Space below each span */
     border-radius: 10px;
     transition: all 0.3s ease;
 }
+
 .sidebar-toggle-btn span:nth-child(1) {
     transform: none;
 }
+
 .sidebar-toggle-btn span:nth-child(2) {
     opacity: 1;
 }
+
 .sidebar-toggle-btn span:nth-child(3) {
     transform: none;
     margin-bottom: 0;
@@ -60,12 +64,15 @@
 .sidebar-toggle-btn.active span:nth-child(1) {
     transform: rotate(45deg) translate(8px, 7px);
 }
+
 .sidebar-toggle-btn.active span:nth-child(2) {
     opacity: 0;
 }
+
 .sidebar-toggle-btn.active span:nth-child(3) {
     transform: rotate(-45deg) translate(5px, -5px);
 }
+
 .logo {
     text-align: center;
     padding: 3rem;
@@ -190,7 +197,7 @@
     align-items: center;
 }
 
-.responsive-label{
+.responsive-label {
     display: none;
     color: #FFFFFF;
     float: left !important;
@@ -282,6 +289,13 @@
     background-color: #5C80B2;
 }
 
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: red;
+}
+
 
 @media only screen and (max-width: 768px) {
     .siderbar {
@@ -298,7 +312,7 @@
         margin-bottom: 46px;
     }
 
-    .step-line{
+    .step-line {
         height: 30px;
     }
 
@@ -310,7 +324,32 @@
         padding: 2rem;
     }
 
+    .responsive-radio-sec {
+        display: flex !important;
+        align-items: center;
+        gap: 20px;
+        height: 20px;
+    }
+    .responsive-radio-sec input{
+        width: 24px;
+        height: 24px;
+    }
+
     .personal-detail-label {
+        display: none !important;
+    }
+
+    .personal-detail-label label{
+        font-size: 14px;
+    }
+
+    .true-false-label {
+        display: block !important;
+        width: 100%;
+        padding-top: 0px;
+    }
+
+    .true-false-input {
         display: none !important;
     }
 
@@ -319,14 +358,15 @@
     }
 
     .personal-detail-container .row .col-md-10,
-    .personal-detail-container .row:nth-child(2) .col-md-6:nth-child(2) 
-    {
+    .personal-detail-container .row:nth-child(2) .col-md-6:nth-child(2) {
         width: 100%;
     }
+
     .full-width {
         width: 100%;
-    }   
-    .responsive-label{
+    }
+
+    .responsive-label {
         display: block;
     }
 
@@ -344,5 +384,11 @@
 
     .form-textarea {
         padding: 12px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .next-btn{
+        padding: 10px 35px;
     }
 }

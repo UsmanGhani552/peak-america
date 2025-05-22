@@ -23,12 +23,18 @@ function Step4WantsAndNeeds() {
                                         <h2>You</h2>
                                         <label className="form-label responsive-label" htmlFor="">Estimated Monthly Expenses</label>
                                         <select name="" id="" className="form-select">
-                                            <option value="" disabled selected>Select Expense</option>
+                                        <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Estimated Annual Expenses</label>
                                         <select name="" id="" className="form-select">
-                                            <option value="" disabled selected>Select Expense</option>
+                                        <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Total</label>
@@ -41,12 +47,18 @@ function Step4WantsAndNeeds() {
                                         <h2>Spouse</h2>
                                         <label className="form-label responsive-label" htmlFor="">Estimated Monthly Expenses</label>
                                         <select name="" id="" className="form-select">
-                                            <option value="" disabled selected>Select Expense</option>
+                                        <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Estimated Annual Expenses</label>
                                         <select name="" id="" className="form-select">
-                                            <option value="" disabled selected>Select Expense</option>
+                                        <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Total</label>
@@ -77,18 +89,30 @@ function Step4WantsAndNeeds() {
                                         <label className="form-label responsive-label" htmlFor="">Incremental Monthly Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Incremental Annual Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">One Time Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Maintain the Same Lifestyle</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Total</label>
                                         <input type="text" className="form-control" placeholder="$00.00" />
@@ -100,18 +124,30 @@ function Step4WantsAndNeeds() {
                                         <label className="form-label responsive-label" htmlFor="">Incremental Monthly Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Incremental Annual Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">One Time Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Maintain the Same Lifestyle</label>
                                         <select name="" id="" className="form-select">
-                                            <option value="" disabled selected>Select Expense</option>
+                                        <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Total</label>
                                         <input type="text" className="form-control" placeholder="$00.00" />

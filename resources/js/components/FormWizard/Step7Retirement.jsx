@@ -12,7 +12,6 @@ function Step7Retirement() {
                 </div>
                 <div className="row ">
                     <div className="col-8 d-flex flex-column personal-detail-label">
-                        <label className="form-label" htmlFor="">What is Your Biggest Concern in either preparing for or in Retirement?</label>
                         <label className="form-label" htmlFor="">Being Able to Fully Retire Without Working?</label>
                         <label className="form-label" htmlFor="">Generating Income Without Risking Principle?</label>
                         <label className="form-label" htmlFor="">Outliving My Money?</label>
@@ -27,7 +26,6 @@ function Step7Retirement() {
                             <div className="col-md-6">
                                     <div className="personal-detail-input">
                                         <h2>Yes</h2>
-                                        <input type="radio" class="form-check-input value-radio" name="RadioDefault1" />
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault2" />
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault3" />
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault4" />
@@ -40,7 +38,6 @@ function Step7Retirement() {
                                 <div className="col-md-6">
                                     <div className="personal-detail-input">
                                         <h2>No</h2>
-                                        <input type="radio" class="form-check-input value-radio" name="RadioDefault1" />
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault2" />
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault3" />
                                         <input type="radio" class="form-check-input value-radio" name="RadioDefault4" />

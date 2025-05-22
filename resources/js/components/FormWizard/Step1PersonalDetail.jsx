@@ -1,6 +1,24 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 function Step1PersonalDetail() {
+    const [inputYou, setYouValue] = useState("");
+    const [inputSpouse, setSpouseValue] = useState("");
+
+    const handleYouChange = (event) => {
+        setYouValue(event.target.value);
+    }
+    const handleSpouseChange = (event) => {
+        setSpouseValue(event.target.value);
+    }
+    let youValue = [];
+    for (let i = 0; i < inputYou; i++) {
+        youValue.push(i);
+    }
+    let spouseValue = [];
+    for (let i = 0; i < inputSpouse; i++) {
+        spouseValue.push(i);
+    }
 
     return (
         <>
@@ -34,7 +52,7 @@ function Step1PersonalDetail() {
                                         <label className="form-label responsive-label" htmlFor="">Age</label>
                                         <input type="date" className="form-control" placeholder="Age" />
                                         <label className="form-label responsive-label" htmlFor="">Cell Phone</label>
-                                        <input type="text" className="form-control" placeholder="000-000-000" />
+                                        <input type="number" className="form-control" placeholder="000-000-000" />
                                         <label className="form-label responsive-label" htmlFor="">Email</label>
                                         <input type="text" className="form-control" placeholder="Enter Email Address" />
                                         <label className="form-label responsive-label" htmlFor="">Marital Status</label>
@@ -44,23 +62,11 @@ function Step1PersonalDetail() {
                                             <option value="">Married</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Kids</label>
-                                        <select name="" id="" className="form-select" placeholder="Select Kids">
-                                            <option value="" selected disabled>Select Kids</option>
-                                            <option value="">1</option>
-                                            <option value="">2</option>
-                                            <option value="">3</option>
-                                            <option value="">4</option>
-                                            <option value="">5</option>
-                                        </select>
+                                        <input type="number" className="form-control" onChange={handleYouChange} placeholder="Select Kids" />
                                         <label className="form-label responsive-label" htmlFor="">Kids Age</label>
-                                        <select name="" id="" className="form-select" placeholder="Select age">
-                                            <option value="" selected disabled>Select age</option>
-                                            <option value="">1</option>
-                                            <option value="">2</option>
-                                            <option value="">3</option>
-                                            <option value="">4</option>
-                                            <option value="">5</option>
-                                        </select>
+                                        {youValue.map((index, value) => (
+                                            <input type="number" className="form-control" placeholder="Select Kids Age" />
+                                        ))}
                                     </div>
                                 </div>
                                 <div className="col-md-6 child-two">
@@ -83,26 +89,13 @@ function Step1PersonalDetail() {
                                             <option value="">Married</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Kids</label>
-                                        <select name="" id="" className="form-select" placeholder="Select Kids">
-                                            <option value="" selected disabled>Select Kids</option>
-                                            <option value="">1</option>
-                                            <option value="">2</option>
-                                            <option value="">3</option>
-                                            <option value="">4</option>
-                                            <option value="">5</option>
-                                        </select>
+                                        <input type="number" className="form-control" onChange={handleSpouseChange} placeholder="Select Kids" />
                                         <label className="form-label responsive-label" htmlFor="">Kids Age</label>
-                                        <select name="" id="" className="form-select" placeholder="Select age">
-                                            <option value="" selected disabled>Select age</option>
-                                            <option value="">1</option>
-                                            <option value="">2</option>
-                                            <option value="">3</option>
-                                            <option value="">4</option>
-                                            <option value="">5</option>
-                                        </select>
+                                        {spouseValue.map((index, value) => (
+                                            <input type="number" className="form-control" placeholder="Select Kids Age" />
+                                        ))}
                                     </div>
                                 </div>
-
                             </div>
 
                         </div>

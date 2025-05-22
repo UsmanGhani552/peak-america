@@ -26,12 +26,18 @@ function Step3NeedsAndhealthCare() {
                                         <label className="form-label responsive-label" htmlFor="">Estimated Monthly Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Enter Amount</label>
                                         <input type="text" className="form-control" placeholder="Enter Amount" />
                                         <label className="form-label responsive-label" htmlFor="">Estimated Annual Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Total</label>
                                         <input type="text" className="form-control" placeholder="$00.00" />
@@ -44,12 +50,18 @@ function Step3NeedsAndhealthCare() {
                                         <label className="form-label responsive-label" htmlFor="">Estimated Monthly Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Enter Amount</label>
                                         <input type="text" className="form-control" placeholder="Enter Amount" />
                                         <label className="form-label responsive-label" htmlFor="">Estimated Annual Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Total</label>
                                         <input type="text" className="form-control" placeholder="$00.00" />
@@ -78,10 +90,16 @@ function Step3NeedsAndhealthCare() {
                                         <label className="form-label responsive-label" htmlFor="">Estimated Monthly Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Estimated Annual Expenses</label>
                                         <select name="" id="" className="form-select">
-                                            <option value="" disabled selected >Select Expense</option>
+                                            <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Total</label>
                                         <input type="text" className="form-control" placeholder="$00.00" />
@@ -94,10 +112,16 @@ function Step3NeedsAndhealthCare() {
                                         <label className="form-label responsive-label" htmlFor="">Estimated Monthly Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Estimated Annual Expenses</label>
                                         <select name="" id="" className="form-select">
                                             <option value="" disabled selected>Select Expense</option>
+                                            <option value="">Groceries</option>
+                                            <option value="">Bill</option>
+                                            <option value="">Fuel</option>
                                         </select>
                                         <label className="form-label responsive-label" htmlFor="">Total</label>
                                         <input type="text" className="form-control" placeholder="$00.00" />
@@ -114,7 +138,7 @@ function Step3NeedsAndhealthCare() {
                             <textarea className="form-control" placeholder="Enter note here..."></textarea>
 
                             <div className="d-flex justify-content-between mt-3">
-                            <Link className="next-btn" type="submit" to='/step2'>Previous</Link>
+                                <Link className="next-btn" type="submit" to='/step2'>Previous</Link>
                                 <Link to={'/step4'} className="next-btn" type="submit">Next</Link>
                             </div>
                         </div>
