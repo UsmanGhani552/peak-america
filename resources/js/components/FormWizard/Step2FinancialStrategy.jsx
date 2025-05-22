@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 function Step2FinancialStrategy() {
-
+    const [step1Note, setStep1Note] = useState('');
+    const [step2Note, setStep2Note] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
     const [youInputArray, setYouInputArray] = useState([0, 0, 0, 0, 0, 0, 0]);
     const handleYouChange = index => (e) => {
@@ -132,7 +133,7 @@ function Step2FinancialStrategy() {
                                 <label className="form-label" htmlFor="">Note</label>
                             </div>
                             <div className="col-md-10 my-4 form-textarea">
-                                <textarea className="form-control" placeholder="Enter note here..."></textarea>
+                                <textarea className="form-control" placeholder="Enter note here..." value={step1Note} onChange={(e) => setStep1Note(e.target.value)}></textarea>
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <Link className="next-btn" type="submit" to='/step1'>Previous</Link>
@@ -218,7 +219,7 @@ function Step2FinancialStrategy() {
                                 <label className="form-label" htmlFor="">Note</label>
                             </div>
                             <div className="col-md-10 my-4 form-textarea">
-                                <textarea className="form-control" placeholder="Enter note here..."></textarea>
+                                <textarea className="form-control" placeholder="Enter note here..." value={step2Note} onChange={(e) => setStep2Note(e.target.value)}></textarea>
 
                                 <div className="d-flex justify-content-between mt-3">
 
