@@ -289,8 +289,8 @@ function Step4PropertyAndMarket() {
                     <div className="col-md-10 my-4 form-textarea">
                         <textarea id="notes" className="form-control" placeholder="Enter note here..."></textarea>
                         <div className="d-flex justify-content-between mt-3">
-                            <Link className="next-btn" to="/step4">Previous</Link>
-                            <Link className="next-btn" to="/step6">Next</Link>
+                            <Link className="next-btn" to="/step3">Previous</Link>
+                            <Link className="next-btn" to="/step5">Next</Link>
                         </div>
                     </div>
                 </div>
