@@ -73,7 +73,7 @@ function Step3NeedsAndhealthCare() {
                     </div>
                     <div className="row">
                         <div className="col personal-detail-header">
-                            <h2> Your Healthcare Needs</h2>
+                            <h2>Your Wants (Discretionary)</h2>
                         </div>
                     </div>
                     <div className="row ">
