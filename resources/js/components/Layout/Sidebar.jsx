@@ -5,11 +5,11 @@ const steps = [
     { step: 1, title: 'Personal Detail', path: '/step1' },
     { step: 2, title: 'Financial Strategy', path: '/step2' },
     { step: 3, title: 'Needs and Healthcare', path: '/step3' },
-    { step: 4, title: 'Wants and Dreams', path: '/step4' },
-    { step: 5, title: 'Property & Market', path: '/step5' },
-    { step: 6, title: 'Value', path: '/step6' },
-    { step: 7, title: 'Retirement', path: '/step7' },
-    { step: 8, title: 'Financial Assets', path: '/step8' },
+    // { step: 4, title: 'Wants and Dreams', path: '/step4' },
+    { step: 4, title: 'Property & Market', path: '/step4' },
+    { step: 5, title: 'Value', path: '/step5' },
+    { step: 6, title: 'Retirement', path: '/step6' },
+    // { step: 7, title: 'Financial Assets', path: '/step7' },
 ];
 const Sidebar = () => {
     const location = useLocation();

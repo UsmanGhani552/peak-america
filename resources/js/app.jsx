@@ -10,11 +10,11 @@ import { BrowserRouter, Navigate, replace, Route, Router, Routes } from 'react-r
 import Step1PersonalDetail from './components/FormWizard/Step1PersonalDetail';
 import Step2FinancialStrategy from './components/FormWizard/Step2FinancialStrategy';
 import Step3NeedsAndhealthCare from './components/FormWizard/Step3NeedsAndHealthCare';
-import Step4WantsAndNeeds from './components/FormWizard/Step4WantsAndDreams';
-import Step5PropertyAndMarket from './components/FormWizard/Step5PropertyAndMarket';
-import Step6Value from './components/FormWizard/Step6Value';
-import Step7Retirement from './components/FormWizard/Step7Retirement';
-import Step8FinancialAssets from './components/FormWizard/Step8FinancialAssets';
+import Step4WantsAndNeeds from './components/FormWizard/xStep4WantsAndDreams';
+import Step4PropertyAndMarket from './components/FormWizard/Step4PropertyAndMarket';
+import Step5Value from './components/FormWizard/Step5Value';
+import Step6Retirement from './components/FormWizard/Step6Retirement';
+import Step7FinancialAssets from './components/FormWizard/xStep7FinancialAssets';
 
 
 function App() {
@@ -42,11 +42,11 @@ function App() {
                             <Route path="/step1" element={<Step1PersonalDetail />} />
                             <Route path="/step2" element={<Step2FinancialStrategy />} />
                             <Route path="/step3" element={<Step3NeedsAndhealthCare />} />
-                            <Route path="/step4" element={<Step4WantsAndNeeds />} />
-                            <Route path="/step5" element={<Step5PropertyAndMarket />} />
-                            <Route path="/step6" element={<Step6Value />} />
-                            <Route path="/step7" element={<Step7Retirement />} />
-                            <Route path="/step8" element={<Step8FinancialAssets />} />
+                            {/* <Route path="/step4" element={<Step4WantsAndNeeds />} /> */}
+                            <Route path="/step4" element={<Step4PropertyAndMarket />} />
+                            <Route path="/step5" element={<Step5Value />} />
+                            <Route path="/step6" element={<Step6Retirement />} />
+                            {/* <Route path="/step7" element={<Step7FinancialAssets />} /> */}
                         </Routes>
                     </div>
                 </div>

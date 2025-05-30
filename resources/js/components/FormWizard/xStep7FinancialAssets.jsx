@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function Step8FinancialAssets() {
+function Step7FinancialAssets() {
 
     return (
         <>
@@ -78,8 +78,8 @@ function Step8FinancialAssets() {
                         <textarea className="form-control" placeholder="Enter note here..."></textarea>
 
                         <div className="d-flex justify-content-between mt-3">
-                        <Link className="next-btn" type="submit" to='/step7'>Previous</Link>
-                            <Link className="next-btn" type="submit">Submit</Link>
+                        <Link className="next-btn" type="submit" to='/step6'>Previous</Link>
+                        <Link className="next-btn" type="submit">Submit</Link>
                         </div>
                     </div>
                 </div>
@@ -88,4 +88,4 @@ function Step8FinancialAssets() {
     )
 }
 
-export default Step8FinancialAssets;
+export default Step7FinancialAssets;
