@@ -19,11 +19,11 @@ class FormStep1Handler implements FormStepHandlerInterface
         $data = $request->validate([
             'person' => 'required|array|min:1|max:2',
             'person.*.is_spouse' => 'required|boolean',
-            'person.*.first_name' => 'nullable|string|max:255',
-            'person.*.last_name' => 'nullable|string|max:255',
+            'person.*.first_name' => 'required|string|max:255',
+            'person.*.last_name' => 'required|string|max:255',
             'person.*.age' => 'nullable|integer|min:0',
-            'person.*.cell_phone' => 'nullable|string|max:15',
-            'person.*.email' => 'nullable|email|max:255',
+            'person.*.cell_phone' => 'required|string|max:15',
+            'person.*.email' => 'required|email|max:255',
             'person.*.marital_status' => 'nullable|string|max:50',
             'person.*.kids' => 'nullable|integer',
             'person.*.kids_age' => 'nullable|array',
@@ -39,13 +39,14 @@ class FormStep1Handler implements FormStepHandlerInterface
                 $personsInDB = MultiStepForm_1::updateOrCreate([
                     'guest_id' => $guest_id,
                     'is_spouse' => $person['is_spouse'],
+                ], [
                     'first_name' => $person['first_name'],
                     'last_name' => $person['last_name'],
                     'age' => $person['age'],
                     'cell_phone' => $person['cell_phone'],
                     'email' => $person['email'],
                     'marital_status' => $person['marital_status'],
-                    'notes' => $person['notes'],
+                    'notes' => $person['note'],
                 ]);
 
                 if ($personsInDB->kids && $personsInDB->kids->isNotEmpty()) {

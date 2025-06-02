@@ -25,7 +25,8 @@ class MultiStepFormController extends Controller
             2.1 => new FormSteps\FormStep2_1Handler(),
             2.2 => new FormSteps\FormStep2_2Handler(),
             4 => new FormSteps\FormStep4Handler(),
-            // 1 => new FormSteps\FormStep2Handler(),
+            5 => new FormSteps\FormStep5Handler(),
+            6 => new FormSteps\FormStep6Handler(),
             default => throw new \InvalidArgumentException('No step '.$step.' found.'),
         };
     }

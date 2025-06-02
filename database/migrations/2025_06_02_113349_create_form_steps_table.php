@@ -11,21 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('multi_step_form_5s', function (Blueprint $table) {
+        Schema::create('multi_step_forms', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-
-            $table->foreignId('guest_id')->constrained()->onDelete('cascade');
-            $table->boolean('is_spouse')->default(false);
-            $table->text('note')->nullable();
+            $table->float('step')->default(1);
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('multi_step_form_5s');
+        Schema::dropIfExists('multi_step_forms');
     }
 };

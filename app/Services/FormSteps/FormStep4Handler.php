@@ -19,7 +19,7 @@ class FormStep4Handler implements FormStepHandlerInterface
         $data = $request->validate([
             'person' => 'required|array|min:1|max:2',
             'person.*.is_spouse' => 'required|boolean',
-            'person.*.notes' => 'nullable|string',
+            'person.*.note' => 'nullable|string',
             'person.*.properties' => 'nullable|array',
             'person.*.properties.*.type' => 'nullable|string',
             'person.*.properties.*.address' => 'nullable|string',
@@ -34,7 +34,8 @@ class FormStep4Handler implements FormStepHandlerInterface
                 $form = MultiStepForm_4::updateOrCreate([
                     'guest_id' => $guest_id,
                     'is_spouse' => $person['is_spouse'],
-                    'notes' => $person['notes'] ?? null,
+                ], [
+                    'note' => $person['note'] ?? null,
                 ]);
 
                 if ($form->property && $form->property->isNotEmpty()) {

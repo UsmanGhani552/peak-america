@@ -49,6 +49,7 @@ class FormStep2_1Handler implements FormStepHandlerInterface
                 $personsInDB[] = MultiStepForm_2_1::updateOrCreate([
                     'guest_id' => $guest_id,
                     'is_spouse' => $person['is_spouse'],
+                ], [
                     'checking_savings' => $person['checking_savings'] ?? null,
                     'cds' => $person['cds'] ?? null,
                     'stocks_bonds_brokerage' => $person['stocks_bonds_brokerage'] ?? null,

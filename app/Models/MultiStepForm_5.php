@@ -13,7 +13,7 @@ class MultiStepForm_5 extends Model
         'guest_id',
         'is_spouse',
 
-        'notes',
+        'note',
     ];
 
     protected $casts = [

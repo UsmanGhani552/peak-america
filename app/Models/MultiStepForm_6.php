@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MultiStepForm_4 extends Model
+class MultiStepForm_6 extends Model
 {
     use HasFactory;
 
@@ -20,13 +20,13 @@ class MultiStepForm_4 extends Model
         'is_spouse' => 'boolean',
     ];
 
-    public function property()
-    {
-        return $this->hasMany(Property::class);
-    }
-
     public function guest()
     {
         return $this->belongsTo(Guest::class);
+    }
+
+    public function questionAnswers()
+    {
+        return $this->morphMany(QuestionAnswer::class, 'questionable');
     }
 }

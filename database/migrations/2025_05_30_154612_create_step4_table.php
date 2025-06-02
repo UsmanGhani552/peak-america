@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('guest_id')->constrained()->onDelete('cascade');
             $table->boolean('is_spouse')->default(false);
-            $table->text('notes')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
