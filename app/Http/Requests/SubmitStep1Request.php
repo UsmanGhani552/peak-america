@@ -129,12 +129,6 @@ class SubmitStep1Request extends FormRequest
         );
         $formRequest->withValidator($validator);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors'  => $validator->errors(),
-            ], 422);
-        }
         return $validator;
     }
 }
