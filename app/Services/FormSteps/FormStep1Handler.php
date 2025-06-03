@@ -2,8 +2,11 @@
 
 namespace App\Services\FormSteps;
 
+use App\Http\Requests\SubmitStep1Request;
+use App\Models\Guest;
 use App\Models\Kid;
 use App\Models\MultiStepForm_1;
+use App\Models\Note;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -19,18 +22,17 @@ class FormStep1Handler implements FormStepHandlerInterface
         $data = $request->validate([
             'person' => 'required|array|min:1|max:2',
             'person.*.is_spouse' => 'required|boolean',
-            'person.*.first_name' => 'required|string|max:255',
-            'person.*.last_name' => 'required|string|max:255',
-            'person.*.age' => 'nullable|integer|min:0',
-            'person.*.cell_phone' => 'required|string|max:15',
-            'person.*.email' => 'required|email|max:255',
+            'person.*.first_name' => 'nullable|string|max:255',
+            'person.*.last_name' => 'nullable|string|max:255',
+            'person.*.age' => 'nullable|date',
+            'person.*.cell_phone' => 'nullable|string|max:15',
+            'person.*.email' => 'nullable|email|max:255',
             'person.*.marital_status' => 'nullable|string|max:50',
             'person.*.kids' => 'nullable|integer',
             'person.*.kids_age' => 'nullable|array',
             'person.*.kids_age.*' => 'integer',
-            'person.*.notes' => 'nullable|string',
+            'note' => 'nullable|string',
         ]);
-
 
         try {
             DB::beginTransaction();
@@ -45,8 +47,7 @@ class FormStep1Handler implements FormStepHandlerInterface
                     'age' => $person['age'],
                     'cell_phone' => $person['cell_phone'],
                     'email' => $person['email'],
-                    'marital_status' => $person['marital_status'],
-                    'notes' => $person['note'],
+                    'marital_status' => $person['marital_status']
                 ]);
 
                 if ($personsInDB->kids && $personsInDB->kids->isNotEmpty()) {
@@ -61,6 +62,15 @@ class FormStep1Handler implements FormStepHandlerInterface
                 }
             }
 
+            if($data['note']){
+                Note::updateOrCreate([
+                    'guest_id' => $guest_id,
+                    'step' => 1,
+                ], [
+                    'note' => $data['note']
+                ]);
+            }
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -73,7 +83,14 @@ class FormStep1Handler implements FormStepHandlerInterface
     public function get(Request $request): JsonResponse
     {
         $guest_id = $request->guest_id();
-        $from = MultiStepForm_1::where('guest_id', $guest_id)->with('kids')->get();
+        // $from = MultiStepForm_1::where('guest_id', $guest_id)->with('kids')->get();
+        $from = Guest::where('id', $guest_id)->with('multiStepForm1', 'multiStepForm1.kids', 'note')->get();
+        // $from = Guest::where('id', $guest_id)
+        // ->with([
+        //     'multiStepForm1.kids',
+        //     // 'note'
+        // ])
+        // ->first();
 
         if ($from->isEmpty()) {
             return ResponseTrait::error('No data found for Form 1.', [], 404);

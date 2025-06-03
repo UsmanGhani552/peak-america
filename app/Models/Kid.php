@@ -19,10 +19,10 @@ class Kid extends Model
         'age' => 'int',
     ];
 
-    public function kids()
-    {
-        return $this->hasMany(Kid::class);
-    }
+    // public function kids()
+    // {
+    //     return $this->hasMany(Kid::class);
+    // }
 
     public function form()
     {

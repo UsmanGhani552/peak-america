@@ -12,4 +12,36 @@ class Guest extends Model
     protected $fillable = [
         'uuid'
     ];
+
+
+    public function multiStepForm1()
+    {
+        return $this->hasMany(MultiStepForm_1::class, 'guest_id');
+    }
+    public function multiStepForm2_1()
+    {
+        return $this->hasMany(MultiStepForm_2_1::class, 'guest_id');
+    }
+    public function multiStepForm2_2()
+    {
+        return $this->hasMany(MultiStepForm_2_2::class, 'guest_id');
+    }
+
+    public function multiStepForm4()
+    {
+        return $this->hasMany(MultiStepForm_4::class, 'guest_id');
+    }
+    public function multiStepForm5()
+    {
+        return $this->hasMany(MultiStepForm_5::class, 'guest_id');
+    }
+    public function multiStepForm6()
+    {
+        return $this->hasMany(MultiStepForm_6::class, 'guest_id');
+    }
+
+    public function note()
+    {
+        return $this->hasMany(Note::class, 'guest_id');
+    }
 }

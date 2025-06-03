@@ -20,7 +20,6 @@ class MultiStepForm_2_2 extends Model
         'business_interest',
         'other_assets',
         'total',
-        'note',
     ];
 
     protected $casts = [

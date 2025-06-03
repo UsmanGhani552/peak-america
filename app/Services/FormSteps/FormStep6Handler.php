@@ -5,6 +5,7 @@ namespace App\Services\FormSteps;
 use App\Models\MultiStepForm;
 use App\Models\Kid;
 use App\Models\MultiStepForm_6;
+use App\Models\Note;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -20,9 +21,9 @@ class FormStep6Handler implements FormStepHandlerInterface
         $data = $request->validate([
             'person' => 'required|array|min:1|max:2',
             'person.*.is_spouse' => 'required|boolean',
-            'person.*.note' => 'nullable|string',
             'person.*.question_answers' => 'nullable|array',
             'person.*.question_answers.*.answer' => 'nullable|string',
+            'note' => 'nullable|string',
         ]);
 
         try {
@@ -60,6 +61,15 @@ class FormStep6Handler implements FormStepHandlerInterface
                         ]);
                     }
                 }
+            }
+
+            if($data['note']){
+                Note::updateOrCreate([
+                    'guest_id' => $guest_id,
+                    'step' => 1,
+                ], [
+                    'note' => $data['note']
+                ]);
             }
 
             DB::commit();

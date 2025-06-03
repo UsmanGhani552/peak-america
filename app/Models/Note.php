@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MultiStepForm_6 extends Model
+class Note extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'guest_id',
-        'is_spouse',
-    ];
-
-    protected $casts = [
-        'is_spouse' => 'boolean',
+        'step',
+        'note',
     ];
 
     public function guest()
@@ -23,8 +20,8 @@ class MultiStepForm_6 extends Model
         return $this->belongsTo(Guest::class);
     }
 
-    public function questionAnswers()
+    public function step()
     {
-        return $this->morphMany(QuestionAnswer::class, 'questionable');
+        return $this->belongsTo(MultiStepForm::class);
     }
 }

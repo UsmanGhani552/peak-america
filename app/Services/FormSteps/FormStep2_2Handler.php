@@ -4,6 +4,7 @@ namespace App\Services\FormSteps;
 
 use App\Models\Kid;
 use App\Models\MultiStepForm_2_2;
+use App\Models\Note;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +28,7 @@ class FormStep2_2Handler implements FormStepHandlerInterface
             'person.*.business_interest' => 'nullable|numeric',
             'person.*.other_assets' => 'nullable|numeric',
             'person.*.total' => 'numeric',
-            'person.*.note' => 'nullable|string',
+            'note' => 'nullable|string',
         ]);
 
         try {
@@ -57,9 +58,18 @@ class FormStep2_2Handler implements FormStepHandlerInterface
                     'business_interest' => $person['business_interest'] ?? null,
                     'other_assets' => $person['other_assets'] ?? null,
                     'total' => $person['total'] ?? null,
-                    'note' => $person['note'] ?? null,
                 ]);
             }
+
+            if($data['note']){
+                Note::updateOrCreate([
+                    'guest_id' => $guest_id,
+                    'step' => 1,
+                ], [
+                    'note' => $data['note']
+                ]);
+            }
+
             $total_amounts = 0;
             foreach ($amounts as $index => $amount) {
                 $total_amounts += $amount;

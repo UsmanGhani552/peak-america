@@ -21,7 +21,6 @@ class MultiStepForm_2_1 extends Model
         'other_funds',
         'qualified_retirement_accounts',
         'total',
-        'note',
     ];
 
     protected $casts = [

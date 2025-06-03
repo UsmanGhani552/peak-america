@@ -12,8 +12,6 @@ class MultiStepForm_5 extends Model
     protected $fillable = [
         'guest_id',
         'is_spouse',
-
-        'note',
     ];
 
     protected $casts = [

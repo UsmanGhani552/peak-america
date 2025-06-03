@@ -4,6 +4,7 @@ namespace App\Services\FormSteps;
 
 use App\Models\Kid;
 use App\Models\MultiStepForm_4;
+use App\Models\Note;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -19,11 +20,11 @@ class FormStep4Handler implements FormStepHandlerInterface
         $data = $request->validate([
             'person' => 'required|array|min:1|max:2',
             'person.*.is_spouse' => 'required|boolean',
-            'person.*.note' => 'nullable|string',
             'person.*.properties' => 'nullable|array',
             'person.*.properties.*.type' => 'nullable|string',
             'person.*.properties.*.address' => 'nullable|string',
             'person.*.properties.*.value' => 'nullable|numeric',
+            'note' => 'nullable|string',
         ]);
 
         try {
@@ -34,8 +35,6 @@ class FormStep4Handler implements FormStepHandlerInterface
                 $form = MultiStepForm_4::updateOrCreate([
                     'guest_id' => $guest_id,
                     'is_spouse' => $person['is_spouse'],
-                ], [
-                    'note' => $person['note'] ?? null,
                 ]);
 
                 if ($form->property && $form->property->isNotEmpty()) {
@@ -51,6 +50,15 @@ class FormStep4Handler implements FormStepHandlerInterface
                         ]);
                     }
                 }
+            }
+
+            if($data['note']){
+                Note::updateOrCreate([
+                    'guest_id' => $guest_id,
+                    'step' => 1,
+                ], [
+                    'note' => $data['note']
+                ]);
             }
 
             DB::commit();
