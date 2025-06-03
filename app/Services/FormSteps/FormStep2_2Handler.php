@@ -2,6 +2,7 @@
 
 namespace App\Services\FormSteps;
 
+use App\Models\Guest;
 use App\Models\Kid;
 use App\Models\MultiStepForm_2_2;
 use App\Models\Note;
@@ -64,7 +65,7 @@ class FormStep2_2Handler implements FormStepHandlerInterface
             if($data['note']){
                 Note::updateOrCreate([
                     'guest_id' => $guest_id,
-                    'step' => 1,
+                    'step' => 2.2,
                 ], [
                     'note' => $data['note']
                 ]);
@@ -93,7 +94,8 @@ class FormStep2_2Handler implements FormStepHandlerInterface
     public function get(Request $request): JsonResponse
     {
         $guest_id = $request->guest_id();
-        $from = MultiStepForm_2_2::where('guest_id', $guest_id)->get();
+        // $from = MultiStepForm_2_2::where('guest_id', $guest_id)->get();
+        $from = Guest::where('id', $guest_id)->with('multiStepForm2_2', 'note')->get();
 
         if ($from->isEmpty()) {
             return ResponseTrait::error('No data found for Form 2.2.', [], 404);

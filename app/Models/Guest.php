@@ -44,4 +44,9 @@ class Guest extends Model
     {
         return $this->hasMany(Note::class, 'guest_id');
     }
+
+    public function noteForStep($step)
+    {
+        return $this->note()->where('step', $step)->get();
+    }
 }

@@ -75,14 +75,8 @@ class FormStep1Handler implements FormStepHandlerInterface
     public function get(Request $request): JsonResponse
     {
         $guest_id = $request->guest_id();
-        // $from = MultiStepForm_1::where('guest_id', $guest_id)->with('kids')->get();
+
         $from = Guest::where('id', $guest_id)->with('multiStepForm1', 'multiStepForm1.kids', 'note')->get();
-        // $from = Guest::where('id', $guest_id)
-        // ->with([
-        //     'multiStepForm1.kids',
-        //     // 'note'
-        // ])
-        // ->first();
 
         if ($from->isEmpty()) {
             return ResponseTrait::error('No data found for Form 1.', [], 404);

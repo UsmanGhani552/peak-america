@@ -2,6 +2,7 @@
 
 namespace App\Services\FormSteps;
 
+use App\Models\Guest;
 use App\Models\MultiStepForm;
 use App\Models\Kid;
 use App\Models\MultiStepForm_6;
@@ -34,8 +35,6 @@ class FormStep6Handler implements FormStepHandlerInterface
                 $form = MultiStepForm_6::updateOrCreate([
                         'guest_id' => $guest_id,
                         'is_spouse' => $person['is_spouse'],
-                    ],[
-                        'note' => $person['note'] ?? null,
                     ]
                 );
 
@@ -66,7 +65,7 @@ class FormStep6Handler implements FormStepHandlerInterface
             if($data['note']){
                 Note::updateOrCreate([
                     'guest_id' => $guest_id,
-                    'step' => 1,
+                    'step' => 6,
                 ], [
                     'note' => $data['note']
                 ]);
@@ -84,7 +83,8 @@ class FormStep6Handler implements FormStepHandlerInterface
     public function get(Request $request): JsonResponse
     {
         $guest_id = $request->guest_id();
-        $from = MultiStepForm_6::where('guest_id', $guest_id)->with('questionAnswers')->get();
+        // $from = MultiStepForm_6::where('guest_id', $guest_id)->with('questionAnswers')->get();
+        $from = Guest::where('id', $guest_id)->with('multiStepForm6', 'multiStepForm6.questionAnswers' ,'note')->get();
 
         if ($from->isEmpty()) {
             return ResponseTrait::error('No data found for Form 5.', [], 404);

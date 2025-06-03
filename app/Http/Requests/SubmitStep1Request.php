@@ -117,7 +117,7 @@ class SubmitStep1Request extends FormRequest
     }
 
 
-    public static function customValidate(Request $request){
+    public static function customValidator(Request $request){
         $formRequest = new SubmitStep1Request();
         $formRequest->merge($request->all());
 
