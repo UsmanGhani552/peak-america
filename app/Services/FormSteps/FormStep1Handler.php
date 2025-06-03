@@ -11,28 +11,20 @@ use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class FormStep1Handler implements FormStepHandlerInterface
 {
     use ResponseTrait;
 
+    // public function submit(SubmitStep1Request $request): JsonResponse
     public function submit(Request $request): JsonResponse
     {
-        // Validate and process the request data
-        $data = $request->validate([
-            'person' => 'required|array|min:1|max:2',
-            'person.*.is_spouse' => 'required|boolean',
-            'person.*.first_name' => 'nullable|string|max:255',
-            'person.*.last_name' => 'nullable|string|max:255',
-            'person.*.age' => 'nullable|date',
-            'person.*.cell_phone' => 'nullable|string|max:15',
-            'person.*.email' => 'nullable|email|max:255',
-            'person.*.marital_status' => 'nullable|string|max:50',
-            'person.*.kids' => 'nullable|integer',
-            'person.*.kids_age' => 'nullable|array',
-            'person.*.kids_age.*' => 'integer',
-            'note' => 'nullable|string',
-        ]);
+        $validator = SubmitStep1Request::customValidator($request);
+        if ($validator->fails()) {
+            return ResponseTrait::validationError(error:$validator->errors());
+        }
+        $data = $validator->validated();
 
         try {
             DB::beginTransaction();

@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SubmitStep1Request extends FormRequest
 {
@@ -11,7 +13,7 @@ class SubmitStep1Request extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,14 +28,14 @@ class SubmitStep1Request extends FormRequest
             'person.*.is_spouse' => 'required|boolean',
             'person.*.first_name' => 'nullable|string|max:255',
             'person.*.last_name' => 'nullable|string|max:255',
-            'person.*.age' => 'nullable|integer|min:0',
+            'person.*.age' => 'nullable|date',
             'person.*.cell_phone' => 'nullable|string|max:15',
             'person.*.email' => 'nullable|email|max:255',
             'person.*.marital_status' => 'nullable|string|max:50',
             'person.*.kids' => 'nullable|integer',
             'person.*.kids_age' => 'nullable|array',
             'person.*.kids_age.*' => 'integer',
-            'person.*.notes' => 'nullable|string',
+            'note' => 'nullable|string',
         ];
     }
 
@@ -47,7 +49,7 @@ class SubmitStep1Request extends FormRequest
                 return !empty($person['cell_phone']);
             });
             if (!$hasField) {
-                $validator->errors()->add('person', 'At least one person must have a first name.');
+                $validator->errors()->add('person', 'At least one person must have a cell phone.');
             }
 
             // Any one email
@@ -58,26 +60,17 @@ class SubmitStep1Request extends FormRequest
                 $validator->errors()->add('person', 'At least one person must have a email.');
             }
 
-            // Custom marital_status and first_name logic
-            $maritalStatusTrue = collect($persons)->contains(function ($person) {
-                return isset($person['marital_status']) && $person['marital_status'] === true;
-            });
-
-            $isSpouseFalse = collect($persons)->contains(function ($person) {
-                return isset($person['is_spouse']) && $person['is_spouse'] === false;
-            });
-
-            if ($isSpouseFalse && $maritalStatusTrue) {
+            if (count($persons) == 2) {
                 // Both first names required
                 foreach ($persons as $index => $person) {
                     if (empty($person['first_name'])) {
-                        $validator->errors()->add("person.$index.first_name", 'First name is required for both persons when is_spouse is false and marital_status is true.');
+                        $validator->errors()->add("person.$index.first_name", 'First name is required for both persons when spouse is present.');
                     }
                     if (empty($person['last_name'])) {
-                        $validator->errors()->add("person.$index.last_name", 'Last name is required for both persons when is_spouse is false and marital_status is true.');
+                        $validator->errors()->add("person.$index.last_name", 'Last name is required for both persons when spouse is present.');
                     }
                     if (empty($person['age'])) {
-                        $validator->errors()->add("person.$index.age", 'Age is required for both persons when is_spouse is false and marital_status is true.');
+                        $validator->errors()->add("person.$index.age", 'Age is required for both persons when spouse is present.');
                     }
                 }
             } else {
@@ -121,5 +114,27 @@ class SubmitStep1Request extends FormRequest
             'person.*.is_spouse.required' => 'The is_spouse field is required for each person.',
             'person.*.is_spouse.boolean' => 'The is_spouse field must be true or false.',
         ];
+    }
+
+
+    public static function customValidate(Request $request){
+        $formRequest = new SubmitStep1Request();
+        $formRequest->merge($request->all());
+
+        $validator = Validator::make(
+            $formRequest->all(),
+            $formRequest->rules(),
+            $formRequest->messages(),
+            $formRequest->attributes(),
+        );
+        $formRequest->withValidator($validator);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+        return $validator;
     }
 }
