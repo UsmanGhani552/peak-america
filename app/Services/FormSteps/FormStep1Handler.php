@@ -22,7 +22,7 @@ class FormStep1Handler implements FormStepHandlerInterface
     {
         $validator = SubmitStep1Request::customValidator($request);
         if ($validator->fails()) {
-            return ResponseTrait::validationError(error:$validator->errors());
+            return ResponseTrait::error(data:$validator->errors());
         }
         $data = $validator->validated();
 
