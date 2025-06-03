@@ -17,16 +17,7 @@ trait ResponseTrait
         return response()->json([
             'success' => false,
             'message' => $message,
-            'data' => $data,
-        ], $statusCode);
-    }
-
-    public static function validationError($message = 'An error occurred', $error = [], $statusCode = 422)
-    {
-        return response()->json([
-            'success' => false,
-            'message' => $message,
-            'error' => $error,
+            'data' => ['error' => $data],
         ], $statusCode);
     }
 }
