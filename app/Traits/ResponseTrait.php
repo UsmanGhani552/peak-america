@@ -17,7 +17,7 @@ trait ResponseTrait
         return response()->json([
             'success' => false,
             'message' => $message,
-            'data' => ['error' => $data? $data: $message],
+            'data' => ['error' => $data? $data: [$message]],
         ], $statusCode);
     }
 }
