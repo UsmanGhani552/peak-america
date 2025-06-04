@@ -21,7 +21,7 @@ class FormStep5Handler implements FormStepHandlerInterface
     {
         // Validate and process the request data
         $data = $request->validate([
-            'person' => 'required|array|min:1|max:2',
+            'person' => 'required|array|min:1|max:1',
             'person.*.is_spouse' => 'required|boolean',
             'person.*.question_answers' => 'nullable|array',
             'person.*.question_answers.*.answer' => 'nullable|string',

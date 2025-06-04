@@ -76,7 +76,7 @@ class FormStep2_2Handler implements FormStepHandlerInterface
                 $total_amounts += $amount;
 
                 if ($amount !== $data['person'][$index]['total']) {
-                    return ResponseTrait::error('Total amounts do not match the number of persons.');
+                    return ResponseTrait::error('Total amounts do not match the number of persons. Its off by ' . abs($amount - $data['person'][$index]['total']), ['Total amounts do not match the number of persons. Its off by ' . abs($amount - $data['person'][$index]['total'])]);
                 }
             }
             if ($total_amounts === 0) {
@@ -85,7 +85,7 @@ class FormStep2_2Handler implements FormStepHandlerInterface
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            return ResponseTrait::error("Form 2.2 can't be saved due to {$th->getMessage()}", [], 500);
+            return ResponseTrait::error("Form 2.2 can't be saved due to {$th->getMessage()}", ["Form 2.2 can't be saved due to {$th->getMessage()}"], 500);
         }
 
         return ResponseTrait::success('Form 2.2 data saved successfully.', $data);
