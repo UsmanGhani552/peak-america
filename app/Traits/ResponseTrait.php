@@ -12,12 +12,12 @@ trait ResponseTrait
         ]);
     }
 
-    public static function error($message = 'An error occurred', $data = [], $statusCode = 400)
+    public static function error($message = 'An error occurred', $data = null, $statusCode = 400)
     {
         return response()->json([
             'success' => false,
             'message' => $message,
-            'data' => ['error' => $data],
+            'data' => ['error' => $data? $data: $message],
         ], $statusCode);
     }
 }

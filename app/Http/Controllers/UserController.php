@@ -54,7 +54,7 @@ class UserController extends Controller
             ]);
             ResponseTrait::success('Profile updated successfully.', $user);
         } catch (\Throwable $th) {
-            ResponseTrait::error("Profile can\'t be update due to {$th->getMessage()}", [], 500);
+            ResponseTrait::error("Profile can\'t be update due to {$th->getMessage()}", null, 500);
         }
 
     }
@@ -82,14 +82,14 @@ class UserController extends Controller
             return ResponseTrait::success('Profile picture updated successfully', $user);
 
         } catch (\Throwable $th) {
-            return ResponseTrait::error("Profile picture can't be updated due to {$th->getMessage()}", [], 500);
+            return ResponseTrait::error("Profile picture can't be updated due to {$th->getMessage()}", null, 500);
         }
     }
     public function deleteProfilePic(Request $request){
         try {
             $profilePic = FileManager::deleteFile($request->profile_picture,  StorageFolder::PROFILE_PICTURES);
         } catch (\Throwable $th) {
-            return ResponseTrait::error("Profile picture can't be deleted due to {$th->getMessage()}", [], 500);
+            return ResponseTrait::error("Profile picture can't be deleted due to {$th->getMessage()}", null, 500);
         }
 
         return ResponseTrait::success('Profile picture deleted successfully.', ['profilePic'=>$profilePic]);

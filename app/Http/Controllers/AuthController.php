@@ -58,7 +58,7 @@ class AuthController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return ResponseTrait::error('An error occurred due to: '.$e->getMessage(), [], 500);
+            return ResponseTrait::error('An error occurred due to: '.$e->getMessage(), null, 500);
         }
     }
 
@@ -70,7 +70,7 @@ class AuthController extends Controller
         // Check if the user exists
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return ResponseTrait::error('We cannot find a user with that email address.', [], 404);
+            return ResponseTrait::error('We cannot find a user with that email address.', null, 404);
         }
 
         // Generate a custom token
@@ -109,18 +109,18 @@ class AuthController extends Controller
             ->first();
 
         if (!$resetEntry) {
-            return ResponseTrait::error('Invalid or expired code.', [], 400);
+            return ResponseTrait::error('Invalid or expired code.', null, 400);
         }
 
         // Check if the code is expired (e.g., valid for 60 minutes)
         if (now()->diffInMinutes($resetEntry->created_at) > 60) {
-            return ResponseTrait::error('The reset code has expired.', [], 400);
+            return ResponseTrait::error('The reset code has expired.', null, 400);
         }
 
         // Reset the user's password
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return ResponseTrait::error('Cannot find a user with that email address.', [], 404040);
+            return ResponseTrait::error('Cannot find a user with that email address.', null, 404040);
         }
 
         return ResponseTrait::success('Code is valid.');
@@ -140,18 +140,18 @@ class AuthController extends Controller
             ->first();
 
         if (!$resetEntry) {
-            return ResponseTrait::error('Invalid or expired code.', [], 400);
+            return ResponseTrait::error('Invalid or expired code.', null, 400);
         }
 
         // Check if the code is expired (e.g., valid for 60 minutes)
         if (now()->diffInMinutes($resetEntry->created_at) > 60) {
-            return ResponseTrait::error('The reset code has expired.', [], 400);
+            return ResponseTrait::error('The reset code has expired.', null, 400);
         }
 
         // Reset the user's password
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return ResponseTrait::error('Cannot find a user with that email address.', [], 404040);
+            return ResponseTrait::error('Cannot find a user with that email address.', null, 404040);
         }
 
         $user->forceFill([
@@ -174,7 +174,7 @@ class AuthController extends Controller
         ]);
 
         if (!Hash::check($request->current_password, $request->user()->password)) {
-            return ResponseTrait::error('Current password is incorrect.', [], 400);
+            return ResponseTrait::error('Current password is incorrect.', null, 400);
         }
 
         $request->user()->update([

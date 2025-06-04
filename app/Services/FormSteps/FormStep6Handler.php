@@ -20,52 +20,50 @@ class FormStep6Handler implements FormStepHandlerInterface
     {
         // Validate and process the request data
         $data = $request->validate([
-            'person' => 'required|array|min:1|max:2',
-            'person.*.is_spouse' => 'required|boolean',
-            'person.*.question_answers' => 'nullable|array',
-            'person.*.question_answers.*.answer' => 'nullable|string',
+            'question_answers' => 'nullable|array',
+            'question_answers.*.answer' => 'nullable|string',
             'note' => 'nullable|string',
         ]);
-
+        $step = $request['step'];
         try {
             DB::beginTransaction();
             $guest_id = $request->guest_id();
 
-            foreach ($data['person'] as $person) {
-                $form = MultiStepForm_6::updateOrCreate([
-                        'guest_id' => $guest_id,
-                        'is_spouse' => $person['is_spouse'],
-                    ]
-                );
+            $form = MultiStepForm_6::updateOrCreate([
+                    'guest_id' => $guest_id,
+                    'is_spouse' => false,
+                ]);
 
-                if ($form->property && $form->property->isNotEmpty()) {
-                    $form->property()->delete();
+            // Save Question Answers
+            if (!empty($data['question_answers']) && is_array($data['question_answers'])) {
+                $multiStepForm = MultiStepForm::where('step', $step)->with('questions')->first();
+                $questions_id = $multiStepForm && $multiStepForm->questions ? $multiStepForm->questions->pluck('id')->all() : [];
+
+                if (count($data['question_answers']) != count($questions_id)){
+                    $questionOffset = count($questions_id)-count($data['question_answers']);
+                    $message = '';
+                    if ($questionOffset > 0) {
+                        $message = 'You have '.$questionOffset.' question(s) remaining.';
+                    } else {
+                        $message = 'You have answered extra '.abs($questionOffset).' questions.';
+                    }
+                    return ResponseTrait::error($message, null, 422);
                 }
 
-                // Save Question Answers
-                if (!empty($person['question_answers']) && is_array($person['question_answers'])) {
-                    $multiStepForm = MultiStepForm::where('step', $data['step'] ?? 5)->with('questions')->first();
-                    $questions_id = $multiStepForm && $multiStepForm->questions ? $multiStepForm->questions->pluck('id')->all() : [];
+                $form->questionAnswers()->delete();
+                foreach ($data['question_answers'] as $index => $qa) {
 
-                    if (count($person['question_answers']) != count($questions_id)){
-                        return ResponseTrait::error(($person['is_spouse'] ? 'Spouse ' : 'You ')  . 'did not answer all questions. '.(count($questions_id)-count($person['question_answers'])). ' Question remaing', [], 422);
-                    }
-
-                    $form->questionAnswers()->delete();
-                    foreach ($person['question_answers'] as $index => $qa) {
-
-                        $form->questionAnswers()->create([
-                            'question_id' => $questions_id[$index],
-                            'answer' => $qa['answer'],
-                        ]);
-                    }
+                    $form->questionAnswers()->create([
+                        'question_id' => $questions_id[$index],
+                        'answer' => $qa['answer'],
+                    ]);
                 }
             }
 
             if($data['note']){
                 Note::updateOrCreate([
                     'guest_id' => $guest_id,
-                    'step' => 6,
+                    'step' => $step,
                 ], [
                     'note' => $data['note']
                 ]);
@@ -74,10 +72,10 @@ class FormStep6Handler implements FormStepHandlerInterface
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            return ResponseTrait::error("Form 5 can't be saved due to {$th->getMessage()}", [], 500);
+            return ResponseTrait::error("Form {$step} can't be saved due to {$th->getMessage()}", null, 500);
         }
 
-        return ResponseTrait::success('Form 5 data saved successfully.', $data);
+        return ResponseTrait::success("Form {$step} data saved successfully.", $data);
     }
 
     public static function get($guest_id, $step)

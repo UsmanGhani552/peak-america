@@ -66,7 +66,7 @@ class FormStep1Handler implements FormStepHandlerInterface
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            return ResponseTrait::error("Form 1 can't be saved due to {$th->getMessage()}", ["Form 1 can't be saved due to {$th->getMessage()}"], 500);
+            return ResponseTrait::error("Form 1 can't be saved due to {$th->getMessage()}", null, 500);
         }
 
         return ResponseTrait::success('Form 1 data saved successfully.', $data);

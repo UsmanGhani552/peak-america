@@ -47,7 +47,7 @@ class MultiStepFormController extends Controller
         try {
             $formController = $this->getController($request);
         } catch (\Throwable $th) {
-            return ResponseTrait::error("Fetching form error: ".$th->getMessage(), [], 404);
+            return ResponseTrait::error("Fetching form error: ".$th->getMessage(), null, 404);
         }
         return $formController->submit($request);
     }
@@ -59,11 +59,11 @@ class MultiStepFormController extends Controller
             $guest_id = $request->guest_id();
             $data = $formController->get($guest_id, $request->step);
         } catch (\Throwable $th) {
-            return ResponseTrait::error("Fetching form error: ".$th->getMessage(), [], 404);
+            return ResponseTrait::error("Fetching form error: ".$th->getMessage(), null, 404);
         }
 
         if (!$data) {
-            return ResponseTrait::error("No data found for Form $request->step.", [], 404);
+            return ResponseTrait::error("No data found for Form $request->step.", null, 404);
         }
         return ResponseTrait::success("Form $request->step data retrieved successfully.", $data);
     }
