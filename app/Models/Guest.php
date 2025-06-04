@@ -47,6 +47,7 @@ class Guest extends Model
 
     public function noteForStep($step)
     {
-        return $this->note()->where('step', $step)->get();
+        return $this->note()->where('step', $step)->get()->first();
     }
+
 }

@@ -71,16 +71,12 @@ class FormStep4Handler implements FormStepHandlerInterface
         return ResponseTrait::success('Form 4 data saved successfully.', $data);
     }
 
-    public function get(Request $request): JsonResponse
+    public static function get($guest_id, $step)
     {
-        $guest_id = $request->guest_id();
-        // $from = MultiStepForm_4::where('guest_id', $guest_id)->with('property')->get();
-        $from = Guest::where('id', $guest_id)->with('multiStepForm4', 'multiStepForm4.property' ,'note')->get();
-
-        if ($from->isEmpty()) {
-            return ResponseTrait::error('No data found for Form 4.', [], 404);
-        }
-
-        return ResponseTrait::success('Form 4 data retrieved successfully.', $from);
+        $data = Guest::where('id', $guest_id)
+            ->with(['multiStepForm4.property'])
+            ->first();
+        $data['note'] = $data->noteForStep($step)->note;
+        return $data;
     }
 }

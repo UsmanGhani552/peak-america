@@ -77,7 +77,7 @@ class FormStep2_1Handler implements FormStepHandlerInterface
                 $total_amounts += $amount;
 
                 if($amount !== $data['person'][$index]['total']) {
-                    return ResponseTrait::error('Total amounts do not match the number of persons.');
+                    return ResponseTrait::error('Total amounts do not match the number of persons. Its off by ' . abs($amount - $data['person'][$index]['total']), ['Total amounts do not match the number of persons. Its off by ' . abs($amount - $data['person'][$index]['total'])]);
                 }
             }
             if($total_amounts === 0) {
@@ -92,16 +92,13 @@ class FormStep2_1Handler implements FormStepHandlerInterface
         return ResponseTrait::success('Form 2.1 data saved successfully.', $data);
     }
 
-    public function get(Request $request): JsonResponse
+    public static function get($guest_id, $step)
     {
-        $guest_id = $request->guest_id();
-        // $from = MultiStepForm_2_1::where('guest_id', $guest_id)->get();
-        $from = Guest::where('id', $guest_id)->with('multiStepForm2_1', 'note')->get();
+        $data = Guest::where('id', $guest_id)
+            ->with(['multiStepForm2_1'])
+            ->first();
+        $data['note'] = $data->noteForStep($step)->note;
 
-        if ($from->isEmpty()) {
-            return ResponseTrait::error('No data found for Form 2.1.', [], 404);
-        }
-
-        return ResponseTrait::success('Form 2.1 data retrieved successfully.', $from);
+        return $data;
     }
 }

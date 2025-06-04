@@ -66,22 +66,18 @@ class FormStep1Handler implements FormStepHandlerInterface
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            return ResponseTrait::error("Form 1 can't be saved due to {$th->getMessage()}", [], 500);
+            return ResponseTrait::error("Form 1 can't be saved due to {$th->getMessage()}", ["Form 1 can't be saved due to {$th->getMessage()}"], 500);
         }
 
         return ResponseTrait::success('Form 1 data saved successfully.', $data);
     }
 
-    public function get(Request $request): JsonResponse
+    public static function get($guest_id, $step)
     {
-        $guest_id = $request->guest_id();
-
-        $from = Guest::where('id', $guest_id)->with('multiStepForm1', 'multiStepForm1.kids', 'note')->get();
-
-        if ($from->isEmpty()) {
-            return ResponseTrait::error('No data found for Form 1.', [], 404);
-        }
-
-        return ResponseTrait::success('Form 1 data retrieved successfully.', $from);
+        $data = Guest::where('id', $guest_id)
+            ->with(['multiStepForm1.kids'])
+            ->first();
+        $data['note'] = $data->noteForStep($step)->note;
+        return $data;
     }
 }

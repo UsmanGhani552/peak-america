@@ -21,6 +21,9 @@ Route::middleware('auth:sanctum')
         Route::post('/delete-profile-pic', [UserController::class, 'deleteProfilePic']);
         Route::get('/get-user', [UserController::class, 'getUserProfile']);
         Route::put('/edit-user', [UserController::class, 'updateUserProfile']);
+
+        // Dashboard APIs
+        Route::get('/get-all-forms', [MultiStepFormController::class, 'getAllGuestForms']);
     });
 
 

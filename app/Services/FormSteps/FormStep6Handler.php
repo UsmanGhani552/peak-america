@@ -80,16 +80,12 @@ class FormStep6Handler implements FormStepHandlerInterface
         return ResponseTrait::success('Form 5 data saved successfully.', $data);
     }
 
-    public function get(Request $request): JsonResponse
+    public static function get($guest_id, $step)
     {
-        $guest_id = $request->guest_id();
-        // $from = MultiStepForm_6::where('guest_id', $guest_id)->with('questionAnswers')->get();
-        $from = Guest::where('id', $guest_id)->with('multiStepForm6', 'multiStepForm6.questionAnswers' ,'note')->get();
-
-        if ($from->isEmpty()) {
-            return ResponseTrait::error('No data found for Form 5.', [], 404);
-        }
-
-        return ResponseTrait::success('Form 5 data retrieved successfully.', $from);
+        $data = Guest::where('id', $guest_id)
+            ->with(['multiStepForm6.questionAnswers'])
+            ->first();
+        $data['note'] = $data->noteForStep($step)->note;
+        return $data;
     }
 }

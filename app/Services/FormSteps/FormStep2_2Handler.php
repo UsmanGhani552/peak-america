@@ -91,16 +91,12 @@ class FormStep2_2Handler implements FormStepHandlerInterface
         return ResponseTrait::success('Form 2.2 data saved successfully.', $data);
     }
 
-    public function get(Request $request): JsonResponse
+    public static function get($guest_id, $step)
     {
-        $guest_id = $request->guest_id();
-        // $from = MultiStepForm_2_2::where('guest_id', $guest_id)->get();
-        $from = Guest::where('id', $guest_id)->with('multiStepForm2_2', 'note')->get();
-
-        if ($from->isEmpty()) {
-            return ResponseTrait::error('No data found for Form 2.2.', [], 404);
-        }
-
-        return ResponseTrait::success('Form 2.2 data retrieved successfully.', $from);
+        $data = Guest::where('id', $guest_id)
+            ->with(['multiStepForm2_2'])
+            ->first();
+        $data['note'] = $data->noteForStep($step)->note;
+        return $data;
     }
 }
