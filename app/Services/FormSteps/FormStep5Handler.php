@@ -84,7 +84,11 @@ class FormStep5Handler implements FormStepHandlerInterface
         $data = Guest::where('id', $guest_id)
             ->with(['multiStepForm5.questionAnswers'])
             ->first();
+        if($data->multiStepForm5->isEmpty()){
+            return null;
+        }
         $data['note'] = $data->noteForStep($step)->note;
+        $data['step'] = (float)$step;
         return $data;
     }
 }

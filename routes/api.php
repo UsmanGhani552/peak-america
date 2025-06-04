@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FormAssignmentController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\MultiStepFormController;
 use App\Http\Controllers\UserController;
@@ -24,6 +25,10 @@ Route::middleware('auth:sanctum')
 
         // Dashboard APIs
         Route::get('/get-all-forms', [MultiStepFormController::class, 'getAllGuestForms']);
+
+        // Form Assignment APIs
+        Route::post('/assign-form-to-user', [FormAssignmentController::class, 'assignFormToUser']);
+        Route::get('/get-assigned-form', [FormAssignmentController::class, 'getAssignedForms']);
     });
 
 
