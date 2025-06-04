@@ -81,7 +81,7 @@ class FormStep2_1Handler implements FormStepHandlerInterface
                 }
             }
             if($total_amounts === 0) {
-                return ResponseTrait::error('Total amount can\'t be zero.');
+                return ResponseTrait::error('Total amount can\'t be zero.', ['Total amount can\'t be zero.']);
             }
             DB::commit();
         } catch (\Throwable $th) {
