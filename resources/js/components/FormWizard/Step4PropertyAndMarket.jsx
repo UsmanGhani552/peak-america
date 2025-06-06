@@ -1,7 +1,13 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { api } from "../../src/api";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
+import Toaster from "../Layout/Toaster";
 
 function Step4PropertyAndMarket() {
+    const navigate = useNavigate();
     // State for each property type (You and Spouse separately)
     const [primaryResidence, setPrimaryResidence] = useState({
         you: { address: '', value: '' },
@@ -18,6 +24,63 @@ function Step4PropertyAndMarket() {
         spouse: [{ address: '', value: '' }]
     });
 
+    const handleFormData = () => {
+        const youProperties = [
+            {
+                type: 'primary',
+                address: primaryResidence.you.address,
+                value: Number(primaryResidence.you.value) || 0
+            },
+            ...rentalProperties.you.map(p => ({
+                type: 'rental',
+                address: p.address,
+                value: Number(p.value) || 0
+            })),
+            ...vacationProperties.you.map(p => ({
+                type: 'vacation',
+                address: p.address,
+                value: Number(p.value) || 0
+            }))
+        ];
+
+        const spouseProperties = [
+            {
+                type: 'primary',
+                address: primaryResidence.spouse.address,
+                value: Number(primaryResidence.spouse.value) || 0
+            },
+            ...rentalProperties.spouse.map(p => ({
+                type: 'rental',
+                address: p.address,
+                value: Number(p.value) || 0
+            })),
+            ...vacationProperties.spouse.map(p => ({
+                type: 'vacation',
+                address: p.address,
+                value: Number(p.value) || 0
+            }))
+        ];
+
+        const newFormData = {
+            step: 4,
+            person: [
+                {
+                    is_spouse: false,
+                    properties: youProperties
+                },
+                {
+                    is_spouse: true,
+                    properties: spouseProperties
+                }
+            ],
+            note: ''
+        };
+
+        setFormData(newFormData);
+    };
+    useEffect(() => {
+        handleFormData();
+    }, [primaryResidence, rentalProperties, vacationProperties]);
     // Generic handler for adding properties
     const addProperty = (propertyType, person) => {
         if (propertyType === 'rental') {
@@ -112,9 +175,78 @@ function Step4PropertyAndMarket() {
         ));
     };
 
+
+    const [formData, setFormData] = useState({
+        step: 4,
+        person: [
+            {
+                is_spouse: false,
+                properties: [
+                    {
+                        type: 'primary',
+                        address: '',
+                        value: 0
+                    },
+                    {
+                        type: 'rental',
+                        address: '',
+                        value: 0
+                    },
+                    {
+                        type: 'vacation',
+                        address: '',
+                        value: 0
+                    }
+                ]
+            },
+            {
+                is_spouse: true,
+                properties: [
+                    {
+                        type: 'primary',
+                        address: '',
+                        value: 0
+                    }
+                ]
+            }
+        ],
+        note: ''
+    });
+
+    const handleSubmit = async (e) => {
+            e.preventDefault();
+            api.post('submit-form', formData)
+                .then(response => {
+                    console.log("Form submitted successfully:", response.data);
+                    toast.success("Success! Your details have been saved.");
+                    setTimeout(() => {
+                        navigate('/step5');
+                    }, 1500);
+                })
+                .catch(error => {
+                    if (error.response && error.response.data) {
+                        const errorData = error.response.data.data.error;
+                        // Process each error and show in toast
+                        Object.entries(errorData).forEach(([key, messages]) => {
+                            // Show each error message in a toast
+                            toast.error(`${messages}`);
+    
+                        });
+                    } else {
+                        toast.error("An unknown error occurred. Please try again.");
+                        console.error("Unknown error:", error);
+                    }
+                });
+        }
+
+    // console.log( rentalProperties);
+    console.log('Form Data:', formData);
+
     return (
+        <>
+        <Toaster/>
         <div className="container-fluid personal-detail-container">
-            <form className="container-fluid">
+            <form onSubmit={handleSubmit} className="container-fluid">
                 {/* Primary Residence Section */}
                 <div className="row">
                     <div className="col personal-detail-header">
@@ -290,12 +422,13 @@ function Step4PropertyAndMarket() {
                         <textarea id="notes" className="form-control" placeholder="Enter note here..."></textarea>
                         <div className="d-flex justify-content-between mt-3">
                             <Link className="next-btn" to="/step3">Previous</Link>
-                            <Link className="next-btn" to="/step5">Next</Link>
+                            <button className="next-btn" type="submit">Next</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
+        </>
     );
 }
 

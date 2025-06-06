@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { api } from "../../src/api";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
+import Toaster from "../Layout/Toaster";
 
 function Step2FinancialStrategy() {
+    const navigate = useNavigate();
     const [step1Note, setStep1Note] = useState('');
     const [step2Note, setStep2Note] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
+
+
     const [youInputArray, setYouInputArray] = useState([0, 0, 0, 0, 0, 0, 0]);
     const handleYouChange = index => (e) => {
         setYouInputArray(prevArray => {
@@ -23,8 +31,6 @@ function Step2FinancialStrategy() {
         });
     }
     const spouseTotal = spouseInputArray.reduce((a, b) => a + b, 0);
-
-    //step 2
     const [youAssetArray, setYouAssetArray] = useState([0, 0, 0, 0, 0, 0]);
     const handleAssetYouChange = index => (e) => {
         setYouAssetArray(prevArray => {
@@ -54,8 +60,164 @@ function Step2FinancialStrategy() {
         setCurrentStep(1);
     }
 
+    //form submission
+
+    const [formData1, setFormData1] = useState({
+        step: 2.1,
+        note: step1Note,
+        person: [
+            {
+                is_spouse: false,
+                checking_savings: 0,
+                cds: 0,
+                stocks_bonds_brokerage: 0,
+                iras_pre_tax: 0,
+                roth_iras: 0,
+                other_funds: 0,
+                qualified_retirement_accounts: 0,
+                total: 0,
+            },
+            {
+                is_spouse: true,
+                checking_savings: 0,
+                cds: 0,
+                stocks_bonds_brokerage: 0,
+                iras_pre_tax: 0,
+                roth_iras: 0,
+                other_funds: 0,
+                qualified_retirement_accounts: 0,
+                total: 0,
+            }
+        ]
+    });
+    const [formData2, setFormData2] = useState({
+        step: 2.2,
+        note: step2Note,
+        person: [
+            {
+                is_spouse: false,
+                annuities: 0,
+                lump_sum_pension: 0,
+                long_term_care_insurance: 0,
+                life_insurance: 0,
+                business_interest: 0,
+                other_assets: 0,
+                total: 0,
+            },
+            {
+                is_spouse: true,
+                annuities: 0,
+                lump_sum_pension: 0,
+                long_term_care_insurance: 0,
+                life_insurance: 0,
+                business_interest: 0,
+                other_assets: 0,
+                total: 0,
+            }
+        ]
+    });
+
+    // Update formData whenever input arrays or totals change
+    useEffect(() => {
+        setFormData1(prev => ({
+            ...prev,
+            person: [
+                {
+                    ...prev.person[0],
+                    checking_savings: youInputArray[0],
+                    cds: youInputArray[1],
+                    stocks_bonds_brokerage: youInputArray[2],
+                    iras_pre_tax: youInputArray[3],
+                    roth_iras: youInputArray[4],
+                    other_funds: youInputArray[5],
+                    qualified_retirement_accounts: youInputArray[6],
+                    total: youTotal,
+                },
+                {
+                    ...prev.person[1],
+                    checking_savings: spouseInputArray[0],
+                    cds: spouseInputArray[1],
+                    stocks_bonds_brokerage: spouseInputArray[2],
+                    iras_pre_tax: spouseInputArray[3],
+                    roth_iras: spouseInputArray[4],
+                    other_funds: spouseInputArray[5],
+                    qualified_retirement_accounts: spouseInputArray[6],
+                    total: spouseTotal,
+                }
+            ]
+        }));
+        setFormData2(prev => ({
+            ...prev,
+            person: [
+                {
+                    ...prev.person[0],
+                    annuities: youAssetArray[0],
+                    lump_sum_pension: youAssetArray[1],
+                    long_term_care_insurance: youAssetArray[2],
+                    life_insurance: youAssetArray[3],
+                    business_interest: youAssetArray[4],
+                    other_assets: youAssetArray[5],
+                    qualified_retirement_accounts: youAssetArray[6],
+                    total: youAssetTotal,
+                },
+                {
+                    ...prev.person[1],
+                    annuities: spouseAssetArray[0],
+                    lump_sum_pension: spouseAssetArray[1],
+                    long_term_care_insurance: spouseAssetArray[2],
+                    life_insurance: spouseAssetArray[3],
+                    business_interest: spouseAssetArray[4],
+                    other_assets: spouseAssetArray[5],
+                    qualified_retirement_accounts: spouseAssetArray[6],
+                    total: spouseAssetTotal,
+                },
+            ]
+        }));
+    }, [youInputArray, spouseInputArray, youTotal, spouseTotal, youAssetArray, spouseAssetArray, youAssetTotal, spouseAssetTotal]);
+    // console.log('form Data:', formData);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const formData = currentStep === 1 ? formData1 : formData2;
+        api.post('submit-form', formData)
+            .then(response => {
+                console.log("Form submitted successfully:", response.data);
+                toast.success("Success! Your details have been saved.");
+                setTimeout(() => {
+                    if (currentStep === 1) {
+                        setCurrentStep(prevStep => {
+                            // Ensure we're moving to the correct next step
+                            const nextStep = 2; // Or your actual next step
+                            console.log(`Moving from step ${prevStep} to step ${nextStep}`);
+                            return nextStep;
+                        });
+                    } else {
+                        navigate('/step3');
+                    }
+                }, 1500);
+            })
+            .catch(error => {
+                if (error.response && error.response.data) {
+                    const errorData = error.response.data.data.error;
+                    // Process each error and show in toast
+                    Object.entries(errorData).forEach(([key, messages]) => {
+                        // Show each error message in a toast
+                        toast.error(`${messages}`);
+
+                    });
+                } else {
+                    toast.error("An unknown error occurred. Please try again.");
+                    console.error("Unknown error:", error);
+                }
+            });
+    }
+
+
+
     return (
         <>
+            <Toaster/>
+
             <div className="personal-detail-container">
                 <div className="row">
                     <div className="col personal-detail-header">
@@ -63,7 +225,7 @@ function Step2FinancialStrategy() {
                     </div>
                 </div>
                 {currentStep === 1 ? (
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="row ">
                             <div className="col-md-2 d-flex flex-column personal-detail-label">
                                 <>
@@ -137,14 +299,13 @@ function Step2FinancialStrategy() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <Link className="next-btn" type="submit" to='/step1'>Previous</Link>
-                                    <button className="next-btn" type="submit" onClick={goToNextStep}>Next</button>
-
+                                    <button className="next-btn" type="submit">Next</button>
                                 </div>
                             </div>
                         </div>
                     </form>
                 ) : (
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="row ">
                             <div className="col-md-2 d-flex flex-column personal-detail-label">
 
@@ -213,7 +374,7 @@ function Step2FinancialStrategy() {
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <button className="next-btn b-0" type="submit pe-3" onClick={goToPreviousStep}>Previous</button>
-                                    <Link className="next-btn" type="submit" to='/step3'>Next</Link>
+                                    <button className="next-btn" type="submit">Next</button>
                                 </div>
                             </div>
                         </div>
