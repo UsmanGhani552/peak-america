@@ -46,7 +46,7 @@ class AuthController extends Controller
             ]);
 
             $token = $user->createToken('user_token')->plainTextToken;
-            $user->assignRole('user');
+            $user->assignRole('Admin');
 
             $user->roles_name = $user->getRoleNames();
             unset($user->roles);

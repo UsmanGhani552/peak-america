@@ -23,12 +23,25 @@ class RolesAndPermissionsSeeder extends Seeder
         foreach ($users_permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
-        $user = Role::firstOrCreate(['name' => 'user']);
-        $user->syncPermissions($users_permissions);
+
+        $get_my_form_permission = 'view assigined forms';
+        Permission::firstOrCreate(['name' => $get_my_form_permission]);
+
+        $form_permissions = [
+            'view forms',
+            'assigin form',
+            'edit forms',
+            'delete forms',
+        ];
+        foreach ($form_permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
+
+        $user = Role::firstOrCreate(['name' => 'Admin']);
+        $user->syncPermissions($get_my_form_permission);
 
         // Create roles and assign permissions
-        $admin = Role::firstOrCreate(['name' => 'admin']);
+        $admin = Role::firstOrCreate(['name' => 'Super Admin']);
         $admin->syncPermissions(Permission::all());
-
     }
 }

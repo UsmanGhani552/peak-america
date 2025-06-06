@@ -25,10 +25,10 @@ class UserController extends Controller
     use ResponseTrait;
 
     public function __construct(){
-        $this->middleware('role_or_permission:Permission view users|Permission create users|Permission edit users|Permission delete users', ['only' => ['getUserProfile']]);
-        $this->middleware('role_or_permission:Permission create users', ['only' => ['uploadProfilePic']]);
-        $this->middleware('role_or_permission:Permission edit users', ['only' => ['updateUserProfile']]);
-        $this->middleware('role_or_permission:Permission delete users', ['only' => ['deleteProfilePic']]);
+        // $this->middleware('role_or_permission:Permission view users|Permission create users|Permission edit users|Permission delete users', ['only' => ['getUserProfile']]);
+        // $this->middleware('role_or_permission:Permission create users', ['only' => ['uploadProfilePic']]);
+        // $this->middleware('role_or_permission:Permission edit users', ['only' => ['updateUserProfile']]);
+        // $this->middleware('role_or_permission:Permission delete users', ['only' => ['deleteProfilePic']]);
     }
 
     public function getUserProfile(Request $request)
