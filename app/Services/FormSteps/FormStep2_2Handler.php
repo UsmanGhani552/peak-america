@@ -96,7 +96,11 @@ class FormStep2_2Handler implements FormStepHandlerInterface
         $data = Guest::where('id', $guest_id)
             ->with(['multiStepForm2_2'])
             ->first();
+        if($data->multiStepForm2_2->isEmpty()){
+            return null;
+        }
         $data['note'] = $data->noteForStep($step)->note;
+        $data['step'] = (float)$step;
         return $data;
     }
 }

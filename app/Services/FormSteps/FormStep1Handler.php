@@ -77,7 +77,11 @@ class FormStep1Handler implements FormStepHandlerInterface
         $data = Guest::where('id', $guest_id)
             ->with(['multiStepForm1.kids'])
             ->first();
+        if($data->multiStepForm1->isEmpty()){
+            return null;
+        }
         $data['note'] = $data->noteForStep($step)->note;
+        $data['step'] = (float)$step;
         return $data;
     }
 }

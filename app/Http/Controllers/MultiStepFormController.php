@@ -72,7 +72,10 @@ class MultiStepFormController extends Controller
     {
         $data = [];
         foreach ($this->formClasses as $step => $class) {
-            $data[] = $class::get($guest_id, $step);
+            $form = $class::get($guest_id, $step);
+            if($form){
+                $data[] = $form;
+            }
         }
         return $data;
     }
@@ -81,18 +84,21 @@ class MultiStepFormController extends Controller
     {
         $perPage = $request->query('per_page', 15);   // default 15 items per page
         $page    = $request->query('page', 1);
-        // Build a paginated query:
-        $guests = Guest::paginate(
-            (int) $perPage,    // how many items per page
-            ['*'],             // columns
-            'page',            // “page” parameter name
-            (int) $page        // which page to fetch
-        );
+        try {
+            // Build a paginated query:
+            $guests = Guest::paginate(
+                (int) $perPage,    // how many items per page
+                ['*'],             // columns
+                'page',            // “page” parameter name
+                (int) $page        // which page to fetch
+            );
 
-        foreach ($guests as $guest) {
-            $guest->forms = $this->getGuestForms($guest->id);
+            foreach ($guests as $guest) {
+                $guest->forms = $this->getGuestForms($guest->id);
+            }
+        } catch (\Throwable $th) {
+            return ResponseTrait::error("Invalid pagination parameters: ".$th->getMessage(), null, 400);
         }
-
         return ResponseTrait::success('Guest forms retrieved successfully.', $guests);
     }
 }
