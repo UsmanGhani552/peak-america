@@ -13,15 +13,16 @@ class FormAssignmentController extends Controller
 
     public function assignFormToUser(Request $request)
     {
-        $user_id = $request->user()->id;
         $data = $request->validate([
-            'guest_id' => 'required|exists:guests,id',
+            'user_id' => 'required|exists:users,id',
+            'form_id' => 'required|exists:guests,id',
         ]);
 
         try {
-            $guest_id = $data['guest_id'];
+            $user_id = $data['user_id'];
+            $guest_id = $data['form_id'];
             $formAssignment = FormAssignment::where('guest_id', $guest_id)
-                ->where('user_id', $user_id)->get();
+                ->where('user_id', $user_id)->get()->first();
             if($formAssignment){
                 return ResponseTrait::error('Form already assigned to this user', null, 400);
             }
@@ -38,13 +39,51 @@ class FormAssignmentController extends Controller
     public function getAssignedForms(Request $request, MultiStepFormController $multiStepFormController)
     {
         try {
-            $formAssigned = FormAssignment::where('user_id', $request->user()->id)->get();
-            foreach ($formAssigned as $assignment) {
-                $assignment->form_data = $multiStepFormController->getGuestForms($assignment->guest_id);
+            $relations = MultiStepFormController::getRelations();
+            $assignedGuestIds = FormAssignment::where('user_id', $request->user()->id)
+            ->pluck('guest_id')
+            ->toArray();
+
+            // Get guests with those IDs and eager load relations
+            $guests = Guest::with($relations)
+                ->with('note')
+                ->whereIn('id', $assignedGuestIds)
+                ->get();
+
+            if (!$guests) {
+                return ResponseTrait::error("No guests found.", null, 404);
             }
+            $formAssigned = MultiStepFormController::formateForms($guests, $relations);
         } catch (\Throwable $th) {
             return ResponseTrait::error('Form assignments failed due to: ' . $th->getMessage(), null, 422);
         }
         return ResponseTrait::success('Form assignments retrieved successfully', $formAssigned);
+    }
+
+    public function getAllUsassignedGuestForms(Request $request)
+    {
+        $perPage = $request->query('per_page', 15);   // default 15 items per page
+        $page    = $request->query('page', 1);
+        try {
+            $assignedGuestIds = FormAssignment::pluck('guest_id')->toArray();
+            // Build a paginated query:
+            $relations = MultiStepFormController::getRelations();
+            $guests = Guest::whereNotIn('id', $assignedGuestIds)
+            ->with($relations)
+            ->with('note')
+            ->paginate(
+                (int) $perPage,    // how many items per page
+                ['*'],             // columns
+                'page',            // “page” parameter name
+                (int) $page        // which page to fetch
+            );
+            if (!$guests) {
+                return ResponseTrait::error("No guests found.", null, 404);
+            }
+            $guestsData = MultiStepFormController::formateForms($guests, $relations);
+        } catch (\Throwable $th) {
+            return ResponseTrait::error("Invalid pagination parameters: ".$th->getMessage(), null, 400);
+        }
+        return ResponseTrait::success('Guest forms retrieved successfully.', $guestsData);
     }
 }

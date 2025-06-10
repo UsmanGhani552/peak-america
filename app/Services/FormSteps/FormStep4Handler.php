@@ -83,4 +83,6 @@ class FormStep4Handler implements FormStepHandlerInterface
         $data['step'] = (float)$step;
         return $data;
     }
+
+    public const TABLE_AND_RELATIONS = ['multiStepForm4', 'multiStepForm4.property'];
 }

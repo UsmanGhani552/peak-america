@@ -90,4 +90,6 @@ class FormStep6Handler implements FormStepHandlerInterface
         $data['step'] = (float)$step;
         return $data;
     }
+
+    public const TABLE_AND_RELATIONS = ['multiStepForm6', 'multiStepForm6.questionAnswers'];
 }

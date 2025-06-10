@@ -24,20 +24,19 @@ class RoleController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required']);
-        $role = Role::create(['name' => $request->name]);
-        if(!$role){
-            return ResponseTrait::error('Role failed to failed.');
-        }
-        // $role->syncPermissions($request->permissions);
+        $request->validate(['name' => 'required|string|unique:roles,name']);
 
-        return ResponseTrait::success('Role created !!!');
+        $role = Role::create(['name' => $request->name]);
+
+        // Optionally sync permissions if provided
+        if ($request->has('permissions') && is_array($request->permissions)) {
+            $role->syncPermissions($request->permissions);
+        }
+
+        return ResponseTrait::success('Role created!', $role);
     }
 
     /**

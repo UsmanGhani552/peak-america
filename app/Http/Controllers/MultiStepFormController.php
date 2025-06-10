@@ -13,7 +13,7 @@ class MultiStepFormController extends Controller
 {
     use ResponseTrait;
 
-    private array $formClasses = [
+    private static array $formClasses = [
             '1'   => FormSteps\FormStep1Handler::class,
             '2.1' => FormSteps\FormStep2_1Handler::class,
             '2.2' => FormSteps\FormStep2_2Handler::class,
@@ -68,10 +68,10 @@ class MultiStepFormController extends Controller
         return ResponseTrait::success("Form $request->step data retrieved successfully.", $data);
     }
 
-    public function getGuestForms($guest_id)
+    public static function getGuestForms($guest_id)
     {
         $data = [];
-        foreach ($this->formClasses as $step => $class) {
+        foreach (MultiStepFormController::$formClasses as $step => $class) {
             $form = $class::get($guest_id, $step);
             if($form){
                 $data[] = $form;
@@ -86,19 +86,87 @@ class MultiStepFormController extends Controller
         $page    = $request->query('page', 1);
         try {
             // Build a paginated query:
-            $guests = Guest::paginate(
+            $relations = self::getRelations();
+            $guests = Guest::with($relations)
+            ->with('note')
+            ->paginate(
                 (int) $perPage,    // how many items per page
                 ['*'],             // columns
                 'page',            // “page” parameter name
                 (int) $page        // which page to fetch
             );
-
-            foreach ($guests as $guest) {
-                $guest->forms = $this->getGuestForms($guest->id);
+            if (!$guests) {
+                return ResponseTrait::error("No guests found.", null, 404);
             }
+            $guestsData = self::formateForms($guests, $relations);
         } catch (\Throwable $th) {
             return ResponseTrait::error("Invalid pagination parameters: ".$th->getMessage(), null, 400);
         }
-        return ResponseTrait::success('Guest forms retrieved successfully.', $guests);
+        return ResponseTrait::success('Guest forms retrieved successfully.', $guestsData);
+    }
+
+    public static function getRelations()
+    {
+        $relations = [];
+        foreach (MultiStepFormController::$formClasses as $step => $class) {
+            $relation = $class::TABLE_AND_RELATIONS ?? null;
+            if($relation){
+                $relations = array_merge($relations, $relation);
+            }
+        }
+        return $relations;
+    }
+
+    public static function formateForms($guests, $relations){
+        $guestsData = [];
+        foreach ($guests as $guest){
+            $guestsData[] = self::formateForm($guest, $relations);
+        }
+        return $guestsData;
+    }
+    protected static function formateForm($guest, $relations)
+    {
+        if($guest->note == null){
+            return $guest;
+        }
+        $guestData = [
+            'id' => $guest->id,
+            'uuid' => $guest->uuid,
+            'created_at' => $guest->created_at,
+            'updated_at' => $guest->updated_at,
+        ];
+        // Attach note and step to each form attribute
+        $forms = [];
+        foreach ($relations as $relation) {
+            if (str_contains($relation, '.')) {
+                continue;
+            }
+            $formObj = $guest->$relation == null ? null : (object)['form' => $guest->{$relation}];
+            if ($formObj) {
+                $stepNumber = self::extractStepFromRelation($relation);
+                $note = collect($guest->note)->firstWhere('step', $stepNumber);
+
+                $formObj->note = $note ? $note['note'] : null;
+                $formObj->step = $stepNumber;
+
+                $forms[] = $formObj;
+            }
+        }
+        $guestData['forms'] = $forms;
+
+        return $guestData;
+    }
+
+    // Helper to extract step number from relation name
+    protected static function extractStepFromRelation($relation)
+    {
+        // Example: multiStepForm1 => 1, multiStepForm2_1 => 2.1, etc.
+        if (preg_match('/multiStepForm(\d+)(?:_(\d+))?/', $relation, $matches)) {
+            if (isset($matches[2])) {
+                return floatval($matches[1] . '.' . $matches[2]);
+            }
+            return intval($matches[1]);
+        }
+        return null;
     }
 }

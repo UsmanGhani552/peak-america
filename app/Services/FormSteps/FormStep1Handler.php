@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\TextUI\Configuration\Constant;
 
 class FormStep1Handler implements FormStepHandlerInterface
 {
@@ -84,4 +85,6 @@ class FormStep1Handler implements FormStepHandlerInterface
         $data['step'] = (float)$step;
         return $data;
     }
+
+    public const TABLE_AND_RELATIONS = ['multiStepForm1', 'multiStepForm1.kids'];
 }

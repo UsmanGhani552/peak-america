@@ -91,4 +91,6 @@ class FormStep5Handler implements FormStepHandlerInterface
         $data['step'] = (float)$step;
         return $data;
     }
+
+    public const TABLE_AND_RELATIONS = ['multiStepForm5', 'multiStepForm5.questionAnswers'];
 }
