@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')
     // Form Assignment APIs
     Route::post('/assign-form-to-user', [FormAssignmentController::class, 'assignFormToUser'])->middleware('role_or_permission:Super Admin||Admin');
     Route::get('/get-assigned-form', [FormAssignmentController::class, 'getAssignedForms'])->middleware('role_or_permission:Super Admin||Admin');
-    Route::get('/get-all-unassigned-forms', [FormAssignmentController::class, 'getAllUsassignedGuestForms'])->middleware('role_or_permission:Super Admin||Admin');
+    Route::get('/get-all-unassigned-forms', [FormAssignmentController::class, 'getAllUnassignedGuestForms'])->middleware('role_or_permission:Super Admin||Admin');
 
     Route::middleware('role_or_permission:Super Admin')
     ->group(function () {

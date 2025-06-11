@@ -60,7 +60,7 @@ class FormAssignmentController extends Controller
         return ResponseTrait::success('Form assignments retrieved successfully', $formAssigned);
     }
 
-    public function getAllUsassignedGuestForms(Request $request)
+    public function getAllUnassignedGuestForms(Request $request)
     {
         $perPage = $request->query('per_page', 15);   // default 15 items per page
         $page    = $request->query('page', 1);
