@@ -24,7 +24,7 @@ class MultiStepFormController extends Controller
 
     private function getFormClass($step)
     {
-        return $this->formClasses[(string)$step] ?? null;
+        return $this::$formClasses[(string)$step] ?? null;
     }
 
     private function getController(Request &$request)
@@ -124,7 +124,7 @@ class MultiStepFormController extends Controller
         }
         return $guestsData;
     }
-    protected static function formateForm($guest, $relations)
+    public static function formateForm($guest, $relations)
     {
         if($guest->note == null){
             return $guest;

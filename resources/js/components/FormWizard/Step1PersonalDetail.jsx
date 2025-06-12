@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "bootstrap/dist/js/bootstrap.bundle.min";
 import { api } from "../../src/api";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 
@@ -12,7 +12,7 @@ function Step1PersonalDetail() {
     const [inputYou, setYouValue] = useState("1");
     const [inputSpouse, setSpouseValue] = useState("1");
     const [formData, setFormData] = useState({
-        step: 1,
+        step: '1',
         note: '',
         person: [
             {
@@ -94,7 +94,6 @@ function Step1PersonalDetail() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         api.post('submit-form', formData)
             .then(response => {
                 console.log("Form submitted successfully:", response.data);

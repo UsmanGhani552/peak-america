@@ -3,6 +3,7 @@ import axios from 'axios';
 async function generateGuestId() {
     try {
         const response = await axios.get('/api/register-guest');
+        console.log(response);
         const uuid = response.data.data.guest_uuid;
         localStorage.setItem('guestId', uuid);
         console.log('Generated Guest ID:', uuid);
@@ -15,6 +16,7 @@ async function generateGuestId() {
 
 async function getApiInstance() {
     let guestId = localStorage.getItem('guestId');
+    console.log(guestId);
     if (!guestId) {
         guestId = await generateGuestId();
     }

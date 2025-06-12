@@ -55,6 +55,7 @@ function Step5Value() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("Form Data:", formData);
         api.post('submit-form', formData)
             .then(response => {
                 console.log("Form submitted successfully:", response.data);

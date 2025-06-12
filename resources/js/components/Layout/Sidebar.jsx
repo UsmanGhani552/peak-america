@@ -14,7 +14,6 @@ const steps = [
 const Sidebar = () => {
     const location = useLocation();
     const currentStep = parseInt(location.pathname.replace('/step', ''), 10);
-    console.log(currentStep);
     return (
         <>
            
