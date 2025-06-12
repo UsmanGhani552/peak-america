@@ -27,4 +27,16 @@ class MultiStepForm_6 extends Model
     {
         return $this->morphMany(QuestionAnswer::class, 'questionable');
     }
+
+    public function questions()
+    {
+        return $this->hasManyThrough(
+            Question::class,
+            QuestionAnswer::class,
+            'questionable_id', // Foreign key on QuestionAnswer table
+            'id', // Foreign key on Question table
+            'id', // Local key on MultiStepForm_5 table
+            'question_id' // Local key on QuestionAnswer table
+        );
+    }
 }

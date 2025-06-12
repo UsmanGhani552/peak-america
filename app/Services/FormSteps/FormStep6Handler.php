@@ -91,5 +91,5 @@ class FormStep6Handler implements FormStepHandlerInterface
         return $data;
     }
 
-    public const TABLE_AND_RELATIONS = ['multiStepForm6', 'multiStepForm6.questionAnswers'];
+    public const TABLE_AND_RELATIONS = ['multiStepForm6', 'multiStepForm6.questionAnswers', 'multiStepForm6.questions'];
 }

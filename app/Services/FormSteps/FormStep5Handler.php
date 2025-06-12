@@ -92,5 +92,5 @@ class FormStep5Handler implements FormStepHandlerInterface
         return $data;
     }
 
-    public const TABLE_AND_RELATIONS = ['multiStepForm5', 'multiStepForm5.questionAnswers'];
+    public const TABLE_AND_RELATIONS = ['multiStepForm5', 'multiStepForm5.questionAnswers', 'multiStepForm5.questions'];
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guest;
+use App\Models\MultiStepForm;
+use App\Models\MultiStepForm_1;
 use App\Services\FormSteps;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
@@ -137,6 +139,9 @@ class MultiStepFormController extends Controller
         ];
         // Attach note and step to each form attribute
         $forms = [];
+        // $staticFormDetails = MultiStepForm::all()->pluck('step', 'id')->toArray();
+
+        // dd($staticFormDetails);
         foreach ($relations as $relation) {
             if (str_contains($relation, '.')) {
                 continue;
@@ -148,6 +153,16 @@ class MultiStepFormController extends Controller
 
                 $formObj->note = $note ? $note['note'] : null;
                 $formObj->step = $stepNumber;
+
+                foreach ($formObj->form as $form) {
+                    if(isset($form->questions) && isset($form->questionAnswers)){
+                        foreach ($form->questionAnswers as $questionAnswers) {
+                            $questionAnswers->question = $form->questions->firstWhere('id', $questionAnswers->questionable_id)->question ?? null;
+                        }
+
+                        unset($form->questions);
+                    }
+                }
 
                 $forms[] = $formObj;
             }
