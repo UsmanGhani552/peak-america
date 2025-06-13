@@ -49,5 +49,8 @@ class Guest extends Model
     {
         return $this->note()->where('step', $step)->get()->first();
     }
-
+    public function formAssigned()
+    {
+        return $this->hasMany(FormAssignment::class, 'guest_id');
+    }
 }

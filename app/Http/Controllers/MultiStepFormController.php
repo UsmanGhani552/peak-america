@@ -91,6 +91,8 @@ class MultiStepFormController extends Controller
             $relations = self::getRelations();
             $guests = Guest::with($relations)
             ->with('note')
+            // ->with('formAssigned')
+            ->with('formAssigned.user')
             ->paginate(
                 (int) $perPage,    // how many items per page
                 ['*'],             // columns
@@ -136,6 +138,7 @@ class MultiStepFormController extends Controller
             'uuid' => $guest->uuid,
             'created_at' => $guest->created_at,
             'updated_at' => $guest->updated_at,
+            'form_assigned_to' => $guest->formAssigned->pluck('user')->toArray()[0]['name'] ?? null,
         ];
         // Attach note and step to each form attribute
         $forms = [];
