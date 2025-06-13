@@ -157,7 +157,7 @@ class MultiStepFormController extends Controller
                 foreach ($formObj->form as $form) {
                     if(isset($form->questions) && isset($form->questionAnswers)){
                         foreach ($form->questionAnswers as $questionAnswers) {
-                            $questionAnswers->question = $form->questions->firstWhere('id', $questionAnswers->questionable_id)->question ?? null;
+                            $questionAnswers->question = $form->questions->firstWhere('id', $questionAnswers->question_id)->question ?? null;
                         }
 
                         unset($form->questions);
@@ -168,7 +168,6 @@ class MultiStepFormController extends Controller
             }
         }
         $guestData['forms'] = $forms;
-
         return $guestData;
     }
 

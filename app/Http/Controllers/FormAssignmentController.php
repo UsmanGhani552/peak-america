@@ -11,6 +11,28 @@ class FormAssignmentController extends Controller
 {
     use ResponseTrait;
 
+    public function index() {
+        try {
+            $relations = MultiStepFormController::getRelations();
+            $assignedGuestIds = FormAssignment::where('user_id', auth()->user()->id)
+            ->pluck('guest_id')
+            ->toArray();
+
+            // Get guests with those IDs and eager load relations
+            $guests = Guest::with($relations)
+                ->with('note')
+                ->whereIn('id', $assignedGuestIds)
+                ->get();
+
+            if (!$guests) {
+                return ResponseTrait::error("No guests found.", null, 404);
+            }
+            $guestsData = MultiStepFormController::formateForms($guests, $relations);
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('Form assignments failed due to: ' . $th->getMessage(), null, 422);
+        }
+        return view('admin.my-forms.index', ['guestsData' => $guestsData]);
+    }
     public function assignFormToUser(Request $request)
     {
         $data = $request->validate([

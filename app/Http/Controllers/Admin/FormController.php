@@ -32,7 +32,6 @@ class FormController extends Controller
                 return ResponseTrait::error("No guests found.", null, 404);
             }
             $guestsData = MultiStepFormController::formateForms($guests, $relations);
-            // return response($guestsData[0]['uuid']);
             return view('admin.all-forms.index', compact('guestsData'));
         } catch (\Throwable $th) {
             return ResponseTrait::error("Invalid pagination parameters: " . $th->getMessage(), null, 400);
@@ -56,4 +55,25 @@ class FormController extends Controller
             return ResponseTrait::error("Form not found: " . $th->getMessage(), null, 404);
         }
     }
+
+    public function assignFormToUser($guest_id)
+    {
+
+        try {
+            $user_id = auth()->user()->id;
+            $formAssignment = FormAssignment::where('guest_id', $guest_id)
+                ->where('user_id', $user_id)->get()->first();
+            if ($formAssignment) {
+                return ResponseTrait::error('Form already assigned to this user', null, 400);
+            }
+            $formAssignment = FormAssignment::create([
+                'guest_id' => $guest_id,
+                'user_id' => $user_id,
+            ]);
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('Form assignment failed: ' . $th->getMessage(), null, 500);
+        }
+        return redirect()->route('admin.form.index')->with('success', 'Form accepted successfully! Check My Forms to view it.');
+    }
+    
 }

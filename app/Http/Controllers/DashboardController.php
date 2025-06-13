@@ -12,7 +12,7 @@ class DashboardController extends Controller
         $response = $formAssignmentController->assignFormToUser($request);
 
         // Assign the forms to the view
-        return view('dashboard.assign-form-to-user', ['response' => $response]);
+        return view('admin.all-forms.index', ['response' => $response])->with('success', 'Form assigned successfully');
     }
 
     public function getAssignedForms(Request $request, FormAssignmentController $formAssignmentController, MultiStepFormController $multiStepFormController): \Illuminate\View\View
@@ -21,7 +21,7 @@ class DashboardController extends Controller
         $response = $formAssignmentController->getAssignedForms($request, $multiStepFormController);
 
         // Assign the forms to the view
-        return view('dashboard.get-assigned-forms', ['response' => $response]);
+        return view('admin.all-forms.index', ['response' => $response]);
     }
 
     public function getAllUnassignedGuestForms(Request $request, FormAssignmentController $formAssignmentController): \Illuminate\View\View

@@ -50,7 +50,7 @@
             <!-- LOGO -->
             <div class="topbar-left">
                 <div class="text-center bg-logo">
-                    <a href="index.html" class="logo"><i class="mdi mdi-bowling text-success"></i> Zoogler</a>
+                    <a href="index.html" class="logo"><img src="{{ asset('logo-mini.png') }}" height="50" alt="logo"></a>
                     <!-- <a href="index.html" class="logo"><img src="assets/images/logo.png" height="24" alt="logo"></a> -->
                 </div>
             </div>
@@ -86,7 +86,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="calendar.html" class="waves-effect">
+                            <a href="{{ route('admin.my-form.index') }}" class="waves-effect">
                                 <i class="dripicons-to-do"></i><span> My Forms
                                 </span>
                             </a>
@@ -124,7 +124,7 @@
                                 <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                                     <!-- item-->
                                    
-                                    <a class="dropdown-item" href="#"><i class="mdi mdi-logout m-r-5 text-muted"></i>
+                                    <a class="dropdown-item" href="{{ route('admin.logout') }}"><i class="mdi mdi-logout m-r-5 text-muted"></i>
                                         Logout</a>
                                 </div>
                             </li>
@@ -213,6 +213,7 @@
     <!-- App js -->
     <script src="{{ asset('assets/js/app.js') }}"></script>
 
+    @yield('scripts')
     @stack('scripts')
 
 </body>
