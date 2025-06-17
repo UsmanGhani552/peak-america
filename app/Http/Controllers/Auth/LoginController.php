@@ -27,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin/form';
+    protected $redirectTo = '/admin/unassigned-form';
 
     /**
      * Create a new controller instance.

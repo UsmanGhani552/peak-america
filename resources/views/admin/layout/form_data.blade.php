@@ -5,7 +5,7 @@
             var uuid = $(this).data('uuid');
 
             $.ajax({
-                url: 'form/show/' + id,
+                url: 'unassigned-form/show/' + id,
                 type: 'GET',
                 success: function (response) {
                     console.log(response);
@@ -14,11 +14,12 @@
                     if (response && response.data && response.data.forms) {
                         var formData = response.data.forms;
                         var guestId = response.data.id; // Get the ID from your response
-                        var assignFormRoute = '{{ route("admin.form.assign", ["guest_id" => ":id"]) }}'.replace(':id', guestId);
+                        var assignFormRoute = '{{ route("admin.unassigned-form.assign", ["guest_id" => ":id"]) }}'.replace(':id', guestId);
                         var htmlContent = `
                                 <div class="modal-header">
                                     <h5 class="modal-title mt-0">Form Details - ${uuid}</h5>
-                                    ${window.location.pathname == '/admin/form' ? `<a href="${assignFormRoute}" class="btn btn-success btn-sm m-auto">Accept</a>` : ''}
+                                    ${window.location.pathname == '/admin/unassigned-form' ? `<a href="${assignFormRoute}" class="btn btn-success btn-sm m-auto"><i
+                                    class="fas fa-plus-square mr-2"></i>Accept</a>` : ''}
                                     
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                 </div>
@@ -94,7 +95,7 @@
 
             // Add note if exists
             if (formStep.note) {
-                html += `<div class="alert alert-info mb-4"><strong>Note:</strong> ${formStep.note}</div>`;
+                html += `<div class="alert alert-dark mb-4"><strong>Note:</strong> ${formStep.note}</div>`;
             }
 
             html += `<div class="row">`;
@@ -187,7 +188,7 @@
 
                         formData.property.forEach(property => {
                             html += `
-                                    <div class="card mb-2">
+                                    <div class="card mb-2 shadow ">
                                         <div class="card-body">
                                             <h6 class="card-title text-capitalize">${property.type} Property</h6>
                                             <p><strong>Address:</strong> ${property.address}</p>

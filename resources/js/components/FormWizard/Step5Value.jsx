@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { api } from "../../src/api";
+import { getApiInstance } from "../../src/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
+import useStepRedirect from "../../src/hooks/useStepRedirect";
 
 function Step5Value() {
     const navigate = useNavigate();
+
+    useStepRedirect('5');
+
     const [formData, setFormData] = useState({
         step: 5,
         question_answers: [
@@ -55,11 +59,13 @@ function Step5Value() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const api = await getApiInstance();
         console.log("Form Data:", formData);
-        api.post('submit-form', formData)
+        await api.post('submit-form', formData)
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
+                localStorage.setItem('currentStep', '6');
                 setTimeout(() => {
                     navigate('/step6');
                 }, 1500);

@@ -50,25 +50,26 @@
             <!-- LOGO -->
             <div class="topbar-left">
                 <div class="text-center bg-logo">
-                    <a href="index.html" class="logo"><img src="{{ asset('logo-mini.png') }}" height="50" alt="logo"></a>
+                    <a href="index.html" class="logo"><img src="{{ asset('logo-mini.png') }}" height="50"
+                            alt="logo"></a>
                     <!-- <a href="index.html" class="logo"><img src="assets/images/logo.png" height="24" alt="logo"></a> -->
                 </div>
             </div>
             <div class="sidebar-user">
-                <img src="assets/images/users/avatar-6.jpg" alt="user" class="rounded-circle img-thumbnail mb-1">
-                <h6 class="">Mr. Michael Hill </h6>
+                {{-- <img src="assets/images/users/avatar-6.jpg" alt="user" class="rounded-circle img-thumbnail mb-1"> --}}
+                <h6 class="">{{ auth()->user()->name }} </h6>
                 <p class=" online-icon text-dark"><i class="mdi mdi-record text-success"></i>online</p>
                 <ul class="list-unstyled list-inline mb-0 mt-2">
-                    <li class="list-inline-item">
+                    {{-- <li class="list-inline-item">
                         <a href="#" class="" data-toggle="tooltip" data-placement="top" title="Profile"><i
                                 class="dripicons-user text-purple"></i></a>
                     </li>
                     <li class="list-inline-item">
                         <a href="#" class="" data-toggle="tooltip" data-placement="top" title="Settings"><i
                                 class="dripicons-gear text-dark"></i></a>
-                    </li>
+                    </li> --}}
                     <li class="list-inline-item">
-                        <a href="#" class="" data-toggle="tooltip" data-placement="top" title="Log out"><i
+                        <a href="{{ route('admin.logout') }}" class="" data-toggle="tooltip" data-placement="top" title="Log out"><i
                                 class="dripicons-power text-danger"></i></a>
                     </li>
                 </ul>
@@ -77,22 +78,40 @@
             <div class="sidebar-inner slimscrollleft">
 
                 <div id="sidebar-menu">
-                    <ul>    
+                    <ul>
                         <li class="menu-title">Main</li>
-
-                        <li>
-                            <a href="{{ route('admin.form.index') }}" class="waves-effect">
-                                <i class="dripicons-device-desktop"></i><span>All Forms</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.my-form.index') }}" class="waves-effect">
-                                <i class="dripicons-to-do"></i><span> My Forms
-                                </span>
-                            </a>
-                        </li>
-
-
+                        @can('access all forms')
+                            <li>
+                                <a href="{{ route('admin.all-form.index') }}" class="waves-effect">
+                                    <i class="dripicons-document-new"></i><span> All Forms
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('access unassigned forms')
+                            <li>
+                                <a href="{{ route('admin.unassigned-form.index') }}" class="waves-effect">
+                                    <i class="dripicons-document-edit"></i><span>Unassigned Forms</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('access my forms')
+                            <li>
+                                <a href="{{ route('admin.my-form.index') }}" class="waves-effect">
+                                    <i class="dripicons-to-do"></i><span> My Forms
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('access admins')
+                            <li>
+                                <a href="{{ route('admin.user.index') }}" class="waves-effect">
+                                    <i class="dripicons-user-id"></i><span> Admins
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
+                        
                     </ul>
                 </div>
                 <div class="clearfix"></div>
@@ -111,26 +130,23 @@
 
                     <nav class="navbar-custom">
 
-                        <ul class="list-inline float-right mb-0">
+                        <ul class="list-inline float-right mb-0" style="
+                            margin: 16px 16px 16px 60px !important;
+                        ">
                             <!-- language-->
-                            
 
                             <li class="list-inline-item dropdown notification-list">
-                                <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user"
+                                <a href="{{ route('admin.logout') }}" class="btn btn-success btn-danger">Logout</a>
+                                {{-- <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user"
                                     data-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                                     aria-expanded="false">
                                     <img src="assets/images/users/avatar-6.jpg" alt="user" class="rounded-circle">
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                                    <!-- item-->
-                                   
-                                    <a class="dropdown-item" href="{{ route('admin.logout') }}"><i class="mdi mdi-logout m-r-5 text-muted"></i>
-                                        Logout</a>
-                                </div>
+                                </a> --}}
+                                
                             </li>
                         </ul>
 
-                        <ul class="list-inline menu-left mb-0">
+                        {{-- <ul class="list-inline menu-left mb-0">
                             <li class="float-left">
                                 <button class="button-menu-mobile open-left waves-light waves-effect">
                                     <i class="mdi mdi-menu"></i>
@@ -142,7 +158,7 @@
                                     <a href=""><i class="fas fa-search"></i></a>
                                 </form>
                             </li>
-                        </ul>
+                        </ul> --}}
 
                         <div class="clearfix"></div>
                     </nav>

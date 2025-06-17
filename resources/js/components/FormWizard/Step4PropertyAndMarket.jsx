@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { api } from "../../src/api";
+import { getApiInstance } from "../../src/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
+import useStepRedirect from "../../src/hooks/useStepRedirect";
 
 function Step4PropertyAndMarket() {
     const navigate = useNavigate();
+    useStepRedirect('4');
     // State for each property type (You and Spouse separately)
     const [primaryResidence, setPrimaryResidence] = useState({
         you: { address: '', value: '' },
@@ -23,7 +25,6 @@ function Step4PropertyAndMarket() {
         you: [{ address: '', value: '' }],
         spouse: [{ address: '', value: '' }]
     });
-
     const handleFormData = () => {
         const youProperties = [
             {
@@ -212,13 +213,15 @@ function Step4PropertyAndMarket() {
         ],
         note: ''
     });
-
+    console.log('Initial Form Data:', formData);
     const handleSubmit = async (e) => {
             e.preventDefault();
-            api.post('submit-form', formData)
+            const api = await getApiInstance();
+            await api.post('submit-form', formData)
                 .then(response => {
                     console.log("Form submitted successfully:", response.data);
                     toast.success("Success! Your details have been saved.");
+                    localStorage.setItem('currentStep', '5');
                     setTimeout(() => {
                         navigate('/step5');
                     }, 1500);
@@ -419,7 +422,7 @@ function Step4PropertyAndMarket() {
                         <label className="form-label" htmlFor="notes">Note</label>
                     </div>
                     <div className="col-md-10 my-4 form-textarea">
-                        <textarea id="notes" className="form-control" placeholder="Enter note here..."></textarea>
+                        <textarea id="notes" className="form-control" placeholder="Enter note here..." onChange={(e) => setFormData(prev => ({ ...prev, note: e.target.value }))}></textarea>
                         <div className="d-flex justify-content-between mt-3">
                             <Link className="next-btn" to="/step3">Previous</Link>
                             <button className="next-btn" type="submit">Next</button>

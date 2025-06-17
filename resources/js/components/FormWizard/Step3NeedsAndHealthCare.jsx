@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import useStepRedirect from "../../src/hooks/useStepRedirect";
 
 function Step3NeedsAndhealthCare() {
+
+    // useStepRedirect('3');
+
     return (
         <>
             <div className="container-fluid personal-detail-container">

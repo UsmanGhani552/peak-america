@@ -9,30 +9,19 @@ use App\Models\Guest;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 
+use function Laravel\Prompts\select;
+
 class FormController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page', 15);   // default 15 items per page
-        $page  = $request->query('page', 1);
         try {
             $assignedGuestIds = FormAssignment::pluck('guest_id')->toArray();
-            // Build a paginated query:
-            $relations = MultiStepFormController::getRelations();
-            $guests = Guest::whereNotIn('id', $assignedGuestIds)
-                ->with($relations)
-                ->with('note')
-                ->paginate(
-                    (int) $perPage,    // how many items per page
-                    ['*'],             // columns
-                    'page',            // “page” parameter name
-                    (int) $page        // which page to fetch
-                );
-            if (!$guests) {
+            $guestsData = Guest::whereNotIn('id', $assignedGuestIds)->select('id','uuid')->get();
+            if (!$guestsData) {
                 return ResponseTrait::error("No guests found.", null, 404);
             }
-            $guestsData = MultiStepFormController::formateForms($guests, $relations);
-            return view('admin.all-forms.index', compact('guestsData'));
+            return view('admin.unassigned-forms.index', compact('guestsData'));
         } catch (\Throwable $th) {
             return ResponseTrait::error("Invalid pagination parameters: " . $th->getMessage(), null, 400);
         }
@@ -41,16 +30,13 @@ class FormController extends Controller
     public function show($id)
     {
         try {
-            $guest = Guest::with(MultiStepFormController::getRelations())
+            $relations = MultiStepFormController::getRelations();
+            $guest = Guest::with($relations)
                 ->with('note')
                 ->findOrFail($id);
-            $formData = MultiStepFormController::formateForm($guest, MultiStepFormController::getRelations());
+            $formData = MultiStepFormController::formateForm($guest, $relations);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Form data retrieved successfully.',
-                'data' => $formData
-            ]);
+            return ResponseTrait::success("Form data retrieved successfully.", $formData);
         } catch (\Throwable $th) {
             return ResponseTrait::error("Form not found: " . $th->getMessage(), null, 404);
         }
@@ -73,7 +59,19 @@ class FormController extends Controller
         } catch (\Throwable $th) {
             return ResponseTrait::error('Form assignment failed: ' . $th->getMessage(), null, 500);
         }
-        return redirect()->route('admin.form.index')->with('success', 'Form accepted successfully! Check My Forms to view it.');
+        return redirect()->route('admin.unassigned-form.index')->with('success', 'Form accepted successfully! Check My Forms to view it.');
     }
-    
+
+    public function allForms() {
+        try {
+            $guestsData = Guest::with('formAssigned.user')->get();
+            if (!$guestsData) {
+                return ResponseTrait::error("No guests found.", null, 404);
+            }
+        } catch (\Throwable $th) {
+            return ResponseTrait::error('Form assignments failed due to: ' . $th->getMessage(), null, 422);
+        }
+        return view('admin.all-forms.index', ['guestsData' => $guestsData]);
+    }
+
 }

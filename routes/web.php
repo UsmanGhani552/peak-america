@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\FormController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -38,25 +39,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::controller(FormController::class)->prefix('admin/form')->name('admin.form.')->group(function () {
+    Route::controller(FormController::class)->prefix('admin/unassigned-form')->name('admin.unassigned-form.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
         Route::get('/show/{id}', 'show')->name('show');
         Route::get('/assign-form/{guest_id}', 'assignFormToUser')->name('assign');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/edit/{form}', 'edit')->name('edit');
-        Route::post('/update/{form}', 'update')->name('update');
         Route::get('/destroy/{form}', 'delete')->name('delete');
     });
     Route::controller(FormAssignmentController::class)->prefix('admin/my-form')->name('admin.my-form.')->group(function () {
         Route::get('/', 'index')->name('index');
+    });
+    Route::controller(FormController::class)->prefix('admin/all-form')->name('admin.all-form.')->group(function () {
+        Route::get('/', 'allForms')->name('index');
+    });
+
+    Route::controller(UserController::class)->prefix('admin/user')->name('admin.user.')->group(function () {
+        Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
-        Route::get('/show/{id}', 'show')->name('show');
-        Route::get('/assign-form/{guest_id}', 'assignFormToUser')->name('assign');
         Route::post('/store', 'store')->name('store');
-        Route::get('/edit/{form}', 'edit')->name('edit');
-        Route::post('/update/{form}', 'update')->name('update');
-        Route::get('/destroy/{form}', 'delete')->name('delete');
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/delete/{id}', 'delete')->name('delete');
     });
 });
 

@@ -1,14 +1,18 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { api } from "../../src/api";
+import { getApiInstance } from "../../src/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
+import useStepRedirect from "../../src/hooks/useStepRedirect";
 
 
 function Step6Retirement() {
     const navigate = useNavigate();
+
+    useStepRedirect('6');
+
     const [formData, setFormData] = useState({
         step: 6,
         question_answers: [
@@ -40,16 +44,18 @@ function Step6Retirement() {
         }));
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        api.post('submit-form', formData)
+        const api = await getApiInstance();
+        await api.post('submit-form', formData)
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Form submitted successfully!");
-                // setTimeout(() => {
-                //     navigate('/step6');
-                // }, 1500);
+                localStorage.setItem('currentStep', '7');
+                localStorage.setItem('allStepsCompleted', 'true'); // Mark all steps as completed
+                setTimeout(() => {
+                    navigate('/thank-you');
+                }, 1500);
             })
             .catch(error => {
                 if (error.response && error.response.data) {

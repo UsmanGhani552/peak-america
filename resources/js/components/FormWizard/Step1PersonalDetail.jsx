@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "bootstrap/dist/js/bootstrap.bundle.min";
-import { api } from "../../src/api";
+import { getApiInstance } from "../../src/api";
 import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
+import useStepRedirect from "../../src/hooks/useStepRedirect";
 
 function Step1PersonalDetail() {
     const navigate = useNavigate();
+    useStepRedirect('1');
+
     const [inputYou, setYouValue] = useState("1");
     const [inputSpouse, setSpouseValue] = useState("1");
     const [formData, setFormData] = useState({
@@ -94,10 +97,11 @@ function Step1PersonalDetail() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        api.post('submit-form', formData)
+        const api = await getApiInstance();
+        await api.post('submit-form', formData)
             .then(response => {
-                console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
+                localStorage.setItem('currentStep', '2');
                 setTimeout(() => {
                     navigate('/step2'); // Replace with your actual next step route
                 }, 1500);
@@ -132,10 +136,9 @@ function Step1PersonalDetail() {
                 }
             });
     }
-
     return (
         <>
-           <Toaster/>
+            <Toaster />
 
             <div className="personal-detail-container">
                 <div className="row">
@@ -201,7 +204,7 @@ function Step1PersonalDetail() {
                                         />
 
                                         <label className="form-label responsive-label">Email</label>
-                                        <input type="text" className="form-control" placeholder="Enter Email Address"
+                                        <input type="email" className="form-control" placeholder="Enter Email Address"
                                             onChange={(e) => setFormData({
                                                 ...formData, person: formData.person.map((p, index) =>
                                                     index === 0 ? { ...p, email: e.target.value } : p
@@ -302,7 +305,7 @@ function Step1PersonalDetail() {
                                         />
 
                                         <label className="form-label responsive-label">Email</label>
-                                        <input type="text" className="form-control" placeholder="Enter Email Address"
+                                        <input type="email" className="form-control" placeholder="Enter Email Address"
                                             onChange={(e) => setFormData({
                                                 ...formData, person: formData.person.map((p, index) =>
                                                     index === 1 ? { ...p, email: e.target.value } : p
@@ -371,10 +374,10 @@ function Step1PersonalDetail() {
                             <textarea
                                 className="form-control"
                                 placeholder="Enter note here..."
-                                value={formData.notes}
+                                value={formData.note}
                                 onChange={(e) => setFormData({
                                     ...formData,
-                                    notes: e.target.value
+                                    note: e.target.value
                                 })}
                             />
 

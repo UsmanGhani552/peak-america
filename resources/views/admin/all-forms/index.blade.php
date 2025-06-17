@@ -4,9 +4,9 @@
         <div class="col-sm-12">
             <div class="page-title-box">
                 <div class="btn-group float-right">
-                    <a type="button" href="{{ route('admin.form.create') }}"
+                    {{-- <a type="button" href="{{ route('admin.form.create') }}"
                         class="btn btn-primary waves-effect waves-light text-white"><i
-                            class="fas fa-plus-square mr-2"></i>Create</a>
+                            class="fas fa-plus-square mr-2"></i>Create</a> --}}
                 </div>
                 <h4 class="page-title">Forms</h4>
             </div>
@@ -28,7 +28,7 @@
                         <thead>
                             <tr>
                                 <th>Guest Id</th>
-                                {{-- <th>Icon</th> --}}
+                                <th>Assigned To</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -38,6 +38,7 @@
                             @foreach ($guestsData as $data)
                                 <tr>
                                     <td>{{ $data['uuid'] }}</td>
+                                    <td>{{ $data['formAssigned'][0]->user->name ?? 'No user assigned' }}</td>
                                     {{-- <td><img src="{{ asset('images/farm/data/'.$data->icon) }}" alt=""
                                             class="thumb-sm mr-1"></td> --}}
                                     <td>
@@ -46,14 +47,14 @@
                                             data-animation="bounce" data-target=".form-modal-lg">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a type="button" href="{{ route('admin.form.edit', $data['id']) }}"
+                                        {{-- <a type="button" href="{{ route('admin.form.edit', $data['id']) }}"
                                             class="btn btn-sm btn-success text-white">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <a type="button" href="{{ route('admin.form.delete', $data['id']) }}"
                                             class="btn btn-sm btn-danger text-white">
                                             <i class="fas fa-trash-alt"></i>
-                                        </a>
+                                        </a> --}}
                                     </td>
                                 </tr>
                             @endforeach

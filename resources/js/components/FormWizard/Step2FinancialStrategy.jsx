@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { api } from "../../src/api";
+import { getApiInstance } from "../../src/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
+import useStepRedirect from "../../src/hooks/useStepRedirect";
 
 function Step2FinancialStrategy() {
     const navigate = useNavigate();
+    useStepRedirect('2');
+
     const [step1Note, setStep1Note] = useState('');
     const [step2Note, setStep2Note] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
@@ -61,10 +64,10 @@ function Step2FinancialStrategy() {
     }
 
     //form submission
-
+    console.log(step1Note)
     const [formData1, setFormData1] = useState({
         step: 2.1,
-        note: step1Note,
+        note: '',
         person: [
             {
                 is_spouse: false,
@@ -90,6 +93,7 @@ function Step2FinancialStrategy() {
             }
         ]
     });
+    
     const [formData2, setFormData2] = useState({
         step: 2.2,
         note: step2Note,
@@ -116,7 +120,7 @@ function Step2FinancialStrategy() {
             }
         ]
     });
-
+console.log('formData2:', formData2);
     // Update formData whenever input arrays or totals change
     useEffect(() => {
         setFormData1(prev => ({
@@ -144,7 +148,8 @@ function Step2FinancialStrategy() {
                     qualified_retirement_accounts: spouseInputArray[6],
                     total: spouseTotal,
                 }
-            ]
+            ],
+            note: step1Note
         }));
         setFormData2(prev => ({
             ...prev,
@@ -171,18 +176,21 @@ function Step2FinancialStrategy() {
                     qualified_retirement_accounts: spouseAssetArray[6],
                     total: spouseAssetTotal,
                 },
-            ]
+            ],
+            note: step2Note
         }));
-    }, [youInputArray, spouseInputArray, youTotal, spouseTotal, youAssetArray, spouseAssetArray, youAssetTotal, spouseAssetTotal]);
+    }, [youInputArray, spouseInputArray, youTotal, spouseTotal, youAssetArray, spouseAssetArray, youAssetTotal, spouseAssetTotal, step1Note, step2Note]);
     // console.log('form Data:', formData);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const api = await getApiInstance();
         const formData = currentStep === 1 ? formData1 : formData2;
-        api.post('submit-form', formData)
+        await api.post('submit-form', formData)
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
+                localStorage.setItem('currentStep', '4');
                 setTimeout(() => {
                     if (currentStep === 1) {
                         setCurrentStep(prevStep => {
@@ -211,7 +219,6 @@ function Step2FinancialStrategy() {
                 }
             });
     }
-
 
 
     return (
@@ -295,7 +302,7 @@ function Step2FinancialStrategy() {
                                 <label className="form-label" htmlFor="">Note</label>
                             </div>
                             <div className="col-md-10 my-4 form-textarea">
-                                <textarea className="form-control" placeholder="Enter note here..." value={step1Note} onChange={(e) => setStep1Note(e.target.value)}></textarea>
+                                <textarea className="form-control" placeholder="Enter note here..." onChange={(e) => setStep1Note(e.target.value)}></textarea>
 
                                 <div className="d-flex justify-content-between mt-3">
                                     <Link className="next-btn" type="submit" to='/step1'>Previous</Link>
