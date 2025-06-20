@@ -186,16 +186,36 @@
 .personal-detail-label {
     padding-top: 100px;
 }
+.expense-detail-label{
+    padding-top: 89px;
+}
 
-.personal-detail-label label {
+.personal-detail-label label{
     font-weight: 400;
     font-size: 16px;
     color: #000000;
     margin: 0px 0px;
-    height: 78px;
+    height: 74px;
     display: flex;
     align-items: center;
 }
+.text-area-label label {
+    font-weight: 400;
+    font-size: 16px;
+    color: #000000;
+    margin: 0px 0px;
+    display: flex;
+    align-items: center;
+}
+.personal-detail-label .expense-label{    
+    height: 189px;
+    margin-top: 39px;
+}
+/* .personal-detail-label .expense-label:nth-child(even){
+    height: 170px;
+    margin-top: 60px;
+    margin-bottom: 13px;
+} */
 
 .responsive-label {
     display: none;
