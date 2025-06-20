@@ -19,6 +19,7 @@ class MultiStepFormController extends Controller
             '1'   => FormSteps\FormStep1Handler::class,
             '2.1' => FormSteps\FormStep2_1Handler::class,
             '2.2' => FormSteps\FormStep2_2Handler::class,
+            '3'   => FormSteps\FormStep3Handler::class,
             '4'   => FormSteps\FormStep4Handler::class,
             '5'   => FormSteps\FormStep5Handler::class,
             '6'   => FormSteps\FormStep6Handler::class,

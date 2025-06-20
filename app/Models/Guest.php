@@ -26,7 +26,10 @@ class Guest extends Model
     {
         return $this->hasMany(MultiStepForm_2_2::class, 'guest_id');
     }
-
+    public function multiStepForm3()
+    {
+        return $this->hasMany(MultiStepForm_3::class, 'guest_id');
+    }
     public function multiStepForm4()
     {
         return $this->hasMany(MultiStepForm_4::class, 'guest_id');
