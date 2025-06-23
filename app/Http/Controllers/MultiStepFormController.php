@@ -10,6 +10,7 @@ use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MultiStepFormController extends Controller
 {
@@ -169,10 +170,11 @@ class MultiStepFormController extends Controller
                 }
 
                 if($relation == 'multiStepForm3'){
-                    foreach ($formObj as $form) {
-                        if(isset($form->documents)){
-                            if(count($form->documents) != 0){
-                                $formObj->documents = $form->documents;
+                    Log::info( json_encode($formObj));
+                    foreach ($formObj->form as $form) {
+                        if(isset($form['documents'])){
+                            if(count($form['documents']) > 0){
+                                $formObj->documents = $form['documents'];
                             }
                             unset($form->documents);
                         }
