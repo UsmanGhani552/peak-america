@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('multi_step_form_3_id')->constrained('multi_step_form_3s')->onDelete('cascade');
             $table->enum('label', array_column(ExpenseType::cases(), 'value')); // define enum values
             $table->decimal('total', 10, 2)->nullable();
-            $table->decimal('estimated_amount', 10, 2)->nullable();
+            $table->decimal('estimated_annual_amount', 10, 2)->nullable();
             $table->timestamps();
         });
     }

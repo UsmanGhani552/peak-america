@@ -11,7 +11,7 @@ class Expense extends Model
 
         'label',
         'total',
-        'estimated_amount',
+        'estimated_annual_amount',
     ];
     protected $casts = [
         'is_spouse' => 'boolean',

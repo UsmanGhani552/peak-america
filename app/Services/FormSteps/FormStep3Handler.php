@@ -29,7 +29,7 @@ class FormStep3Handler implements FormStepHandlerInterface
 
             'person.*.expenses.*.label' => ['required', Rule::in(array_column(ExpenseType::cases(), 'value'))],
             'person.*.expenses.*.total' => 'required|numeric',
-            'person.*.expenses.*.estimated_amount' => 'nullable|numeric',
+            'person.*.expenses.*.estimated_annual_amount' => 'nullable|numeric',
             'person.*.expenses.*.details' => 'nullable|array',
             'person.*.expenses.*.details.*.label' => 'required|string',
             'person.*.expenses.*.details.*.amount' => 'required|numeric',
@@ -63,7 +63,7 @@ class FormStep3Handler implements FormStepHandlerInterface
                             'multi_step_form_3_id' => $form->id,
                             'label' => $expenseData['label'],
                             'total' => $expenseData['total'],
-                            'estimated_amount' => $expenseData['estimated_amount'] ?? null,
+                            'estimated_annual_amount' => $expenseData['estimated_annual_amount'] ?? null,
                         ]);
 
                         // Save Expense Details
