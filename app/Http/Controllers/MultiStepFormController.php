@@ -168,6 +168,17 @@ class MultiStepFormController extends Controller
                     }
                 }
 
+                if($relation == 'multiStepForm3'){
+                    foreach ($formObj as $form) {
+                        if(isset($form->documents)){
+                            if(count($form->documents) != 0){
+                                $formObj->documents = $form->documents;
+                            }
+                            unset($form->documents);
+                        }
+                    }
+                }
+
                 $forms[] = $formObj;
             }
         }

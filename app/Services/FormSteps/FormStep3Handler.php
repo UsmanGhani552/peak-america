@@ -52,8 +52,6 @@ class FormStep3Handler implements FormStepHandlerInterface
                 $form = MultiStepForm_3::updateOrCreate([
                     'guest_id' => $guest_id,
                     'is_spouse' => $person['is_spouse'],
-                ], [
-                    'expense_documents' => $person['expense_documents'] ?? null,
                 ]);
 
                 // Save Expenses
@@ -93,7 +91,11 @@ class FormStep3Handler implements FormStepHandlerInterface
                     ]);
 
                     // Save the document using the polymorphic relation
-                    $form->documents()->save($document);
+                    foreach ($storedPersons as $form) {
+                        if(!$form->is_spouse){
+                            $form->documents()->save($document);
+                        }
+                    }
 
                     // Optional: attach to a response
                     $response->documents[] = $document;
