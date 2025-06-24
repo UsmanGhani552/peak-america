@@ -1,5 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { getApiInstance } from "../../src/api";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
+import Toaster from "../Layout/Toaster";
+import useStepRedirect from "../../src/hooks/useStepRedirect";
 
 function Step3NeedsAndhealthCare() {
     // Initialize all state with proper structure
@@ -48,8 +54,8 @@ function Step3NeedsAndhealthCare() {
     // Function to calculate totals for a given section
     const calculateTotals = (section) => {
         let state, setState;
-        
-        switch(section) {
+
+        switch (section) {
             case 'needs':
                 state = needs;
                 setState = setNeeds;
@@ -90,7 +96,7 @@ function Step3NeedsAndhealthCare() {
     // Generic function to add inputs
     const addInputs = (person, type) => {
         const newItem = { description: '', amount: '' };
-        
+
         if (type === 'needs') {
             setNeeds(prev => ({
                 ...prev,
@@ -200,23 +206,117 @@ function Step3NeedsAndhealthCare() {
         setDocuments(e.target.files);
     };
 
-    // Handle form submission (for API integration)
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        
-        // Prepare data for API
-        const formData = {
-            needs,
-            wants,
-            liabilities,
-            largeExpense,
-            documents,
-            notes
+    const handleFormData = () => {
+        const formatExpenses = (data, total, annual) => {
+            return [
+                {
+                    label: `your_needs`,
+                    total,
+                    estimated_amount: annual,
+                    details: data.needs.map(item => ({
+                        label: item.description,
+                        amount: parseFloat(item.amount || 0)
+                    }))
+                },
+                {
+                    label: `your_wants`,
+                    total: data.wantsTotal,
+                    estimated_amount: data.wantsAnnual,
+                    details: data.wants.map(item => ({
+                        label: item.description,
+                        amount: parseFloat(item.amount || 0)
+                    }))
+                },
+                {
+                    label: `liabilities`,
+                    total: data.liabilitiesTotal,
+                    estimated_amount: data.liabilitiesAnnual,
+                    details: data.liabilities.map(item => ({
+                        label: item.description,
+                        amount: parseFloat(item.amount || 0)
+                    }))
+                },
+                {
+                    label: `large_expense`,
+                    total: 0, // Optional: add total if needed
+                    estimated_amount: 0,
+                    details: data.largeExpense.map(item => ({
+                        label: item.description,
+                        amount: parseFloat(item.amount || 0)
+                    }))
+                }
+            ];
         };
+        const newFormData = {
+            step: 3,
+            person: [
+                {
+                    is_spouse: false,
+                    expenses: formatExpenses({
+                        needs: needs.you,
+                        wants: wants.you,
+                        liabilities: liabilities.you,
+                        largeExpense: largeExpense.you,
+                        wantsTotal: wants.youTotal,
+                        wantsAnnual: wants.youAnnual,
+                        liabilitiesTotal: liabilities.youTotal,
+                        liabilitiesAnnual: liabilities.youAnnual
+                    }, needs.youTotal, needs.youAnnual)
+                },
+                {
+                    is_spouse: true,
+                    expenses: formatExpenses({
+                        needs: needs.spouse,
+                        wants: wants.spouse,
+                        liabilities: liabilities.spouse,
+                        largeExpense: largeExpense.spouse,
+                        wantsTotal: wants.spouseTotal,
+                        wantsAnnual: wants.spouseAnnual,
+                        liabilitiesTotal: liabilities.spouseTotal,
+                        liabilitiesAnnual: liabilities.spouseAnnual
+                    }, needs.spouseTotal, needs.spouseAnnual)
+                }
+            ],
+            note: notes || '',
+            documents: documents
+        };
+        setFormData(newFormData);
+    }
 
-        console.log('Form data ready for API:', formData);
-        // Here you would typically make an API call with the formData
-    };
+    useEffect(() => {
+        handleFormData();
+    }, [needs, wants, liabilities, largeExpense]);
+
+    const [formData, setFormData] = useState();
+
+    // Handle form submission (for API integration)
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const api = await getApiInstance();
+        await api.post('submit-form', formData)
+            .then(response => {
+                console.log("Form submitted successfully:", response.data);
+                toast.success("Success! Your details have been saved.");
+                localStorage.setItem('currentStep', '4');
+                setTimeout(() => {
+                    navigate('/step4');
+                }, 1500);
+            })
+            .catch(error => {
+                if (error.response && error.response.data) {
+                    const errorData = error.response.data.data.error;
+                    // Process each error and show in toast
+                    Object.entries(errorData).forEach(([key, messages]) => {
+                        // Show each error message in a toast
+                        toast.error(`${messages}`);
+
+                    });
+                } else {
+                    toast.error("An unknown error occurred. Please try again.");
+                    console.error("Unknown error:", error);
+                }
+            });
+        }
 
     const maxNeedsRows = Math.max(needs.you.length, needs.spouse.length);
     const maxWantsRows = Math.max(wants.you.length, wants.spouse.length);
@@ -275,9 +375,9 @@ function Step3NeedsAndhealthCare() {
                                                     )}
                                                 </div>
                                                 <label className="form-label responsive-label">Estimated Monthly Expenses</label>
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
                                                     placeholder="Enter Expense"
                                                     value={expense.description}
                                                     onChange={(e) => handleChange('needs', 'you', index, 'description', e.target.value)}
@@ -309,7 +409,6 @@ function Step3NeedsAndhealthCare() {
                                                 type="number"
                                                 className="form-control"
                                                 placeholder="Enter Annual Expense"
-                                                readOnly
                                             />
                                         </div>
                                     </div>
@@ -347,9 +446,9 @@ function Step3NeedsAndhealthCare() {
                                                     )}
                                                 </div>
                                                 <label className="form-label responsive-label">Estimated Monthly Expenses</label>
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
                                                     placeholder="Enter Expense"
                                                     value={expense.description}
                                                     onChange={(e) => handleChange('needs', 'spouse', index, 'description', e.target.value)}
@@ -367,17 +466,17 @@ function Step3NeedsAndhealthCare() {
                                     </div>
                                     <div className="mt-top">
                                         <label className="form-label responsive-label">Total</label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control" 
+                                        <input
+                                            type="number"
+                                            className="form-control"
                                             placeholder="$00.00"
                                             value={needs.spouseTotal}
                                             readOnly
                                         />
                                         <label className="form-label responsive-label">Estimated Annual Expenses</label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control" 
+                                        <input
+                                            type="number"
+                                            className="form-control"
                                             placeholder="Enter Annual Expense"
                                         />
                                     </div>
@@ -437,9 +536,9 @@ function Step3NeedsAndhealthCare() {
                                                     )}
                                                 </div>
                                                 <label className="form-label responsive-label">Estimated Monthly Expenses</label>
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
                                                     placeholder="Enter Expense"
                                                     value={expense.description}
                                                     onChange={(e) => handleChange('wants', 'you', index, 'description', e.target.value)}
@@ -508,9 +607,9 @@ function Step3NeedsAndhealthCare() {
                                                     )}
                                                 </div>
                                                 <label className="form-label responsive-label">Estimated Monthly Expenses</label>
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
                                                     placeholder="Enter Expense"
                                                     value={expense.description}
                                                     onChange={(e) => handleChange('wants', 'spouse', index, 'description', e.target.value)}
@@ -528,17 +627,17 @@ function Step3NeedsAndhealthCare() {
                                     </div>
                                     <div className="mt-top">
                                         <label className="form-label responsive-label">Total</label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control" 
+                                        <input
+                                            type="number"
+                                            className="form-control"
                                             placeholder="$00.00"
                                             value={wants.spouseTotal}
                                             readOnly
                                         />
                                         <label className="form-label responsive-label">Estimated Annual Expenses</label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control" 
+                                        <input
+                                            type="number"
+                                            className="form-control"
                                             placeholder="Enter Annual Expense"
                                         />
                                     </div>
@@ -598,9 +697,9 @@ function Step3NeedsAndhealthCare() {
                                                     )}
                                                 </div>
                                                 <label className="form-label responsive-label">Estimated Monthly Liabilities</label>
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
                                                     placeholder="Enter Liability"
                                                     value={expense.description}
                                                     onChange={(e) => handleChange('liabilities', 'you', index, 'description', e.target.value)}
@@ -619,18 +718,18 @@ function Step3NeedsAndhealthCare() {
 
                                     <div className="mt-auto">
                                         <label className="form-label responsive-label">Total</label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control" 
+                                        <input
+                                            type="number"
+                                            className="form-control"
                                             placeholder="$00.00"
                                             value={liabilities.youTotal}
                                             readOnly
                                         />
                                         <div>
                                             <label className="form-label responsive-label">Estimated Annual Expenses</label>
-                                            <input 
-                                                type="number" 
-                                                className="form-control" 
+                                            <input
+                                                type="number"
+                                                className="form-control"
                                                 placeholder="Enter Annual Liabilities"
                                             />
                                         </div>
@@ -669,9 +768,9 @@ function Step3NeedsAndhealthCare() {
                                                     )}
                                                 </div>
                                                 <label className="form-label responsive-label">Estimated Monthly Liabilities</label>
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
                                                     placeholder="Enter Liability"
                                                     value={expense.description}
                                                     onChange={(e) => handleChange('liabilities', 'spouse', index, 'description', e.target.value)}
@@ -689,17 +788,17 @@ function Step3NeedsAndhealthCare() {
                                     </div>
                                     <div className="mt-top">
                                         <label className="form-label responsive-label">Total</label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control" 
+                                        <input
+                                            type="number"
+                                            className="form-control"
                                             placeholder="$00.00"
                                             value={liabilities.spouseTotal}
                                             readOnly
                                         />
                                         <label className="form-label responsive-label">Estimated Annual Expenses</label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control" 
+                                        <input
+                                            type="number"
+                                            className="form-control"
                                             placeholder="Enter Annual Liabilities"
                                         />
                                     </div>
@@ -751,9 +850,9 @@ function Step3NeedsAndhealthCare() {
                                                     )}
                                                 </div>
                                                 <label className="form-label responsive-label">Expense Description</label>
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
                                                     placeholder="Enter Description"
                                                     value={expense.description}
                                                     onChange={(e) => handleChange('largeExpense', 'you', index, 'description', e.target.value)}
@@ -803,9 +902,9 @@ function Step3NeedsAndhealthCare() {
                                                     )}
                                                 </div>
                                                 <label className="form-label responsive-label">Expense Description</label>
-                                                <input 
-                                                    type="text" 
-                                                    className="form-control" 
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
                                                     placeholder="Enter Description"
                                                     value={expense.description}
                                                     onChange={(e) => handleChange('largeExpense', 'spouse', index, 'description', e.target.value)}
@@ -833,11 +932,11 @@ function Step3NeedsAndhealthCare() {
                         <label className="form-label" htmlFor="">Expense Documents</label>
                     </div>
                     <div className="col-md-10 my-4">
-                        <input 
-                            type="file" 
-                            className="form-control" 
-                            id="expense-documents" 
-                            multiple 
+                        <input
+                            type="file"
+                            className="form-control"
+                            id="expense-documents"
+                            multiple
                             onChange={handleFileChange}
                         />
                     </div>
@@ -849,8 +948,8 @@ function Step3NeedsAndhealthCare() {
                         <label className="form-label" htmlFor="">Note</label>
                     </div>
                     <div className="col-md-10 my-4 form-textarea">
-                        <textarea 
-                            className="form-control" 
+                        <textarea
+                            className="form-control"
                             placeholder="Enter note here..."
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
