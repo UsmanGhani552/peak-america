@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import useStepRedirect from "../../src/hooks/useStepRedirect";
 import axios from 'axios';
+import LoadingSpinner from "../LoadingSpinner";
 
 function Step3NeedsAndhealthCare() {
     // Initialize all state with proper structure
     const navigate = useNavigate();
     useStepRedirect('3');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState();
     const [needs, setNeeds] = useState({
         you: [{ description: '', amount: 0 }],
@@ -300,7 +302,7 @@ function Step3NeedsAndhealthCare() {
     // Handle form submission (for API integration)
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    setIsSubmitting(true);
 
         const formatExpenses = (data, total, annual) => {
             return [
@@ -433,10 +435,12 @@ function Step3NeedsAndhealthCare() {
                 toast.success("Success! Your details have been saved.");
                 localStorage.setItem('currentStep', '4');
                 setTimeout(() => {
+                    setIsSubmitting(false);
                     navigate('/step4');
                 }, 1500);
             })
             .catch(error => {
+                setIsSubmitting(false);
                 if (error.response && error.response.data) {
                     const errorData = error.response.data.data.error;
                     // Process each error and show in toast
@@ -458,6 +462,7 @@ function Step3NeedsAndhealthCare() {
 
     return (
         <>
+        <LoadingSpinner show={isSubmitting} />
         <Toaster/>
         <div className="container-fluid personal-detail-container">
             <form className="container-fluid" onSubmit={handleSubmit} encType="multipart/formdata">

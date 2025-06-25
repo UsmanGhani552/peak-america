@@ -6,11 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import useStepRedirect from "../../src/hooks/useStepRedirect";
+import LoadingSpinner from "../LoadingSpinner";
 
 function Step2FinancialStrategy() {
     const navigate = useNavigate();
     useStepRedirect('2');
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [step1Note, setStep1Note] = useState('');
     const [step2Note, setStep2Note] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
@@ -120,7 +121,6 @@ function Step2FinancialStrategy() {
             }
         ]
     });
-console.log('formData2:', formData2);
     // Update formData whenever input arrays or totals change
     useEffect(() => {
         setFormData1(prev => ({
@@ -184,6 +184,7 @@ console.log('formData2:', formData2);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const api = await getApiInstance();
         const formData = currentStep === 1 ? formData1 : formData2;
         await api.post('submit-form', formData)
@@ -193,6 +194,7 @@ console.log('formData2:', formData2);
                 localStorage.setItem('currentStep', '3');
                 setTimeout(() => {
                     if (currentStep === 1) {
+                        setIsSubmitting(false);
                         setCurrentStep(prevStep => {
                             // Ensure we're moving to the correct next step
                             const nextStep = 2; // Or your actual next step
@@ -200,11 +202,13 @@ console.log('formData2:', formData2);
                             return nextStep;
                         });
                     } else {
+                        setIsSubmitting(false);
                         navigate('/step3');
                     }
                 }, 1500);
             })
             .catch(error => {
+                setIsSubmitting(false);
                 if (error.response && error.response.data) {
                     const errorData = error.response.data.data.error;
                     // Process each error and show in toast
@@ -223,6 +227,7 @@ console.log('formData2:', formData2);
 
     return (
         <>
+        <LoadingSpinner show={isSubmitting} />
             <Toaster/>
 
             <div className="personal-detail-container">

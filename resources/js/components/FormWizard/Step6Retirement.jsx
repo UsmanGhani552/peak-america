@@ -6,13 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import useStepRedirect from "../../src/hooks/useStepRedirect";
+import LoadingSpinner from "../LoadingSpinner";
 
 
 function Step6Retirement() {
     const navigate = useNavigate();
 
     useStepRedirect('6');
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         step: 6,
         question_answers: [
@@ -46,6 +47,7 @@ function Step6Retirement() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const api = await getApiInstance();
         await api.post('submit-form', formData)
             .then(response => {
@@ -54,10 +56,12 @@ function Step6Retirement() {
                 localStorage.setItem('currentStep', '7');
                 localStorage.setItem('allStepsCompleted', 'true'); // Mark all steps as completed
                 setTimeout(() => {
+                    setIsSubmitting(false);
                     navigate('/thank-you');
                 }, 1500);
             })
             .catch(error => {
+                setIsSubmitting(false);
                 if (error.response && error.response.data) {
                     const errorData = error.response.data.data.error;
                     // Process each error and show in toast
@@ -74,6 +78,7 @@ function Step6Retirement() {
     }
     return (
         <>
+        <LoadingSpinner show={isSubmitting} />
         <Toaster/>
             <div className="container-fluid personal-detail-container">
                 <div className="row">

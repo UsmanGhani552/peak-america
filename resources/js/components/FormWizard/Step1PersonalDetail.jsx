@@ -7,11 +7,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import useStepRedirect from "../../src/hooks/useStepRedirect";
+import LoadingSpinner from "../LoadingSpinner";
 
 function Step1PersonalDetail() {
     const navigate = useNavigate();
     useStepRedirect('1');
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [inputYou, setYouValue] = useState("1");
     const [inputSpouse, setSpouseValue] = useState("1");
     const [formData, setFormData] = useState({
@@ -97,16 +98,19 @@ function Step1PersonalDetail() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const api = await getApiInstance();
         await api.post('submit-form', formData)
             .then(response => {
                 toast.success("Success! Your details have been saved.");
                 localStorage.setItem('currentStep', '2');
                 setTimeout(() => {
+                    setIsSubmitting(false);
                     navigate('/step2'); // Replace with your actual next step route
                 }, 1500);
             })
             .catch(error => {
+                setIsSubmitting(false);
                 if (error.response && error.response.data) {
                     const errorData = error.response.data.data.error;
                     console.log(errorData);
@@ -138,8 +142,8 @@ function Step1PersonalDetail() {
     }
     return (
         <>
+        <LoadingSpinner show={isSubmitting} />
             <Toaster />
-
             <div className="personal-detail-container">
                 <div className="row">
                     <div className="col personal-detail-header">

@@ -6,10 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import useStepRedirect from "../../src/hooks/useStepRedirect";
+import LoadingSpinner from "../LoadingSpinner";
 
 function Step4PropertyAndMarket() {
     const navigate = useNavigate();
     useStepRedirect('4');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     // State for each property type (You and Spouse separately)
     const [primaryResidence, setPrimaryResidence] = useState({
         you: { address: '', value: '' },
@@ -215,7 +217,8 @@ function Step4PropertyAndMarket() {
     });
     console.log('Initial Form Data:', formData);
     const handleSubmit = async (e) => {
-            e.preventDefault();
+        e.preventDefault();
+        setIsSubmitting(true);
             const api = await getApiInstance();
             await api.post('submit-form', formData)
                 .then(response => {
@@ -223,10 +226,12 @@ function Step4PropertyAndMarket() {
                     toast.success("Success! Your details have been saved.");
                     localStorage.setItem('currentStep', '5');
                     setTimeout(() => {
+                        setIsSubmitting(false);
                         navigate('/step5');
                     }, 1500);
                 })
                 .catch(error => {
+                    setIsSubmitting(false);
                     if (error.response && error.response.data) {
                         const errorData = error.response.data.data.error;
                         // Process each error and show in toast
@@ -247,6 +252,7 @@ function Step4PropertyAndMarket() {
 
     return (
         <>
+        <LoadingSpinner show={isSubmitting} />
         <Toaster/>
         <div className="container-fluid personal-detail-container">
             <form onSubmit={handleSubmit} className="container-fluid">

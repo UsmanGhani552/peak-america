@@ -6,12 +6,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import useStepRedirect from "../../src/hooks/useStepRedirect";
+import LoadingSpinner from "../LoadingSpinner";
 
 function Step5Value() {
     const navigate = useNavigate();
 
     useStepRedirect('5');
-
+const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         step: 5,
         question_answers: [
@@ -59,6 +60,7 @@ function Step5Value() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const api = await getApiInstance();
         console.log("Form Data:", formData);
         await api.post('submit-form', formData)
@@ -67,10 +69,12 @@ function Step5Value() {
                 toast.success("Success! Your details have been saved.");
                 localStorage.setItem('currentStep', '6');
                 setTimeout(() => {
+                    setIsSubmitting(false);
                     navigate('/step6');
                 }, 1500);
             })
             .catch(error => {
+                setIsSubmitting(false);
                 if (error.response && error.response.data) {
                     const errorData = error.response.data.data.error;
                     // Process each error and show in toast
@@ -88,6 +92,7 @@ function Step5Value() {
 
     return (
         <>
+        <LoadingSpinner show={isSubmitting} />
          <Toaster/>
             <div className="container-fluid personal-detail-container">
                 <form onSubmit={handleSubmit}>
