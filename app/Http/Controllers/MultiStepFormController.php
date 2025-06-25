@@ -9,6 +9,7 @@ use App\Services\FormSteps;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -91,16 +92,29 @@ class MultiStepFormController extends Controller
         try {
             // Build a paginated query:
             $relations = self::getRelations();
-            $guests = Guest::with($relations)
+            $formRelationNames = self::getFormNamesUsingRelations($relations);
+            $guestsCollection = Guest::with($relations)
             ->with('note')
-            // ->with('formAssigned')
             ->with('formAssigned.user')
-            ->paginate(
-                (int) $perPage,    // how many items per page
-                ['*'],             // columns
-                'page',            // “page” parameter name
-                (int) $page        // which page to fetch
+            ->get()
+            ->filter(function ($element) use ($formRelationNames) {
+                foreach ($formRelationNames as $name) {
+                    if (count($element[$name]) == 0){
+                        return false;
+                    }
+                }
+                return true;
+            })
+            ->values();
+            $guests = new LengthAwarePaginator(
+                $guestsCollection->forPage($page, $perPage),
+                $guestsCollection->count(),
+                $perPage,
+                $page,
+                ['path' => request()->url(), 'query' => request()->query()]
             );
+
+            // dd(json_encode($guests, JSON_PRETTY_PRINT));
             if (!$guests) {
                 return ResponseTrait::error("No guests found.", null, 404);
             }
@@ -121,6 +135,23 @@ class MultiStepFormController extends Controller
             }
         }
         return $relations;
+    }
+    public static function getFormNames()
+    {
+        $relations = self::getRelations();
+        $formRelationNames = self::getFormNamesUsingRelations($relations);
+        return $formRelationNames;
+    }
+    public static function getFormNamesUsingRelations($relations)
+    {
+        $formRelationNames = [];
+        foreach ($relations as $relation) {
+            if (str_contains($relation, '.')) {
+                continue;
+            }
+            $formRelationNames[] = $relation;
+        }
+        return $formRelationNames;
     }
 
     public static function formateForms($guests, $relations){

@@ -14,9 +14,19 @@ class FormAssignmentController extends Controller
     public function index()
     {
         try {
+            $formRelationNames = MultiStepFormController::getFormNames();
             $assignedGuestIds = FormAssignment::where('user_id', auth()->user()->id)
-                ->pluck('guest_id')
-                ->toArray();
+            ->get()
+            ->filter(function ($element) use ($formRelationNames) {
+                foreach ($formRelationNames as $name) {
+                    if (count($element[$name]) == 0){
+                        return false;
+                    }
+                }
+                return true;
+            })
+            ->pluck('guest_id')
+            ->toArray();
 
             $guestsData = Guest::whereIn('id', $assignedGuestIds)->get();
             if (!$guestsData) {

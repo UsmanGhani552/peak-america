@@ -16,7 +16,17 @@ class FormController extends Controller
     public function index(Request $request)
     {
         try {
-            $assignedGuestIds = FormAssignment::pluck('guest_id')->toArray();
+            $formRelationNames = MultiStepFormController::getFormNames();
+            $assignedGuestIds = FormAssignment::pluck('guest_id')->get()
+            ->filter(function ($element) use ($formRelationNames) {
+                foreach ($formRelationNames as $name) {
+                    if (count($element[$name]) == 0){
+                        return false;
+                    }
+                }
+                return true;
+            })
+            ->values();
             $guestsData = Guest::whereNotIn('id', $assignedGuestIds)->select('id','uuid')->get();
             if (!$guestsData) {
                 return ResponseTrait::error("No guests found.", null, 404);
@@ -64,7 +74,17 @@ class FormController extends Controller
 
     public function allForms() {
         try {
-            $guestsData = Guest::with('formAssigned.user')->get();
+            $formRelationNames = MultiStepFormController::getFormNames();
+            $guestsData = Guest::with('formAssigned.user')->get()
+            ->filter(function ($element) use ($formRelationNames) {
+                foreach ($formRelationNames as $name) {
+                    if (count($element[$name]) == 0){
+                        return false;
+                    }
+                }
+                return true;
+            })
+            ->values();
             if (!$guestsData) {
                 return ResponseTrait::error("No guests found.", null, 404);
             }
