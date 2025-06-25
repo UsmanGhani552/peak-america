@@ -79,4 +79,6 @@ Route::get('/{any}', function () {
 })->where('any', '^(?!admin).*');
 Auth::routes();
 
-Route::get('/admin/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/admin/home', function(){
+    return redirect('/admin/unassigned-form');
+})->name('home');

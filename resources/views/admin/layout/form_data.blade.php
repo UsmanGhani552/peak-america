@@ -1,3 +1,8 @@
+<style>
+    .modal-lg{
+        max-width: 850px !important;
+    }
+</style>
 <script>
     $(document).ready(function () {
         $('.show-form-data').on('click', function () {
@@ -79,14 +84,13 @@
                 '1': 'Personal Info',
                 '2_1': 'Financial Assets',
                 '2_2': 'Additional Assets',
+                '3': 'Expenses',
                 '4': 'Property',
                 '5': 'Value',
                 '6': 'Retirement'
             };
             return stepNames[step.toString().replace('.', '_')] || `Step ${step}`;
         }
-
-        // ... rest of your existing functions (renderFormStep, renderFormData, formatDate) ...
 
         function renderFormStep(formStep) {
             let html = '';
@@ -97,7 +101,28 @@
             if (formStep.note) {
                 html += `<div class="alert alert-dark mb-4"><strong>Note:</strong> ${formStep.note}</div>`;
             }
+            if (formStep.documents && formStep.documents.length > 0) {
+                html += `
+            <div class="card mt-4 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Supporting Documents</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">`;
 
+                formStep.documents.forEach(doc => {
+                    html += `
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="${doc.path}" target="_blank">${doc.name}</a>
+                            <span class="badge badge-primary badge-pill">PDF</span>
+                        </li>`;
+                });
+
+                html += `
+                    </ul>
+                </div>
+            </div>`;
+            }
             html += `<div class="row">`;
 
             // Primary (You) column
@@ -182,6 +207,89 @@
                             </div>`;
                     break;
 
+                case 3: // Expenses
+                    html += `<div class="expenses-container">`;
+
+                    if (formData.expenses && formData.expenses.length > 0) {
+                        // Group expenses by category
+                        const groupedExpenses = {};
+                        formData.expenses.forEach(expense => {
+                            if (!groupedExpenses[expense.label]) {
+                                groupedExpenses[expense.label] = {
+                                    label: expense.label.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                                    total: expense.total,
+                                    estimated_annual_amount: expense.estimated_annual_amount,
+                                    items: []
+                                };
+                            }
+                            if (expense.expense_details && expense.expense_details.length > 0) {
+                                groupedExpenses[expense.label].items.push(...expense.expense_details);
+                            }
+                        });
+
+                        // Display each expense category
+                        for (const [category, data] of Object.entries(groupedExpenses)) {
+                            html += `
+                                <div class="card mb-4 shadow-sm">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">${data.label}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                    `
+                                        if(data.label !== 'Large Expense'){
+                                        html += `
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <p><strong>Total:</strong> $${data.total}</p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p><strong>Estimated Annual Amount:</strong> $${data.estimated_annual_amount}</p>
+                                                </div>
+                                            </div>`;
+                                        }
+
+                                        if (data.items.length > 0) {
+                                            let label = '';
+                                            if (data.label === "Liabilities") {
+                                                label = 'Monthly Liabilities';
+                                            } else if (data.label === "Large Expense"){
+                                                label = 'Description';
+                                            }else{
+                                                label = 'Monthly Expense';
+                                            }
+                                            html += `
+                                            <table class="table table-bordered table-hover">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>${label}</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>`;
+
+                                                data.items.forEach(item => {
+                                                    html += `
+                                                            <tr>
+                                                                <td>${item.label}</td>
+                                                                <td>$${item.amount}</td>
+                                                            </tr>`;
+                                                });
+
+                                html += `
+                                                </tbody>
+                                            </table>`;
+                            } else {
+                                html += `<p class="text-muted">No expense items recorded</p>`;
+                            }
+
+                            html += `</div></div>`;
+                        }
+                    } else {
+                        html += `<div class="alert alert-info">No expense information available</div>`;
+                    }
+
+                    html += `</div>`; // Close expenses-container
+                    break;
                 case 4: // Property
                     if (formData.property && formData.property.length > 0) {
                         html += `<div class="mb-3">`;

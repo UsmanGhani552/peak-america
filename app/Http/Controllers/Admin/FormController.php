@@ -17,8 +17,8 @@ class FormController extends Controller
     {
         try {
             $formRelationNames = MultiStepFormController::getFormNames();
-            $assignedGuestIds = FormAssignment::pluck('guest_id')->get()
-            ->filter(function ($element) use ($formRelationNames) {
+            $assignedGuestIds = FormAssignment::pluck('guest_id')->toArray();
+            $guestsData = Guest::whereNotIn('id', $assignedGuestIds)->select('id','uuid')->get()->filter(function ($element) use ($formRelationNames) {
                 foreach ($formRelationNames as $name) {
                     if (count($element[$name]) == 0){
                         return false;
@@ -26,8 +26,7 @@ class FormController extends Controller
                 }
                 return true;
             })
-            ->values();
-            $guestsData = Guest::whereNotIn('id', $assignedGuestIds)->select('id','uuid')->get();
+            ->values();;
             if (!$guestsData) {
                 return ResponseTrait::error("No guests found.", null, 404);
             }
