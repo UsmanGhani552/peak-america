@@ -1,47 +1,51 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getApiInstance } from "../../src/api";
+import { getApiInstance, getApiInstance_formData } from "../../src/api";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import useStepRedirect from "../../src/hooks/useStepRedirect";
+import axios from 'axios';
 
 function Step3NeedsAndhealthCare() {
     // Initialize all state with proper structure
+    const navigate = useNavigate();
+    useStepRedirect('3');
+    const [formData, setFormData] = useState();
     const [needs, setNeeds] = useState({
-        you: [{ description: '', amount: '' }],
-        spouse: [{ description: '', amount: '' }],
-        youTotal: '0',
-        youAnnual: '0',
-        spouseTotal: '0',
-        spouseAnnual: '0'
+        you: [{ description: '', amount: 0 }],
+        spouse: [{ description: '', amount: 0 }],
+        youTotal: 0,
+        youAnnual: 0,
+        spouseTotal: 0,
+        spouseAnnual: 0
     });
 
     const [wants, setWants] = useState({
-        you: [{ description: '', amount: '' }],
-        spouse: [{ description: '', amount: '' }],
-        youTotal: '0',
-        youAnnual: '0',
-        spouseTotal: '0',
-        spouseAnnual: '0'
+        you: [{ description: '', amount: 0 }],
+        spouse: [{ description: '', amount: 0 }],
+        youTotal: 0,
+        youAnnual: 0,
+        spouseTotal: 0,
+        spouseAnnual: 0
     });
 
     const [liabilities, setLiabilities] = useState({
-        you: [{ description: '', amount: '' }],
-        spouse: [{ description: '', amount: '' }],
-        youTotal: '0',
-        youAnnual: '0',
-        spouseTotal: '0',
-        spouseAnnual: '0'
+        you: [{ description: '', amount: 0 }],
+        spouse: [{ description: '', amount: 0 }],
+        youTotal: 0,
+        youAnnual: 0,
+        spouseTotal: 0,
+        spouseAnnual: 0
     });
 
     const [largeExpense, setLargeExpense] = useState({
-        you: [{ description: '', amount: '' }],
-        spouse: [{ description: '', amount: '' }]
+        you: [{ description: '', amount: 0 }],
+        spouse: [{ description: '', amount: 0 }]
     });
 
-    const [documents, setDocuments] = useState(null);
+    const [documents, setDocuments] = useState([]);
     const [notes, setNotes] = useState('');
 
     // Calculate totals whenever the amounts change
@@ -49,7 +53,7 @@ function Step3NeedsAndhealthCare() {
         calculateTotals('needs');
         calculateTotals('wants');
         calculateTotals('liabilities');
-    }, [needs.you, needs.spouse, wants.you, wants.spouse, liabilities.you, liabilities.spouse]);
+    }, [needs.you, needs.spouse, wants.you, wants.spouse, liabilities.you, liabilities.spouse, documents]);
 
     // Function to calculate totals for a given section
     const calculateTotals = (section) => {
@@ -205,14 +209,13 @@ function Step3NeedsAndhealthCare() {
     const handleFileChange = (e) => {
         setDocuments(e.target.files);
     };
-
     const handleFormData = () => {
         const formatExpenses = (data, total, annual) => {
             return [
                 {
                     label: `your_needs`,
                     total,
-                    estimated_amount: annual,
+                    estimated_annual_amount: annual,
                     details: data.needs.map(item => ({
                         label: item.description,
                         amount: parseFloat(item.amount || 0)
@@ -221,7 +224,7 @@ function Step3NeedsAndhealthCare() {
                 {
                     label: `your_wants`,
                     total: data.wantsTotal,
-                    estimated_amount: data.wantsAnnual,
+                    estimated_annual_amount: data.wantsAnnual,
                     details: data.wants.map(item => ({
                         label: item.description,
                         amount: parseFloat(item.amount || 0)
@@ -230,7 +233,7 @@ function Step3NeedsAndhealthCare() {
                 {
                     label: `liabilities`,
                     total: data.liabilitiesTotal,
-                    estimated_amount: data.liabilitiesAnnual,
+                    estimated_annual_amount: data.liabilitiesAnnual,
                     details: data.liabilities.map(item => ({
                         label: item.description,
                         amount: parseFloat(item.amount || 0)
@@ -239,7 +242,7 @@ function Step3NeedsAndhealthCare() {
                 {
                     label: `large_expense`,
                     total: 0, // Optional: add total if needed
-                    estimated_amount: 0,
+                    estimated_annual_amount: 0,
                     details: data.largeExpense.map(item => ({
                         label: item.description,
                         amount: parseFloat(item.amount || 0)
@@ -247,6 +250,7 @@ function Step3NeedsAndhealthCare() {
                 }
             ];
         };
+        const jsonData = new FormData();
         const newFormData = {
             step: 3,
             person: [
@@ -278,22 +282,152 @@ function Step3NeedsAndhealthCare() {
                 }
             ],
             note: notes || '',
-            documents: documents
         };
-        setFormData(newFormData);
-    }
+        jsonData.append('data', JSON.stringify(newFormData));
 
+        // Append each file individually
+        if (documents) {
+            for (let i = 0; i < documents.length; i++) {
+                jsonData.append('documents[]', documents[i]);
+            }
+        }
+        setFormData(jsonData);
+    }
     useEffect(() => {
         handleFormData();
     }, [needs, wants, liabilities, largeExpense]);
 
-    const [formData, setFormData] = useState();
-
     // Handle form submission (for API integration)
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const api = await getApiInstance();
-        await api.post('submit-form', formData)
+
+
+        const formatExpenses = (data, total, annual) => {
+            return [
+                {
+                    label: `your_needs`,
+                    total,
+                    estimated_annual_amount: annual,
+                    details: data.needs.map(item => ({
+                        label: item.description,
+                        amount: parseFloat(item.amount || 0)
+                    }))
+                },
+                {
+                    label: `your_wants`,
+                    total: data.wantsTotal,
+                    estimated_annual_amount: data.wantsAnnual,
+                    details: data.wants.map(item => ({
+                        label: item.description,
+                        amount: parseFloat(item.amount || 0)
+                    }))
+                },
+                {
+                    label: `liabilities`,
+                    total: data.liabilitiesTotal,
+                    estimated_annual_amount: data.liabilitiesAnnual,
+                    details: data.liabilities.map(item => ({
+                        label: item.description,
+                        amount: parseFloat(item.amount || 0)
+                    }))
+                },
+                {
+                    label: `large_expense`,
+                    total: 0,
+                    estimated_annual_amount: 0,
+                    details: data.largeExpense.map(item => ({
+                        label: item.description,
+                        amount: parseFloat(item.amount || 0)
+                    }))
+                }
+            ];
+        };
+
+        const jsonData = {
+            step: 3,
+            person: [
+                {
+                    is_spouse: false,
+                    expenses: formatExpenses({
+                        needs: needs.you,
+                        wants: wants.you,
+                        liabilities: liabilities.you,
+                        largeExpense: largeExpense.you,
+                        wantsTotal: wants.youTotal,
+                        wantsAnnual: wants.youAnnual,
+                        liabilitiesTotal: liabilities.youTotal,
+                        liabilitiesAnnual: liabilities.youAnnual
+                    }, needs.youTotal, needs.youAnnual)
+                },
+                {
+                    is_spouse: true,
+                    expenses: formatExpenses({
+                        needs: needs.spouse,
+                        wants: wants.spouse,
+                        liabilities: liabilities.spouse,
+                        largeExpense: largeExpense.spouse,
+                        wantsTotal: wants.spouseTotal,
+                        wantsAnnual: wants.spouseAnnual,
+                        liabilitiesTotal: liabilities.spouseTotal,
+                        liabilitiesAnnual: liabilities.spouseAnnual
+                    }, needs.spouseTotal, needs.spouseAnnual)
+                }
+            ],
+            note: notes || ''
+        };
+
+        const buildFormData = (data) => {
+            const formData = new FormData();
+
+            // Step & Note
+            formData.append('step', data.step);
+            formData.append('note', data.note || '');
+
+            // Loop through person array
+            data.person.forEach((person, pIndex) => {
+                formData.append(`person[${pIndex}][is_spouse]`, person.is_spouse ? 1 : 0);
+
+                person.expenses.forEach((expense, eIndex) => {
+                    formData.append(`person[${pIndex}][expenses][${eIndex}][label]`, expense.label);
+                    formData.append(`person[${pIndex}][expenses][${eIndex}][total]`, expense.total);
+                    formData.append(`person[${pIndex}][expenses][${eIndex}][estimated_annual_amount]`, expense.estimated_annual_amount);
+
+                    expense.details.forEach((detail, dIndex) => {
+                        formData.append(`person[${pIndex}][expenses][${eIndex}][details][${dIndex}][label]`, detail.label);
+                        formData.append(`person[${pIndex}][expenses][${eIndex}][details][${dIndex}][amount]`, detail.amount);
+                    });
+                });
+            });
+
+            // 3. Append the actual files with metadata
+            if (documents) {
+                Array.from(documents).forEach((file, index) => {
+                    console.log(file);
+                    formData.append(`documents[]`, file);
+                });
+            }
+
+            return formData;
+        };
+        async function getApiInstance_formData() {
+            let guestId = localStorage.getItem('guestId');
+            console.log('Retrieved Guest ID from localStorage:', guestId);
+            if (!guestId) {
+                guestId = await generateGuestId();
+            }
+
+            let apiInstance = axios.create({
+                baseURL: '/api',
+                headers: {
+                    'X-Guest-UUID': guestId,
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json',
+                },
+            });
+            return apiInstance;
+        }
+        const api = await getApiInstance_formData();
+        await api.post('submit-form', buildFormData(jsonData))
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
@@ -316,15 +450,17 @@ function Step3NeedsAndhealthCare() {
                     console.error("Unknown error:", error);
                 }
             });
-        }
+    }
 
     const maxNeedsRows = Math.max(needs.you.length, needs.spouse.length);
     const maxWantsRows = Math.max(wants.you.length, wants.spouse.length);
     const maxLiabilitiesRows = Math.max(liabilities.you.length, liabilities.spouse.length);
 
     return (
+        <>
+        <Toaster/>
         <div className="container-fluid personal-detail-container">
-            <form className="container-fluid" onSubmit={handleSubmit}>
+            <form className="container-fluid" onSubmit={handleSubmit} encType="multipart/formdata">
                 {/* Your Needs Section */}
                 <div className="row">
                     <div className="col personal-detail-header">
@@ -409,6 +545,10 @@ function Step3NeedsAndhealthCare() {
                                                 type="number"
                                                 className="form-control"
                                                 placeholder="Enter Annual Expense"
+                                                onChange={(e) => setNeeds(prevNeeds => ({
+                                                    ...prevNeeds,
+                                                    youAnnual: e.target.value
+                                                }))}
                                             />
                                         </div>
                                     </div>
@@ -478,6 +618,10 @@ function Step3NeedsAndhealthCare() {
                                             type="number"
                                             className="form-control"
                                             placeholder="Enter Annual Expense"
+                                            onChange={(e) => setNeeds(prevNeeds => ({
+                                                ...prevNeeds,
+                                                spouseAnnual: e.target.value
+                                            }))}
                                         />
                                     </div>
                                 </div>
@@ -570,6 +714,10 @@ function Step3NeedsAndhealthCare() {
                                                 type="number"
                                                 className="form-control"
                                                 placeholder="Enter Annual Expense"
+                                                onChange={(e) => setWants(prevWants => ({
+                                                    ...prevWants,
+                                                    youAnnual: e.target.value
+                                                }))}
                                             />
                                         </div>
                                     </div>
@@ -639,6 +787,10 @@ function Step3NeedsAndhealthCare() {
                                             type="number"
                                             className="form-control"
                                             placeholder="Enter Annual Expense"
+                                            onChange={(e) => setWants(prevWants => ({
+                                                ...prevWants,
+                                                spouseAnnual: e.target.value
+                                            }))}
                                         />
                                     </div>
                                 </div>
@@ -706,7 +858,7 @@ function Step3NeedsAndhealthCare() {
                                                 />
                                                 <label className="form-label responsive-label">Enter Amount</label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     className="form-control"
                                                     placeholder="Enter Amount"
                                                     value={expense.amount}
@@ -731,6 +883,10 @@ function Step3NeedsAndhealthCare() {
                                                 type="number"
                                                 className="form-control"
                                                 placeholder="Enter Annual Liabilities"
+                                                onChange={(e) => setLiabilities(prevLiabilities => ({
+                                                    ...prevLiabilities,
+                                                    youAnnual: e.target.value
+                                                }))}
                                             />
                                         </div>
                                     </div>
@@ -777,7 +933,7 @@ function Step3NeedsAndhealthCare() {
                                                 />
                                                 <label className="form-label responsive-label">Enter Amount</label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     className="form-control"
                                                     placeholder="Enter Amount"
                                                     value={expense.amount}
@@ -800,6 +956,10 @@ function Step3NeedsAndhealthCare() {
                                             type="number"
                                             className="form-control"
                                             placeholder="Enter Annual Liabilities"
+                                            onChange={(e) => setLiabilities(prevLiabilities => ({
+                                                ...prevLiabilities,
+                                                spouseAnnual: e.target.value
+                                            }))}
                                         />
                                     </div>
                                 </div>
@@ -859,7 +1019,7 @@ function Step3NeedsAndhealthCare() {
                                                 />
                                                 <label className="form-label responsive-label">Estimated Amount</label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     className="form-control"
                                                     placeholder="Enter Amount"
                                                     value={expense.amount}
@@ -911,7 +1071,7 @@ function Step3NeedsAndhealthCare() {
                                                 />
                                                 <label className="form-label responsive-label">Estimated Amount</label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     className="form-control"
                                                     placeholder="Enter Amount"
                                                     value={expense.amount}
@@ -936,6 +1096,7 @@ function Step3NeedsAndhealthCare() {
                             type="file"
                             className="form-control"
                             id="expense-documents"
+                            name="documents[]"
                             multiple
                             onChange={handleFileChange}
                         />
@@ -963,6 +1124,7 @@ function Step3NeedsAndhealthCare() {
                 </div>
             </form>
         </div>
+        </>
     );
 }
 

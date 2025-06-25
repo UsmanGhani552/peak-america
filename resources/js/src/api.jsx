@@ -34,6 +34,25 @@ export async function getApiInstance() {
     return apiInstance;
 }
 
+export async function getApiInstance_formData() {
+    if (apiInstance) return apiInstance;
+    let guestId = localStorage.getItem('guestId');
+    console.log('Retrieved Guest ID from localStorage:', guestId);
+    if (!guestId) {
+        guestId = await generateGuestId();
+    }
+
+    apiInstance = axios.create({
+        baseURL: '/api',
+        headers: {
+            'X-Guest-UUID': guestId,
+            'Content-Type': 'multipart/form-data',
+            'Accept': 'application/json',
+        },
+    });
+    return apiInstance;
+}
+
 export function clearApiInstance() {
     localStorage.clear();
     apiInstance = null; // Clear the singleton instance

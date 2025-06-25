@@ -190,7 +190,7 @@ console.log('formData2:', formData2);
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
-                localStorage.setItem('currentStep', '4');
+                localStorage.setItem('currentStep', '3');
                 setTimeout(() => {
                     if (currentStep === 1) {
                         setCurrentStep(prevStep => {
