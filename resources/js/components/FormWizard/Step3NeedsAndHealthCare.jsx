@@ -310,7 +310,9 @@ function Step3NeedsAndhealthCare() {
                     label: `your_needs`,
                     total,
                     estimated_annual_amount: annual,
-                    details: data.needs.map(item => ({
+                    details: data.needs
+                    .filter(item => item.description)
+                    .map(item => ({
                         label: item.description,
                         amount: parseFloat(item.amount || 0)
                     }))
@@ -319,7 +321,9 @@ function Step3NeedsAndhealthCare() {
                     label: `your_wants`,
                     total: data.wantsTotal,
                     estimated_annual_amount: data.wantsAnnual,
-                    details: data.wants.map(item => ({
+                    details: data.wants
+                    .filter(item => item.description)
+                    .map(item => ({
                         label: item.description,
                         amount: parseFloat(item.amount || 0)
                     }))
@@ -328,8 +332,10 @@ function Step3NeedsAndhealthCare() {
                     label: `liabilities`,
                     total: data.liabilitiesTotal,
                     estimated_annual_amount: data.liabilitiesAnnual,
-                    details: data.liabilities.map(item => ({
-                        label: item.description,
+                    details: data.liabilities
+                    .filter(item => item.description)
+                    .map(item => ({
+                        label: item.description || "iiiuu8ugfvtg",
                         amount: parseFloat(item.amount || 0)
                     }))
                 },
@@ -337,7 +343,9 @@ function Step3NeedsAndhealthCare() {
                     label: `large_expense`,
                     total: 0,
                     estimated_annual_amount: 0,
-                    details: data.largeExpense.map(item => ({
+                    details: data.largeExpense
+                    .filter(item => item.description)
+                    .map(item => ({
                         label: item.description,
                         amount: parseFloat(item.amount || 0)
                     }))
