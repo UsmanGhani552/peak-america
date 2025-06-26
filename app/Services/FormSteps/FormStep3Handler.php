@@ -54,6 +54,7 @@ class FormStep3Handler implements FormStepHandlerInterface
                     'is_spouse' => $person['is_spouse'],
                 ]);
 
+                Expense::where('multi_step_form_3_id', $form->id)->delete();
                 // Save Expenses
                 if (isset($person['expenses'])) {
                     foreach ($person['expenses'] as $expenseData) {
