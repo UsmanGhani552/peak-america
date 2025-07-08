@@ -8,6 +8,8 @@ use App\Models\Kid;
 use App\Models\MultiStepForm_1;
 use App\Models\Note;
 use App\Traits\ResponseTrait;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +39,7 @@ class FormStep1Handler implements FormStepHandlerInterface
                 ], [
                     'first_name' => $person['first_name'],
                     'last_name' => $person['last_name'],
-                    'age' => $person['age'],
+                    'age' => $person['age'] ? Carbon::parse($person['age'])->age : null,
                     'cell_phone' => $person['cell_phone'],
                     'email' => $person['email'],
                     'marital_status' => $person['marital_status']
