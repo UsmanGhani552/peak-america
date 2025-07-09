@@ -163,7 +163,7 @@
                     html += `
                             <div class="mb-3">
                                 <p><strong>Name:</strong> ${formData.first_name} ${formData.last_name}</p>
-                                <p><strong>Age:</strong> ${formatDate(formData.age)}</p>
+                                <p><strong>Age:</strong> ${ (formData.age)}</p>
                                 <p><strong>Email:</strong> ${formData.email}</p>
                                 <p><strong>Phone:</strong> ${formData.cell_phone}</p>
                                 <p><strong>Marital Status:</strong> ${formData.marital_status}</p>
