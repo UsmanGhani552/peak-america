@@ -1,13 +1,15 @@
 import axios from 'axios';
 
 let apiInstance = null;
+let isguestIdUpdated = false;
 
-async function generateGuestId() {
+export async function generateGuestId() {
     try {
         const response = await axios.get('/api/register-guest');
         const uuid = response.data.data.guest_uuid;
         localStorage.setItem('guestId', uuid);
         console.log('Generated Guest ID:', uuid);
+        isguestIdUpdated = false;
         return uuid;
     } catch (error) {
         console.error('Error generating guest ID:', error);
@@ -16,12 +18,12 @@ async function generateGuestId() {
 }
 
 export async function getApiInstance() {
-    if (apiInstance) return apiInstance;
+    if (apiInstance && isguestIdUpdated) return apiInstance;
     let guestId = localStorage.getItem('guestId');
-    console.log('Retrieved Guest ID from localStorage:', guestId);
     if (!guestId) {
         guestId = await generateGuestId();
     }
+    isguestIdUpdated = true;
 
     apiInstance = axios.create({
         baseURL: '/api',
@@ -35,12 +37,13 @@ export async function getApiInstance() {
 }
 
 export async function getApiInstance_formData() {
-    if (apiInstance) return apiInstance;
+    if (apiInstance && isguestIdUpdated) return apiInstance;
     let guestId = localStorage.getItem('guestId');
-    console.log('Retrieved Guest ID from localStorage:', guestId);
     if (!guestId) {
         guestId = await generateGuestId();
     }
+
+    isguestIdUpdated = true;
 
     apiInstance = axios.create({
         baseURL: '/api',

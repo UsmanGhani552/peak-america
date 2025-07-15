@@ -5,14 +5,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
-import useStepRedirect from "../../src/hooks/useStepRedirect";
 import LoadingSpinner from "../LoadingSpinner";
 
 
 function Step6Retirement() {
     const navigate = useNavigate();
 
-    useStepRedirect('6');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         step: 6,
@@ -26,6 +24,35 @@ function Step6Retirement() {
         ],
         note: ''
     });
+
+    const loadStep6DataFromApi = async () => {
+        const api = await getApiInstance();
+        try {
+            const response = await api.post('get-form', { step: 6 });
+            const form = response.data.data.multi_step_form6?.[0]; // Handle array safely
+            if (form && form.question_answers) {
+                const mappedAnswers = Array(6).fill({ answer: null });
+
+                form.question_answers.forEach((qa, i) => {
+                    if (qa.answer !== undefined && mappedAnswers[i]) {
+                        mappedAnswers[i] = { answer: qa.answer };
+                    }
+                });
+
+                setFormData(prev => ({
+                    ...prev,
+                    question_answers: mappedAnswers,
+                    note: response.data.data.note || ''
+                }));
+            }
+        } catch (error) {
+            console.error("Failed to load step 6 data:", error);
+        }
+    };
+
+    useEffect(() => {
+        loadStep6DataFromApi();
+    }, []);
 
     const handleRadioChange = (questionIndex, value) => {
         setFormData(prev => {
@@ -53,14 +80,17 @@ function Step6Retirement() {
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Form submitted successfully!");
-                localStorage.setItem('currentStep', '7');
-                localStorage.setItem('allStepsCompleted', 'true'); // Mark all steps as completed
+                localStorage.clear();
                 setTimeout(() => {
                     setIsSubmitting(false);
                     navigate('/thank-you');
                 }, 1500);
             })
-            .catch(error => {
+            .catch(async error => {
+                if (error.response.data.message == 'Guest UUID header is invalid.') {
+                    await generateGuestId();
+                    navigate('/step1');
+                }
                 setIsSubmitting(false);
                 if (error.response && error.response.data) {
                     const errorData = error.response.data.data.error;
@@ -78,8 +108,8 @@ function Step6Retirement() {
     }
     return (
         <>
-        <LoadingSpinner show={isSubmitting} />
-        <Toaster/>
+            <LoadingSpinner show={isSubmitting} />
+            <Toaster />
             <div className="container-fluid personal-detail-container">
                 <div className="row">
                     <div className="col personal-detail-header">

@@ -5,14 +5,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
-import useStepRedirect from "../../src/hooks/useStepRedirect";
 import LoadingSpinner from "../LoadingSpinner";
 
 function Step5Value() {
     const navigate = useNavigate();
 
-    useStepRedirect('5');
-const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         step: 5,
         question_answers: [
@@ -21,12 +19,43 @@ const [isSubmitting, setIsSubmitting] = useState(false);
             { answer: null }, // Q3: Income without spending principal
             { answer: null }, // Q4: Will/POA/Trust
             { answer: null }, // Q5: Expecting inheritance
-            { answer: null }, // Q6: Risk preference
             { answer: null }, // Q7: Years investing (select)
             { answer: null }  // Q8: Stock allocation (select)
         ],
         note: ''
     });
+
+    const loadStep5DataFromApi = async () => {
+        const api = await getApiInstance();
+        try {
+            const response = await api.post('get-form', { step: 5 });
+            const data = response.data.data;
+
+            const answers = data?.multi_step_form5?.[0]?.question_answers || [];
+            const note = data?.note || "";
+
+            // Convert array of answers to match the 8 expected fields (by order)
+            const orderedAnswers = Array(8).fill({ answer: null });
+
+            answers.forEach((item, index) => {
+                if (index < orderedAnswers.length) {
+                    orderedAnswers[index] = { answer: item.answer };
+                }
+            });
+
+            setFormData(prev => ({
+                ...prev,
+                question_answers: orderedAnswers,
+                note: note
+            }));
+        } catch (error) {
+            console.error("Failed to load step 5 data:", error);
+        }
+    };
+
+    useEffect(() => {
+        loadStep5DataFromApi();
+    }, []);
 
     const handleRadioChange = (questionIndex, value) => {
         setFormData(prev => {
@@ -73,7 +102,11 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                     navigate('/step6');
                 }, 1500);
             })
-            .catch(error => {
+            .catch(async error => {
+                if (error.response.data.message == 'Guest UUID header is invalid.') {
+                    await generateGuestId();
+                    navigate('/step1');
+                }
                 setIsSubmitting(false);
                 if (error.response && error.response.data) {
                     const errorData = error.response.data.data.error;
@@ -92,8 +125,8 @@ const [isSubmitting, setIsSubmitting] = useState(false);
 
     return (
         <>
-        <LoadingSpinner show={isSubmitting} />
-         <Toaster/>
+            <LoadingSpinner show={isSubmitting} />
+            <Toaster />
             <div className="container-fluid personal-detail-container">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
@@ -138,13 +171,6 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                                 <input type="radio" className="form-check-input" name="RadioDefault1" />
                                 <label className="form-label" >No</label>
                             </div>
-                            <label className="form-label">At this stage in life which type of investor would best classify you in terms your risk preference</label>
-                            <div className="responsive-radio-sec d-none">
-                                <input type="radio" className="form-check-input" name="RadioDefault1" />
-                                <label className="form-label">Yes</label>
-                                <input type="radio" className="form-check-input" name="RadioDefault1" />
-                                <label className="form-label">No</label>
-                            </div>
 
 
                         </div>
@@ -153,7 +179,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                                 <div className="col-md-6">
                                     <div className="personal-detail-input">
                                         <h2>Yes</h2>
-                                        {[0, 1, 2, 3, 4, 5].map((index) => (
+                                        {[0, 1, 2, 3, 4].map((index) => (
                                             <input
                                                 key={`yes-${index}`}
                                                 type="radio"
@@ -168,7 +194,7 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                                 <div className="col-md-6">
                                     <div className="personal-detail-input">
                                         <h2>No</h2>
-                                        {[0, 1, 2, 3, 4, 5].map((index) => (
+                                        {[0, 1, 2, 3, 4].map((index) => (
                                             <input
                                                 key={`no-${index}`}
                                                 type="radio"
@@ -192,8 +218,8 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                         <div className="col-4">
                             <select
                                 className="form-select percentage-select"
-                                value={formData.question_answers[6].answer || ""}
-                                onChange={(e) => handleSelectChange(6, e)}
+                                value={formData.question_answers[5].answer || ""}
+                                onChange={(e) => handleSelectChange(5, e)}
                             >
                                 <option value="">Select Years</option>
                                 <option value="0-5">0-5</option>
@@ -210,8 +236,8 @@ const [isSubmitting, setIsSubmitting] = useState(false);
                         <div className="col-4">
                             <select
                                 className="form-select percentage-select"
-                                value={formData.question_answers[7].answer || ""}
-                                onChange={(e) => handleSelectChange(7, e)}
+                                value={formData.question_answers[6].answer || ""}
+                                onChange={(e) => handleSelectChange(6, e)}
                             >
                                 <option value="">Select Percentage</option>
                                 <option value="0-25%">0-25%</option>
