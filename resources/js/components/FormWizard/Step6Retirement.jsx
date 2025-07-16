@@ -6,12 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import LoadingSpinner from "../LoadingSpinner";
+import { useStepContext } from "../../src/hooks/StepContext";
 
 
 function Step6Retirement() {
     const navigate = useNavigate();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { markStepCompleted } = useStepContext();
     const [formData, setFormData] = useState({
         step: 6,
         question_answers: [
@@ -24,7 +26,7 @@ function Step6Retirement() {
         ],
         note: ''
     });
-
+    const isSingleStatus = localStorage.getItem('spouseStatus');
     const loadStep6DataFromApi = async () => {
         const api = await getApiInstance();
         try {
@@ -80,6 +82,7 @@ function Step6Retirement() {
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Form submitted successfully!");
+                markStepCompleted(6);
                 localStorage.clear();
                 setTimeout(() => {
                     setIsSubmitting(false);
@@ -173,7 +176,7 @@ function Step6Retirement() {
 
                             <div className="d-flex justify-content-between mt-3">
                                 <Link className="next-btn" type="submit" to='/step5'>Previous</Link>
-                                <button className="next-btn" type="submit">Next</button>
+                                <button className="next-btn" type="submit">Submit</button>
                             </div>
                         </div>
                     </div>

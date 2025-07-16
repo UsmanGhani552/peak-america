@@ -14,9 +14,12 @@
 }
 
 .sidebar-item-link {
-    text-decoration: none; /* removes underline */
-    color: inherit;         /* keeps default text color */
-    display: block;         /* makes the full area clickable */
+    text-decoration: none;
+    /* removes underline */
+    color: inherit;
+    /* keeps default text color */
+    display: block;
+    /* makes the full area clickable */
 }
 
 .siderbar {
@@ -176,6 +179,20 @@
     padding: 10px;
 }
 
+.disabled-section {
+    opacity: 0.6;
+    pointer-events: none;
+}
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+fieldset[disabled] {
+    /* This prevents all interaction with child elements */
+    opacity: 0.6;
+}
+
 .personal-detail-container {
     padding: 50px;
 }
@@ -191,11 +208,12 @@
 .personal-detail-label {
     padding-top: 100px;
 }
-.expense-detail-label{
+
+.expense-detail-label {
     padding-top: 89px;
 }
 
-.personal-detail-label label{
+.personal-detail-label label {
     font-weight: 400;
     font-size: 16px;
     color: #000000;
@@ -204,6 +222,7 @@
     display: flex;
     align-items: center;
 }
+
 .text-area-label label {
     font-weight: 400;
     font-size: 16px;
@@ -212,10 +231,12 @@
     display: flex;
     align-items: center;
 }
-.personal-detail-label .expense-label{    
+
+.personal-detail-label .expense-label {
     height: 189px;
     margin-top: 39px;
 }
+
 /* .personal-detail-label .expense-label:nth-child(even){
     height: 170px;
     margin-top: 60px;
@@ -321,12 +342,12 @@
     color: red;
 }
 
-.percentage-select{
+.percentage-select {
     width: 100%;
     padding: 15px;
 }
 
-.form-select-label{
+.form-select-label {
     font-weight: 400;
     font-size: 16px;
     color: #000000;
@@ -336,7 +357,7 @@
     align-items: center;
 }
 
-hr{
+hr {
     margin: 2rem;
 }
 
@@ -373,7 +394,8 @@ hr{
         gap: 20px;
         height: 20px;
     }
-    .responsive-radio-sec input{
+
+    .responsive-radio-sec input {
         width: 24px;
         height: 24px;
     }
@@ -382,7 +404,7 @@ hr{
         display: none !important;
     }
 
-    .personal-detail-label label{
+    .personal-detail-label label {
         font-size: 14px;
     }
 
@@ -431,7 +453,7 @@ hr{
 }
 
 @media only screen and (max-width: 500px) {
-    .next-btn{
+    .next-btn {
         padding: 10px 35px;
     }
 }

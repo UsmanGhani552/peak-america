@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateGuestId, getApiInstance } from "../../src/api";
 import { toast } from 'react-toastify';
 import Toaster from "../Layout/Toaster";
 import LoadingSpinner from "../LoadingSpinner";
+import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step1PersonalDetail() {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [inputYou, setYouValue] = useState("1");
-    const [inputSpouse, setSpouseValue] = useState("1");
+    const [inputYou, setYouValue] = useState("");
+    const [inputSpouse, setSpouseValue] = useState("");
+    const { markStepCompleted } = useStepContext();
     const [formData, setFormData] = useState({
         step: '1',
         note: '',
@@ -23,7 +25,7 @@ function Step1PersonalDetail() {
                 age: '',
                 cell_phone: '',
                 marital_status: '',
-                kids: "1",
+                kids: "",
                 kids_age: [],
             },
             {
@@ -34,19 +36,20 @@ function Step1PersonalDetail() {
                 age: '',
                 cell_phone: '',
                 marital_status: '',
-                kids: "1",
+                kids: "",
                 kids_age: [],
             }
         ]
     });
-
+    const isKid = formData.person[0].kids > 0 || formData.person[1].kids > 0;
+    const isSingleStatus = formData.person[0].marital_status === 'single';
     // Fetch saved data on component mount
     useEffect(() => {
         const fetchSavedData = async () => {
             try {
                 const api = await getApiInstance();
                 const response = await api.post('get-form', { step: '1' });
-                
+
                 if (response.data && response.data.data) {
                     const savedData = response.data.data;
                     const youData = savedData.multi_step_form1.find(p => !p.is_spouse);
@@ -147,24 +150,27 @@ function Step1PersonalDetail() {
             };
         });
     };
-
+    const cleanedPayload = {
+        ...formData,
+        person: formData.person.filter(p => p.marital_status !== null && p.marital_status !== "")
+    };
+    console.log(cleanedPayload);
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
 
         try {
             const api = await getApiInstance();
-            await api.post('submit-form', formData);
-
+            await api.post('submit-form', cleanedPayload);
             toast.success("Data saved successfully!");
-            localStorage.setItem('currentStep', '2');
-
+            markStepCompleted(1);
             setTimeout(() => {
                 setIsSubmitting(false);
+                localStorage.setItem('spouseStatus', isSingleStatus);
                 navigate('/step2');
             }, 1500);
         } catch (error) {
-            if(error.response.data.message == 'Guest UUID header is invalid.'){
+            if (error.response.data.message == 'Guest UUID header is invalid.') {
                 await generateGuestId();
                 handleSubmit(e);
             }
@@ -221,7 +227,9 @@ function Step1PersonalDetail() {
                             <label className="form-label">Email</label>
                             <label className="form-label">Marital Status</label>
                             <label className="form-label">Kids</label>
-                            <label className="form-label">Kids Age</label>
+                            {isKid && (
+                                <label className="form-label">Kids Age</label>
+                            )}
                         </div>
                         <div className="col-md-10">
                             <div className="row gx-4 personal-detail-input-container">
@@ -340,7 +348,7 @@ function Step1PersonalDetail() {
                                 </div>
 
                                 {/* Spouse Section */}
-                                <div className="col-md-6 child-two">
+                                <div className={`col-md-6 child-two ${isSingleStatus ? 'disabled-section' : ''}`}>
                                     <div className="personal-detail-input">
                                         <h2>Spouse</h2>
                                         <label className="form-label responsive-label">First Name</label>
@@ -420,7 +428,7 @@ function Step1PersonalDetail() {
                                             onChange={(e) => setFormData({
                                                 ...formData,
                                                 person: formData.person.map((p, index) =>
-                                                    index === 0 ? { ...p, marital_status: e.target.value } : p
+                                                    index === 1 ? { ...p, marital_status: e.target.value } : p
                                                 )
                                             })}
                                         >

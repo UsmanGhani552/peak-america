@@ -6,11 +6,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import LoadingSpinner from "../LoadingSpinner";
+import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step4PropertyAndMarket() {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const isSingleStatus = localStorage.getItem('spouseStatus');
+    const { markStepCompleted } = useStepContext();
     // State for each property type (You and Spouse separately)
     const [primaryResidence, setPrimaryResidence] = useState({
         you: { address: '', value: '' },
@@ -40,7 +43,7 @@ function Step4PropertyAndMarket() {
             const newPrimaryResidence = { you: { address: '', value: '' }, spouse: { address: '', value: '' } };
             const newRentalProperties = { you: [], spouse: [] };
             const newVacationProperties = { you: [], spouse: [] };
-
+            const isSingleStatus = localStorage.getItem('spouseStatus');
             multi_step_form4.forEach((personData) => {
                 const isSpouse = personData.is_spouse;
                 const target = isSpouse ? 'spouse' : 'you';
@@ -254,7 +257,8 @@ function Step4PropertyAndMarket() {
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
-                localStorage.setItem('currentStep', '5');
+                localStorage.setItem('currentStep', '');
+                markStepCompleted(4);
                 setTimeout(() => {
                     setIsSubmitting(false);
                     navigate('/step5');
@@ -312,7 +316,7 @@ function Step4PropertyAndMarket() {
                                 </div>
 
                                 {/* Spouse */}
-                                <div className="col-md-6">
+                                <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                     <div className="personal-detail-input">
                                         <h2>Spouse</h2>
                                         {renderPropertyInputs([primaryResidence.spouse], 'primary', 'spouse')}
@@ -351,7 +355,7 @@ function Step4PropertyAndMarket() {
                                 </div>
 
                                 {/* Spouse */}
-                                <div className="col-md-6">
+                                <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                     <div className="personal-detail-input">
                                         <h2>Spouse</h2>
                                         {renderPropertyInputs(rentalProperties.spouse, 'rental', 'spouse')}
@@ -397,7 +401,7 @@ function Step4PropertyAndMarket() {
                                 </div>
 
                                 {/* Spouse */}
-                                <div className="col-md-6">
+                                <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                     <div className="personal-detail-input">
                                         <h2>Spouse</h2>
                                         {renderPropertyInputs(vacationProperties.spouse, 'vacation', 'spouse')}

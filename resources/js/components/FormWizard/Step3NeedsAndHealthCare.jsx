@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Toaster from "../Layout/Toaster";
 import LoadingSpinner from "../LoadingSpinner";
+import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step3NeedsAndhealthCare() {
     const navigate = useNavigate();
@@ -13,7 +14,8 @@ function Step3NeedsAndhealthCare() {
     const [formData, setFormData] = useState();
     const [notes, setNotes] = useState('');
     const [documents, setDocuments] = useState([]);
-
+    const { markStepCompleted } = useStepContext();
+    const isSingleStatus = localStorage.getItem('spouseStatus');
     const [needs, setNeeds] = useState({
         you: [{ description: '', amount: 0 }],
         spouse: [{ description: '', amount: 0 }],
@@ -394,6 +396,7 @@ function Step3NeedsAndhealthCare() {
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
+                markStepCompleted(3);
                 localStorage.setItem('currentStep', '4');
                 setTimeout(() => {
                     setIsSubmitting(false);
@@ -527,7 +530,7 @@ function Step3NeedsAndhealthCare() {
                                 </div>
 
                                 {/* Spouse Section */}
-                                <div className="col-md-6">
+                                <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                     <div className="personal-detail-input d-flex flex-column">
                                         <h2>Spouse</h2>
                                         <div style={{ flex: 1 }}>
@@ -698,7 +701,7 @@ function Step3NeedsAndhealthCare() {
                                 </div>
 
                                 {/* Spouse Section */}
-                                <div className="col-md-6">
+                                <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                     <div className="personal-detail-input d-flex flex-column">
                                         <h2>Spouse</h2>
                                         <div style={{ flex: 1 }}>
@@ -869,7 +872,7 @@ function Step3NeedsAndhealthCare() {
                                 </div>
 
                                 {/* Spouse Section */}
-                                <div className="col-md-6">
+                                <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                     <div className="personal-detail-input d-flex flex-column">
                                         <h2>Spouse</h2>
                                         <div style={{ flex: 1 }}>
@@ -1008,7 +1011,7 @@ function Step3NeedsAndhealthCare() {
                                 </div>
 
                                 {/* Spouse Section */}
-                                <div className="col-md-6">
+                                <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                     <div className="personal-detail-input d-flex flex-column">
                                         <h2>Spouse</h2>
                                         <div style={{ flex: 1 }}>

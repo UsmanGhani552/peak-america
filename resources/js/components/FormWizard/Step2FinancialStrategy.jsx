@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import LoadingSpinner from "../LoadingSpinner";
+import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step2FinancialStrategy() {
     const navigate = useNavigate();
@@ -14,7 +15,7 @@ function Step2FinancialStrategy() {
     const [step1Note, setStep1Note] = useState('');
     const [step2Note, setStep2Note] = useState('');
     const [currentStep, setCurrentStep] = useState(1);
-
+    const { markStepCompleted } = useStepContext();
     const [youTotal, setYouTotal] = useState(0);
     const [spouseTotal, setSpouseTotal] = useState(0);
 
@@ -27,7 +28,7 @@ function Step2FinancialStrategy() {
     const [youAssetArray, setYouAssetArray] = useState([0, 0, 0, 0, 0, 0]);
     const [spouseAssetArray, setSpouseAssetArray] = useState([0, 0, 0, 0, 0, 0]);
 
-
+    const isSingleStatus = localStorage.getItem('spouseStatus');
     const handleYouChange = index => (e) => {
         const value = e.target.value === "" ? 0 : Number(e.target.value);
         setYouInputArray(prevArray => {
@@ -293,7 +294,7 @@ function Step2FinancialStrategy() {
         try {
             await api.post('submit-form', formData);
             toast.success("Success! Your details have been saved.");
-
+markStepCompleted(2);
             if (currentStep === 1) {
                 setCurrentStep(2);
             } else {
@@ -374,7 +375,7 @@ function Step2FinancialStrategy() {
                                         </div>
                                     </div>
 
-                                    <div className="col-md-6">
+                                    <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                         <div className="personal-detail-input">
                                             <h2>Spouse</h2>
                                             <label className="form-label responsive-label">Check/ Savings/ Money Market</label>
@@ -451,7 +452,7 @@ function Step2FinancialStrategy() {
                                         </div>
                                     </div>
 
-                                    <div className="col-md-6">
+                                    <div className={`col-md-6 ${isSingleStatus ? 'disabled-section' : ''}`}>
                                         <div className="personal-detail-input">
                                             <h2>Spouse</h2>
                                             <label className="form-label responsive-label">Annuities</label>

@@ -14,6 +14,7 @@ import Step4PropertyAndMarket from './components/FormWizard/Step4PropertyAndMark
 import Step5Value from './components/FormWizard/Step5Value';
 import Step6Retirement from './components/FormWizard/Step6Retirement';
 import ThankYou from './src/pages/ThankYou';
+import { StepProvider } from './src/hooks/StepContext';
 
 function StepLayout({ isSidebarOpen, toggleSidebar }) {
     return (
@@ -44,22 +45,24 @@ function App() {
     }
     return (
         <BrowserRouter>
-            <Routes>
-                {/* All steps use the StepLayout */}
-                <Route element={<StepLayout isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />}>
-                    <Route path="/" element={<Navigate to="/step1" replace />} />
-                    <Route path="/step1" element={<Step1PersonalDetail />} />
-                    <Route path="/step2" element={<Step2FinancialStrategy />} />
-                    <Route path="/step3" element={<Step3NeedsAndhealthCare />} />
-                    <Route path="/step4" element={<Step4PropertyAndMarket />} />
-                    <Route path="/step5" element={<Step5Value />} />
-                    <Route path="/step6" element={<Step6Retirement />} />
-                </Route>
-                
-                {/* Thank you page doesn't use the StepLayout */}
-                <Route path="/thank-you" element={<ThankYou />} />
-            </Routes>
-        </BrowserRouter>
+        <StepProvider>
+                <Routes>
+                    {/* All steps use the StepLayout */}
+                    <Route element={<StepLayout isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />}>
+                        <Route path="/" element={<Navigate to="/step1" replace />} />
+                        <Route path="/step1" element={<Step1PersonalDetail />} />
+                        <Route path="/step2" element={<Step2FinancialStrategy />} />
+                        <Route path="/step3" element={<Step3NeedsAndhealthCare />} />
+                        <Route path="/step4" element={<Step4PropertyAndMarket />} />
+                        <Route path="/step5" element={<Step5Value />} />
+                        <Route path="/step6" element={<Step6Retirement />} />
+                    </Route>
+
+                    {/* Thank you page doesn't use the StepLayout */}
+                    <Route path="/thank-you" element={<ThankYou />} />
+                </Routes>
+        </StepProvider>
+            </BrowserRouter>
     );
 }
 

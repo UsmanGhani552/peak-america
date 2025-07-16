@@ -6,10 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from "react-router-dom";
 import Toaster from "../Layout/Toaster";
 import LoadingSpinner from "../LoadingSpinner";
+import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step5Value() {
     const navigate = useNavigate();
-
+const { markStepCompleted } = useStepContext();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         step: 5,
@@ -24,7 +25,7 @@ function Step5Value() {
         ],
         note: ''
     });
-
+    const isSingleStatus = localStorage.getItem('spouseStatus');
     const loadStep5DataFromApi = async () => {
         const api = await getApiInstance();
         try {
@@ -97,6 +98,7 @@ function Step5Value() {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
                 localStorage.setItem('currentStep', '6');
+                markStepCompleted(5);
                 setTimeout(() => {
                     setIsSubmitting(false);
                     navigate('/step6');

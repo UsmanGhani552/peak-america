@@ -1,5 +1,6 @@
 import { useLocation, Link } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
+import { useStepContext } from '../../src/hooks/StepContext';
 
 const steps = [
     { step: 1, title: 'Personal Detail', path: '/step1' },
@@ -12,7 +13,20 @@ const steps = [
 
 const Sidebar = () => {
     const location = useLocation();
-    const currentStep = parseInt(location.pathname.replace('/step', ''), 10);
+    const { completedSteps } = useStepContext();
+    const currentStep = parseInt(location.pathname.replace('/step', ''), 10) || 1;
+    console.log(completedSteps);
+    const isStepAccessible = (stepNumber) => {
+        // Allow if step is already completed
+        if (completedSteps.includes(stepNumber)) return true;
+
+        // Allow next immediate step after the last completed one
+        const maxCompletedStep = Math.max(0, ...completedSteps);
+        if (stepNumber === maxCompletedStep + 1) return true;
+
+        // Otherwise, it's not accessible
+        return false;
+    };
 
     return (
         <>
@@ -22,7 +36,12 @@ const Sidebar = () => {
 
             <div className="sidebar-content">
                 {steps.map((item, index) => (
-                    <Link to={item.path} key={index} className="sidebar-item-link">
+                    <Link
+                        to={isStepAccessible(item.step) ? item.path : '#'}
+                        key={index}
+                        className={`sidebar-item-link ${!isStepAccessible(item.step) ? 'disabled-link' : ''}`}
+                        onClick={e => !isStepAccessible(item.step) && e.preventDefault()}
+                    >
                         <div className="sidebar-item">
                             <div className={`step-icon-circle ${currentStep >= item.step ? 'selected' : ''}`}>
                                 <i className="fa-solid fa-angles-right"></i>
