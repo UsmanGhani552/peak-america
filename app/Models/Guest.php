@@ -50,7 +50,7 @@ class Guest extends Model
 
     public function noteForStep($step)
     {
-        return $this->note()->where('step', $step)->get()->first();
+        return $this->note()->where('step', $step)->first()?? null;
     }
     public function formAssigned()
     {

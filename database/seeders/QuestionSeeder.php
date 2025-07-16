@@ -26,7 +26,6 @@ class QuestionSeeder extends Seeder
             "Would you like to generate enough income without spending down the principle?",
             "Do You currently have a Will/POA/Living Will or Trust in Place Today?",
             "Are you expecting to receive an inheritance in the future?",
-            "At this stage in life which type of investor would best classify you in terms your risk preference",
             "How many years have you been investing?",
             "What percentage of your portfolio has typically been allocated to stocks/equities?"
         ];

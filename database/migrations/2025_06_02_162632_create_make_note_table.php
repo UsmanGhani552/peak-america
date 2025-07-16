@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('guest_id')->constrained()->onDelete('cascade');
             $table->float('step');
-            $table->text('note');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }
