@@ -6,7 +6,7 @@ function ThankYou() {
     console.log("Returning to home page");
     const returnHome = () => {
         clearApiInstance();
-        navigate('/'); // Redirect to the home page or the first step of the form
+        window.location.href = '/'; // Redirect to the home page or the first step of the form
     };
     return (
         <>
