@@ -82,7 +82,7 @@ class FormStep1Handler implements FormStepHandlerInterface
         if($data->multiStepForm1->isEmpty()){
             return null;
         }
-        $data['note'] = $data->noteForStep($step)->note?? null;
+        $data['note'] = $data->noteForStep(1)->note?? null;
         $data['step'] = (float)$step;
         return $data;
     }

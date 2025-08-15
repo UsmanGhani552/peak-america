@@ -64,7 +64,7 @@ class FormStep5Handler implements FormStepHandlerInterface
             if($data['note']){
                 Note::updateOrCreate([
                     'guest_id' => $guest_id,
-                    'step' => $step,
+                    'step' => 1,
                 ], [
                     'note' => $data['note']
                 ]);
@@ -87,7 +87,7 @@ class FormStep5Handler implements FormStepHandlerInterface
         if($data->multiStepForm5->isEmpty()){
             return null;
         }
-        $data['note'] = $data->noteForStep($step)->note?? null;
+        $data['note'] = $data->noteForStep(1)->note?? null;
         $data['step'] = (float)$step;
         return $data;
     }
