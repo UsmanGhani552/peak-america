@@ -10,10 +10,12 @@ import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step2FinancialStrategy() {
     const navigate = useNavigate();
+    const note = localStorage.getItem('note');
+    console.log(note);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [step1Note, setStep1Note] = useState('');
-    const [step2Note, setStep2Note] = useState('');
+    const [step1Note, setStep1Note] = useState(note);
+    const [step2Note, setStep2Note] = useState(note);
     const [currentStep, setCurrentStep] = useState(1);
     const { markStepCompleted } = useStepContext();
     const [youTotal, setYouTotal] = useState(0);
@@ -82,7 +84,7 @@ function Step2FinancialStrategy() {
     // Form data states
     const [formData1, setFormData1] = useState({
         step: 2.1,
-        note: '',
+        note: note,
         person: [
             {
                 is_spouse: false,
@@ -111,7 +113,7 @@ function Step2FinancialStrategy() {
 
     const [formData2, setFormData2] = useState({
         step: 2.2,
-        note: '',
+        note: note,
         person: [
             {
                 is_spouse: false,
@@ -294,11 +296,13 @@ function Step2FinancialStrategy() {
         try {
             await api.post('submit-form', formData);
             toast.success("Success! Your details have been saved.");
-markStepCompleted(2);
+            markStepCompleted(2);
             if (currentStep === 1) {
                 setCurrentStep(2);
+                localStorage.setItem('note',formData1.note)
             } else {
                 localStorage.setItem('currentStep', '3');
+                localStorage.setItem('note',formData2.note)
                 navigate('/step3');
             }
         } catch (error) {

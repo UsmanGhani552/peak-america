@@ -10,6 +10,8 @@ import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step4PropertyAndMarket() {
     const navigate = useNavigate();
+    const note = localStorage.getItem('note');
+    console.log(note)
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const isSingleStatus = localStorage.getItem('spouseStatus');
@@ -30,7 +32,7 @@ function Step4PropertyAndMarket() {
         spouse: [{ address: '', value: '' }]
     });
 
-    const [notes, setNotes] = useState('');
+    const [notes, setNotes] = useState(note);
 
     // Load saved data from API
     const loadStep4DataFromApi = async () => {
@@ -246,7 +248,7 @@ function Step4PropertyAndMarket() {
                 properties: []
             }
         ],
-        note: ''
+        note: note
     });
 
     const handleSubmit = async (e) => {
@@ -258,6 +260,7 @@ function Step4PropertyAndMarket() {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
                 localStorage.setItem('currentStep', '');
+                localStorage.setItem('note',formData.note)
                 markStepCompleted(4);
                 setTimeout(() => {
                     setIsSubmitting(false);

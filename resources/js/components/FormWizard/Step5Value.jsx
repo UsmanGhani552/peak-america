@@ -10,7 +10,8 @@ import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step5Value() {
     const navigate = useNavigate();
-const { markStepCompleted } = useStepContext();
+    const note = localStorage.getItem('note');
+    const { markStepCompleted } = useStepContext();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
         step: 5,
@@ -23,7 +24,7 @@ const { markStepCompleted } = useStepContext();
             { answer: null }, // Q7: Years investing (select)
             { answer: null }  // Q8: Stock allocation (select)
         ],
-        note: ''
+        note: note
     });
     const isSingleStatus = localStorage.getItem('spouseStatus');
     const loadStep5DataFromApi = async () => {
@@ -98,6 +99,7 @@ const { markStepCompleted } = useStepContext();
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
                 localStorage.setItem('currentStep', '6');
+                localStorage.setItem('note',formData.note)
                 markStepCompleted(5);
                 setTimeout(() => {
                     setIsSubmitting(false);

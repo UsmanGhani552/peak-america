@@ -164,9 +164,10 @@ function Step1PersonalDetail() {
             await api.post('submit-form', cleanedPayload);
             toast.success("Data saved successfully!");
             markStepCompleted(1);
+            localStorage.setItem('spouseStatus', isSingleStatus);
+            localStorage.setItem('note',formData.note)
             setTimeout(() => {
                 setIsSubmitting(false);
-                localStorage.setItem('spouseStatus', isSingleStatus);
                 navigate('/step2');
             }, 1500);
         } catch (error) {

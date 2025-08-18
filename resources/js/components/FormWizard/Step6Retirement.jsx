@@ -11,7 +11,7 @@ import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step6Retirement() {
     const navigate = useNavigate();
-
+    const note = localStorage.getItem('note');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const { markStepCompleted } = useStepContext();
     const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ function Step6Retirement() {
             { answer: null }, // Q5: Expecting inheritance
             { answer: null }  // Q6: Risk preference
         ],
-        note: ''
+        note: note
     });
     const isSingleStatus = localStorage.getItem('spouseStatus');
     const loadStep6DataFromApi = async () => {
@@ -82,6 +82,7 @@ function Step6Retirement() {
             .then(response => {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Form submitted successfully!");
+                localStorage.setItem('note',formData.note)
                 markStepCompleted(6);
                 localStorage.clear();
                 setTimeout(() => {

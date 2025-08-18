@@ -10,9 +10,11 @@ import { useStepContext } from "../../src/hooks/StepContext";
 
 function Step3NeedsAndhealthCare() {
     const navigate = useNavigate();
+    const note = localStorage.getItem('note');
+    console.log(note)
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState();
-    const [notes, setNotes] = useState('');
+    const [notes, setNotes] = useState(note);
     const [documents, setDocuments] = useState([]);
     const { markStepCompleted } = useStepContext();
     const isSingleStatus = localStorage.getItem('spouseStatus');
@@ -397,6 +399,7 @@ function Step3NeedsAndhealthCare() {
                 console.log("Form submitted successfully:", response.data);
                 toast.success("Success! Your details have been saved.");
                 markStepCompleted(3);
+                localStorage.setItem('note',notes)
                 localStorage.setItem('currentStep', '4');
                 setTimeout(() => {
                     setIsSubmitting(false);
