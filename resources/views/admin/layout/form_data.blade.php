@@ -56,7 +56,7 @@
                             htmlContent += `
                                     <div class="tab-pane fade ${active}" id="${tabId}" role="tabpanel" 
                                          aria-labelledby="${tabId}-tab">
-                                        ${renderFormStep(formStep)}
+                                        ${renderFormStep(formStep, formData[0].note ?? '')}
                                     </div>`;
 
                         });
@@ -92,14 +92,14 @@
             return stepNames[step.toString().replace('.', '_')] || `Step ${step}`;
         }
 
-        function renderFormStep(formStep) {
+        function renderFormStep(formStep, note) {
             let html = '';
             const primaryForm = formStep.form.find(f => !f.is_spouse);
             const spouseForm = formStep.form.find(f => f.is_spouse);
 
             // Add note if exists
-            if (formStep.note) {
-                html += `<div class="alert alert-dark mb-4"><strong>Note:</strong> ${formStep.note}</div>`;
+            if (note) {
+                html += `<div class="alert alert-dark mb-4"><strong>Note:</strong> ${note}</div>`;
             }
             if (formStep.documents && formStep.documents.length > 0) {
                 html += `
