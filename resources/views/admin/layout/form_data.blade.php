@@ -1,5 +1,5 @@
 <style>
-    .modal-lg{
+    .modal-lg {
         max-width: 850px !important;
     }
 </style>
@@ -163,7 +163,7 @@
                     html += `
                             <div class="mb-3">
                                 <p><strong>Name:</strong> ${formData.first_name} ${formData.last_name}</p>
-                                <p><strong>Age:</strong> ${ (formData.age)}</p>
+                                <p><strong>Age:</strong> ${(formData.age)}</p>
                                 <p><strong>Email:</strong> ${formData.email}</p>
                                 <p><strong>Phone:</strong> ${formData.cell_phone}</p>
                                 <p><strong>Marital Status:</strong> ${formData.marital_status}</p>
@@ -236,8 +236,8 @@
                                     </div>
                                     <div class="card-body">
                                     `
-                                        if(data.label !== 'Large Expense'){
-                                        html += `
+                            if (data.label !== 'Large Expense') {
+                                html += `
                                             <div class="row mb-3">
                                                 <div class="col-md-6">
                                                     <p><strong>Total:</strong> $${data.total}</p>
@@ -246,18 +246,18 @@
                                                     <p><strong>Estimated Annual Amount:</strong> $${data.estimated_annual_amount}</p>
                                                 </div>
                                             </div>`;
-                                        }
+                            }
 
-                                        if (data.items.length > 0) {
-                                            let label = '';
-                                            if (data.label === "Liabilities") {
-                                                label = 'Monthly Liabilities';
-                                            } else if (data.label === "Large Expense"){
-                                                label = 'Description';
-                                            }else{
-                                                label = 'Monthly Expense';
-                                            }
-                                            html += `
+                            if (data.items.length > 0) {
+                                let label = '';
+                                if (data.label === "Liabilities") {
+                                    label = 'Monthly Liabilities';
+                                } else if (data.label === "Large Expense") {
+                                    label = 'Description';
+                                } else {
+                                    label = 'Monthly Expense';
+                                }
+                                html += `
                                             <table class="table table-bordered table-hover">
                                                 <thead class="thead-light">
                                                     <tr>
@@ -267,13 +267,13 @@
                                                 </thead>
                                                 <tbody>`;
 
-                                                data.items.forEach(item => {
-                                                    html += `
+                                data.items.forEach(item => {
+                                    html += `
                                                             <tr>
                                                                 <td>${item.label}</td>
                                                                 <td>$${item.amount}</td>
                                                             </tr>`;
-                                                });
+                                });
 
                                 html += `
                                                 </tbody>
