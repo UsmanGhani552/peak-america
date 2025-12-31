@@ -43,6 +43,7 @@ function Step1PersonalDetail() {
     });
     const isKid = formData.person[0].kids > 0 || formData.person[1].kids > 0;
     const isSingleStatus = formData.person[0].marital_status === 'single';
+    console.log('spouse status',isSingleStatus);
     // Fetch saved data on component mount
     useEffect(() => {
         const fetchSavedData = async () => {

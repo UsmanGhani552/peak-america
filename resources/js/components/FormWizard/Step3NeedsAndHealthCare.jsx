@@ -16,7 +16,7 @@ function Step3NeedsAndHealthCare() {
     const [documents, setDocuments] = useState([]);
     const [loadedData, setLoadedData] = useState(null);
     const { markStepCompleted } = useStepContext();
-    const isSingleStatus = localStorage.getItem('spouseStatus');
+    const isSingleStatus = localStorage.getItem('spouseStatus') === 'true';
 
     const initialValues = {
         needs: {
@@ -394,6 +394,7 @@ function Step3NeedsAndHealthCare() {
                             <div className="row">
                                 <div className="col personal-detail-header">
                                     <h2>Your Needs (Non-Discretionary)</h2>
+                                    <p>These are essential, recurring costs required to maintain a basic standard of living (such as utilities, food, insurance, and transportation).</p>
                                 </div>
                             </div>
                             <div className="row">
@@ -443,7 +444,7 @@ function Step3NeedsAndHealthCare() {
                                                             <Field
                                                                 type="text"
                                                                 className="form-control"
-                                                                placeholder="Enter Expense"
+                                                                placeholder="Enter Expenses"
                                                                 name={`needs.you[${index}].description`}
                                                             />
                                                             <label className="form-label responsive-label">Enter Amount</label>
@@ -513,7 +514,7 @@ function Step3NeedsAndHealthCare() {
                                                             <Field
                                                                 type="text"
                                                                 className="form-control"
-                                                                placeholder="Enter Expense"
+                                                                placeholder="Enter Expenses"
                                                                 name={`needs.spouse[${index}].description`}
                                                             />
                                                             <label className="form-label responsive-label">Enter Amount</label>
@@ -554,6 +555,7 @@ function Step3NeedsAndHealthCare() {
                             <div className="row">
                                 <div className="col personal-detail-header">
                                     <h2>Your Wants (Discretionary)</h2>
+                                    <p>These are non-essential expenses that enhance lifestyle but are not required for daily living (such as dining out, entertainment, travel, hobbies, and subscriptions).</p>
                                 </div>
                             </div>
                             <div className="row">
@@ -603,7 +605,7 @@ function Step3NeedsAndHealthCare() {
                                                             <Field
                                                                 type="text"
                                                                 className="form-control"
-                                                                placeholder="Enter Expense"
+                                                                placeholder="Enter Expenses"
                                                                 name={`wants.you[${index}].description`}
                                                             />
                                                             <label className="form-label responsive-label">Enter Amount</label>
@@ -673,7 +675,7 @@ function Step3NeedsAndHealthCare() {
                                                             <Field
                                                                 type="text"
                                                                 className="form-control"
-                                                                placeholder="Enter Expense"
+                                                                placeholder="Enter Expenses"
                                                                 name={`wants.spouse[${index}].description`}
                                                             />
                                                             <label className="form-label responsive-label">Enter Amount</label>
@@ -713,6 +715,7 @@ function Step3NeedsAndHealthCare() {
                             <div className="row">
                                 <div className="col personal-detail-header">
                                     <h2>Liabilities</h2>
+                                    <p>These are debts or financial obligations you are responsible for paying, such as mortgages, auto loans, credit cards, student loans, or other personal loans.</p>
                                 </div>
                             </div>
                             <div className="row">
@@ -871,12 +874,13 @@ function Step3NeedsAndHealthCare() {
                             {/* Large Expense Section */}
                             <div className="row">
                                 <div className="col personal-detail-header">
-                                    <h2>Large Expense Within The Next 12 Months</h2>
+                                    <h2>Large Expenses Within The Next 12 Months</h2>
+                                    <p>These are one-time or significant expenses expected within the next year that fall outside of normal monthly spending (such as home improvements, vehicle purchases, tuition, medical expenses, or major travel).</p>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-md-2 d-flex flex-column personal-detail-label">
-                                    <label className="form-label" htmlFor="">Expense Description</label>
+                                    <label className="form-label" htmlFor="">Expenses Description</label>
                                     <label className="form-label" htmlFor="">Estimated Amount</label>
                                 </div>
                                 <div className="col-md-10">
@@ -909,7 +913,7 @@ function Step3NeedsAndHealthCare() {
                                                                     </>
                                                                 )}
                                                             </div>
-                                                            <label className="form-label responsive-label">Expense Description</label>
+                                                            <label className="form-label responsive-label">Expenses Description</label>
                                                             <Field
                                                                 type="text"
                                                                 className="form-control"
@@ -959,7 +963,7 @@ function Step3NeedsAndHealthCare() {
                                                                     </>
                                                                 )}
                                                             </div>
-                                                            <label className="form-label responsive-label">Expense Description</label>
+                                                            <label className="form-label responsive-label">Expenses Description</label>
                                                             <Field
                                                                 type="text"
                                                                 className="form-control"
@@ -985,7 +989,7 @@ function Step3NeedsAndHealthCare() {
                             {/* Documents Section */}
                             <div className="row">
                                 <div className="col-md-2 my-4 text-area-label">
-                                    <label className="form-label" htmlFor="">Expense Documents</label>
+                                    <label className="form-label" htmlFor="">Expenses Documents</label>
                                 </div>
                                 <div className="col-md-10 my-4">
                                     <input

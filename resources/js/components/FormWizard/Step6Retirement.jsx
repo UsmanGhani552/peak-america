@@ -26,7 +26,7 @@ function Step6Retirement() {
         ],
         note: note
     });
-    const isSingleStatus = localStorage.getItem('spouseStatus');
+    const isSingleStatus = localStorage.getItem('spouseStatus') === 'true';
     const loadStep6DataFromApi = async () => {
         const api = await getApiInstance();
         try {
@@ -123,12 +123,12 @@ function Step6Retirement() {
                 <form onSubmit={handleSubmit} className="container-fluid">
                     <div className="row ">
                         <div className="col-8 d-flex flex-column personal-detail-label">
-                            <label className="form-label">Do You Worry About Maintaining Your Current Lifestyle in Retirement?</label>
-                            <label className="form-label">Do You Feel Uneasy About Not Having a Clear Plan for Your Financial Future?</label>
-                            <label className="form-label">Do You Want to Enjoy Your Retirement Without Spending Down Your Principle?</label>
-                            <label className="form-label">Are Your Worried About Outliving Your Retirement Savings?</label>
-                            <label className="form-label">Do You Want to Leave a Large Inheritance/Legacy If Possible?</label>
-                            <label className="form-label">Are You Currently Working with a Financial Advisor?</label>
+                            <label className="form-label">Do you worry about maintaining your current lifestyle in retirement?</label>
+                            <label className="form-label">Do you feel uneasy about not having a clear plan for your financial future?</label>
+                            <label className="form-label">Do you want to enjoy your retirement without spending down your principle?</label>
+                            <label className="form-label">Are your worried about outliving your retirement savings?</label>
+                            <label className="form-label">Do you want to leave a large inheritance/legacy if possible?</label>
+                            <label className="form-label">Are you currently working with a financial advisor?</label>
                         </div>
                         <div className="col-4">
                             <div className="row gx-5 personal-detail-input-container">

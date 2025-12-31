@@ -14,7 +14,7 @@ function Step4PropertyAndMarket() {
     console.log(note)
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const isSingleStatus = localStorage.getItem('spouseStatus');
+    const isSingleStatus = localStorage.getItem('spouseStatus') === 'true';
     const { markStepCompleted } = useStepContext();
     // State for each property type (You and Spouse separately)
     const [primaryResidence, setPrimaryResidence] = useState({

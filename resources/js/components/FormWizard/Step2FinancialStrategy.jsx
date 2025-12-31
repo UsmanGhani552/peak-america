@@ -30,7 +30,8 @@ function Step2FinancialStrategy() {
     const [youAssetArray, setYouAssetArray] = useState([0, 0, 0, 0, 0, 0]);
     const [spouseAssetArray, setSpouseAssetArray] = useState([0, 0, 0, 0, 0, 0]);
 
-    const isSingleStatus = localStorage.getItem('spouseStatus');
+    const isSingleStatus = localStorage.getItem('spouseStatus') === 'true';
+    console.log(isSingleStatus === false);
     const handleYouChange = index => (e) => {
         const value = e.target.value === "" ? 0 : Number(e.target.value);
         setYouInputArray(prevArray => {
