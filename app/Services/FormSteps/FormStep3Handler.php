@@ -31,6 +31,7 @@ class FormStep3Handler implements FormStepHandlerInterface
             'person.*.expenses.*.estimated_annual_amount' => 'nullable|numeric',
             'person.*.expenses.*.details' => 'nullable|array',
             'person.*.expenses.*.details.*.label' => 'required|string',
+            'person.*.expenses.*.details.*.amount' => 'sometimes|nullable|numeric',
 
             'documents' => 'nullable|array',
             'documents.*' => 'required|file|mimes:pdf,xlsx,xls,txt,doc,docx|max:10240',
@@ -68,6 +69,7 @@ class FormStep3Handler implements FormStepHandlerInterface
                                 ExpenseDetail::create([
                                     'expense_id' => $expense->id,
                                     'label' => $detail['label'],
+                                    'amount' => $detail['amount'] ?? null,
                                 ]);
                             }
                         }
