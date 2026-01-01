@@ -9,8 +9,7 @@ class ExpenseDetail extends Model
     protected $fillable = [
         'expense_id',
 
-        'label',
-        'amount',
+        'label'
     ];
     protected $casts = [
         'is_spouse' => 'boolean',

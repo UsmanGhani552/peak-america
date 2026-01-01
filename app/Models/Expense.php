@@ -10,7 +10,6 @@ class Expense extends Model
         'multi_step_form_3_id',
 
         'label',
-        'total',
         'estimated_annual_amount',
     ];
     protected $casts = [
