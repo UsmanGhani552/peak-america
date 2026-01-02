@@ -220,6 +220,12 @@ fieldset[disabled] {
 .expense-detail-label {
     padding-top: 89px;
 }
+/* .expense-detail-label .expense-label .form-label {
+    padding-top: 30px;
+} */
+.wants-expense-detail-label {
+    padding-top: 89px;
+}
 
 .personal-detail-label label {
     font-weight: 400;
@@ -241,7 +247,7 @@ fieldset[disabled] {
 }
 
 .personal-detail-label .expense-label {
-    height: 189px;
+    height: 134px;
     margin-top: 39px;
 }
 

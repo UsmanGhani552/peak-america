@@ -239,10 +239,7 @@
                             if (data.label !== 'Large Expense') {
                                 html += `
                                             <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <p><strong>Total:</strong> $${data.total}</p>
-                                                </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <p><strong>Estimated Annual Amount:</strong> $${data.estimated_annual_amount}</p>
                                                 </div>
                                             </div>`;
