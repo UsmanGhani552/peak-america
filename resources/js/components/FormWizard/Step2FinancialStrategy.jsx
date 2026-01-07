@@ -313,10 +313,9 @@ function Step2FinancialStrategy() {
             }
             if (error.response?.data?.data?.error) {
                 const errorData = error.response.data.data.error;
-                Object.entries(errorData).forEach(([key, messages]) => {
-                    messages.forEach(message => {
+                console.error("Validation errors:", errorData);
+                Object.entries(errorData).forEach(([key, message]) => {
                         toast.error(message);
-                    });
                 });
             } else {
                 toast.error("An unknown error occurred. Please try again.");
