@@ -79,9 +79,6 @@ class FormStep2_2Handler implements FormStepHandlerInterface
                     return ResponseTrait::error('Total amounts do not match the number of persons. Its off by ' . abs($amount - $data['person'][$index]['total']));
                 }
             }
-            if ($total_amounts === 0) {
-                return ResponseTrait::error('Total amount can\'t be zero.');
-            }
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
