@@ -49,10 +49,14 @@ function Step3NeedsAndHealthCare() {
         notes: note || ''
     };
 
-     const resetForm = () => {
-        setFormData(initialValues);
-        setYouValue("");
-        setSpouseValue("");
+     const handleResetForm = (formikResetForm) => {
+        formikResetForm();
+        setDocuments([]);
+        // Clear the file input
+        const fileInput = document.getElementById('expense-documents');
+        if (fileInput) {
+            fileInput.value = '';
+        }
         toast.info("Form reset successfully!");
     };
 
@@ -407,7 +411,7 @@ function Step3NeedsAndHealthCare() {
                     onSubmit={handleSubmit}
                     enableReinitialize
                 >
-                    {({ values, setFieldValue, setValues, isSubmitting: formikSubmitting }) => {
+                    {({ values, setFieldValue, setValues, isSubmitting: formikSubmitting, resetForm: formikResetForm }) => {
 
                         // Calculate totals
                         const needsYouTotal = calculateTotals(values, 'needs', 'you');
@@ -1176,8 +1180,7 @@ function Step3NeedsAndHealthCare() {
                                                 type="button"
                                                 className="btn btn-secondary me-2"
                                                 onClick={() => {
-                                                    resetForm();
-                                                    toast.info("Form reset successfully!");
+                                                    handleResetForm(formikResetForm);
                                                 }}
                                             >
                                                 Reset
