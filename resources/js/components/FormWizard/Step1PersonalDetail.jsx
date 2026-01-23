@@ -13,7 +13,7 @@ function Step1PersonalDetail() {
     const [inputYou, setYouValue] = useState("");
     const [inputSpouse, setSpouseValue] = useState("");
     const { markStepCompleted } = useStepContext();
-    const [formData, setFormData] = useState({
+    const initialFormData = {
         step: '1',
         note: '',
         person: [
@@ -40,7 +40,8 @@ function Step1PersonalDetail() {
                 kids_age: [],
             }
         ]
-    });
+    };
+    const [formData, setFormData] = useState(initialFormData);
     const isKid = formData.person[0].kids > 0 || formData.person[1].kids > 0;
     const isSingleStatus = formData.person[0].marital_status === 'single';
     console.log('spouse status',isSingleStatus);
@@ -57,8 +58,8 @@ function Step1PersonalDetail() {
                     const spouseData = savedData.multi_step_form1.find(p => p.is_spouse);
 
                     // Get kids counts from the length of kids arrays
-                    const youKids = youData?.kids?.length || "1";
-                    const spouseKids = spouseData?.kids?.length || "1";
+                    const youKids = youData?.kids?.length || "";
+                    const spouseKids = spouseData?.kids?.length || "";
 
                     setYouValue(youKids.toString());
                     setSpouseValue(spouseKids.toString());
@@ -72,7 +73,7 @@ function Step1PersonalDetail() {
                         note: savedData.note || '',
                         person: [
                             {
-                                ...formData.person[0],
+                                ...initialFormData.person[0],
                                 first_name: youData?.first_name || '',
                                 last_name: youData?.last_name || '',
                                 email: youData?.email || '',
@@ -83,7 +84,7 @@ function Step1PersonalDetail() {
                                 kids_age: youKidsAges
                             },
                             {
-                                ...formData.person[1],
+                                ...initialFormData.person[1],
                                 first_name: spouseData?.first_name || '',
                                 last_name: spouseData?.last_name || '',
                                 email: spouseData?.email || '',
@@ -150,6 +151,13 @@ function Step1PersonalDetail() {
                 person: updatedPerson
             };
         });
+    };
+
+    const resetForm = () => {
+        setFormData(initialFormData);
+        setYouValue("");
+        setSpouseValue("");
+        toast.info("Form reset successfully!");
     };
     const cleanedPayload = {
         ...formData,
@@ -482,8 +490,11 @@ function Step1PersonalDetail() {
                             />
 
                             <div className="text-end mt-3">
+                                <button className="btn btn-secondary me-2" type="button" onClick={resetForm}>
+                                    Reset
+                                </button>
                                 <button className="next-btn" type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? 'Saving...' : 'Next'}
+                                    {isSubmitting ? 'Saving...' : 'Nexts'}
                                 </button>
                             </div>
                         </div>

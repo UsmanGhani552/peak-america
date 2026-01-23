@@ -49,6 +49,13 @@ function Step3NeedsAndHealthCare() {
         notes: note || ''
     };
 
+     const resetForm = () => {
+        setFormData(initialValues);
+        setYouValue("");
+        setSpouseValue("");
+        toast.info("Form reset successfully!");
+    };
+
     const calculateTotals = (values, section, person) => {
         const items = values[section][person];
         return items.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
@@ -123,7 +130,7 @@ function Step3NeedsAndHealthCare() {
                             const detailLabel = d.label || '';
                             let description = '';
                             let customDescription = '';
-                            
+
                             // Check if it's a miscellaneous item with custom text
                             if (detailLabel.toLowerCase().startsWith('miscellaneous')) {
                                 description = 'miscellaneous';
@@ -136,7 +143,7 @@ function Step3NeedsAndHealthCare() {
                                 // For non-miscellaneous items
                                 description = detailLabel;
                             }
-                            
+
                             return {
                                 description: description,
                                 amount: parseFloat(d.amount) || 0,
@@ -150,8 +157,8 @@ function Step3NeedsAndHealthCare() {
                             };
                         }
                     })
-                    : [label === 'liabilities' 
-                        ? { description: '', amount: 0, customDescription: '' } 
+                    : [label === 'liabilities'
+                        ? { description: '', amount: 0, customDescription: '' }
                         : { description: '', amount: 0 }]; // Default empty item
 
                 const total = parseFloat(expense.total) || 0;
@@ -1165,6 +1172,16 @@ function Step3NeedsAndHealthCare() {
 
                                         <div className="d-flex justify-content-between mt-3">
                                             <Link className="next-btn" type="submit" to='/step2'>Previous</Link>
+                                            <button
+                                                type="button"
+                                                className="btn btn-secondary me-2"
+                                                onClick={() => {
+                                                    resetForm();
+                                                    toast.info("Form reset successfully!");
+                                                }}
+                                            >
+                                                Reset
+                                            </button>
                                             <button type="submit" className="next-btn" disabled={formikSubmitting}>
                                                 {formikSubmitting ? 'Submitting...' : 'Next'}
                                             </button>
