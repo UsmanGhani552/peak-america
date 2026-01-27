@@ -494,7 +494,7 @@ function Step1PersonalDetail() {
                                     Reset
                                 </button>
                                 <button className="next-btn" type="submit" disabled={isSubmitting}>
-                                    {isSubmitting ? 'Saving...' : 'Nexts'}
+                                    {isSubmitting ? 'Saving...' : 'Next'}
                                 </button>
                             </div>
                         </div>
