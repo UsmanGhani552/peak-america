@@ -18,6 +18,9 @@ class MultiStepForm_1 extends Model
         'cell_phone',
         'email',
         'marital_status',
+
+        'employment_info',
+        'employment_info_description'
     ];
 
     protected $casts = [

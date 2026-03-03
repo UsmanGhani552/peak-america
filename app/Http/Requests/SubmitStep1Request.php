@@ -32,9 +32,14 @@ class SubmitStep1Request extends FormRequest
             'person.*.cell_phone' => 'nullable|string|max:15',
             'person.*.email' => 'nullable|email|max:255',
             'person.*.marital_status' => 'nullable|string|max:50',
+
+            'person.*.employment_info' => 'string',
+            'person.*.employment_info_description' => 'string',
+
             'person.*.kids' => 'nullable|integer',
             'person.*.kids_age' => 'nullable|array',
             'person.*.kids_age.*' => 'integer',
+
             'note' => 'nullable|string',
         ];
     }

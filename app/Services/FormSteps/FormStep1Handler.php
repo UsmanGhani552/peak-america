@@ -42,7 +42,9 @@ class FormStep1Handler implements FormStepHandlerInterface
                     'age' => $person['age'] ? Carbon::parse($person['age'])->age : null,
                     'cell_phone' => $person['cell_phone'],
                     'email' => $person['email'],
-                    'marital_status' => $person['marital_status']
+                    'marital_status' => $person['marital_status'],
+                    'employment_info' => $person['employment_info'],
+                    'employment_info_description' => $person['employment_info'],
                 ]);
 
                 if ($personsInDB->kids && $personsInDB->kids->isNotEmpty()) {
