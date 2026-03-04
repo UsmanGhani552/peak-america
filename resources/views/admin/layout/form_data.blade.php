@@ -167,6 +167,7 @@
                                 <p><strong>Email:</strong> ${formData.email}</p>
                                 <p><strong>Phone:</strong> ${formData.cell_phone}</p>
                                 <p><strong>Marital Status:</strong> ${formData.marital_status}</p>
+                                <p><strong>Employment Info:</strong> ${formData.employment_info}</p>
                             </div>`;
 
                     if (formData.kids && formData.kids.length > 0) {

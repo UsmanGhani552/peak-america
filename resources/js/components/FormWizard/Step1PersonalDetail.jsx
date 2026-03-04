@@ -25,6 +25,7 @@ function Step1PersonalDetail() {
                 age: '',
                 cell_phone: '',
                 marital_status: '',
+                employment_info: '', // Added employment info field
                 kids: "",
                 kids_age: [],
             },
@@ -36,6 +37,7 @@ function Step1PersonalDetail() {
                 age: '',
                 cell_phone: '',
                 marital_status: '',
+                employment_info: '', // Added employment info field
                 kids: "",
                 kids_age: [],
             }
@@ -80,6 +82,7 @@ function Step1PersonalDetail() {
                                 age: youData?.age ? new Date(youData.age).toISOString().split('T')[0] : '',
                                 cell_phone: youData?.cell_phone || '',
                                 marital_status: youData?.marital_status || '',
+                                employment_info: youData?.employment_info || '', // Added employment info field
                                 kids: youKids.toString(),
                                 kids_age: youKidsAges
                             },
@@ -91,6 +94,7 @@ function Step1PersonalDetail() {
                                 age: spouseData?.age ? new Date(spouseData.age).toISOString().split('T')[0] : '',
                                 cell_phone: spouseData?.cell_phone || '',
                                 marital_status: spouseData?.marital_status || '',
+                                employment_info: spouseData?.employment_info || '', // Added employment info field
                                 kids: spouseKids.toString(),
                                 kids_age: spouseKidsAges
                             }
@@ -236,6 +240,7 @@ function Step1PersonalDetail() {
                             <label className="form-label">Cell Phone</label>
                             <label className="form-label">Email</label>
                             <label className="form-label">Marital Status</label>
+                            <label className="form-label">Employment Info</label> {/* Added employment info label */}
                             <label className="form-label">Kids</label>
                             {isKid && (
                                 <label className="form-label">Kids Age</label>
@@ -331,6 +336,27 @@ function Step1PersonalDetail() {
                                             <option value="">Select marital status</option>
                                             <option value="single">Single</option>
                                             <option value="married">Married</option>
+                                        </select>
+
+                                        {/* Employment Info Select Box */}
+                                        <label className="form-label responsive-label">Employment Info</label>
+                                        <select
+                                            className="form-select"
+                                            value={formData.person[0].employment_info}
+                                            onChange={(e) => setFormData({
+                                                ...formData,
+                                                person: formData.person.map((p, index) =>
+                                                    index === 0 ? { ...p, employment_info: e.target.value } : p
+                                                )
+                                            })}
+                                        >
+                                            <option value="">Select employment status</option>
+                                            <option value="employed">Employed</option>
+                                            <option value="self employed">Self Employed</option>
+                                            <option value="retired">Retired</option>
+                                            <option value="homemaker">Homemaker</option>
+                                            <option value="student">Student</option>
+                                            <option value="not employed">Not Employed</option>
                                         </select>
 
                                         <label className="form-label responsive-label">Kids</label>
@@ -445,6 +471,27 @@ function Step1PersonalDetail() {
                                             <option value="">Select marital status</option>
                                             <option value="single">Single</option>
                                             <option value="married">Married</option>
+                                        </select>
+
+                                        {/* Employment Info Select Box */}
+                                        <label className="form-label responsive-label">Employment Info</label>
+                                        <select
+                                            className="form-select"
+                                            value={formData.person[1].employment_info}
+                                            onChange={(e) => setFormData({
+                                                ...formData,
+                                                person: formData.person.map((p, index) =>
+                                                    index === 1 ? { ...p, employment_info: e.target.value } : p
+                                                )
+                                            })}
+                                        >
+                                            <option value="">Select employment status</option>
+                                            <option value="employed">Employed</option>
+                                            <option value="self employed">Self Employed</option>
+                                            <option value="retired">Retired</option>
+                                            <option value="homemaker">Homemaker</option>
+                                            <option value="student">Student</option>
+                                            <option value="not employed">Not Employed</option>
                                         </select>
 
                                         <label className="form-label responsive-label">Kids</label>

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('multi_step_form_1s', function (Blueprint $table) {
+        Schema::table('multi_step_form_1s', function (Blueprint $table) {
             $table->string('employment_info');
             $table->string('employment_info_description');
         });
