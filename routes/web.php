@@ -52,6 +52,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', 'allForms')->name('index');
     });
 
+    Route::get('admin/form/download-pdf/{id}', [FormController::class, 'downloadPdf'])->name('admin.form.download-pdf');
+    Route::get('admin/form/delete/{id}', [FormController::class, 'delete'])->name('admin.form.delete');
+
     Route::controller(UserController::class)->prefix('admin/user')->name('admin.user.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');

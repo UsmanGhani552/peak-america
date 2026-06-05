@@ -8,7 +8,7 @@
                         class="btn btn-primary waves-effect waves-light text-white"><i
                             class="fas fa-plus-square mr-2"></i>Create</a> --}}
                 </div>
-                <h4 class="page-title">Forms</h4>
+                <h4 class="page-title">Unassigned Forms</h4>
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
-                                <th>Guest Id</th>
+                                <th>Name</th>
                                 {{-- <th>Icon</th> --}}
                                 <th>Actions</th>
                             </tr>
@@ -36,24 +36,33 @@
 
                         <tbody>
                             @foreach ($guestsData as $data)
+                                @php
+                                    $primaryForm1 = $data->multiStepForm1->first(fn($f) => !$f->is_spouse) ?? $data->multiStepForm1->first();
+                                    $spouseForm1  = $data->multiStepForm1->first(fn($f) => (bool)$f->is_spouse);
+                                    $primaryName  = $primaryForm1 ? trim(($primaryForm1->first_name ?? '').' '.($primaryForm1->last_name ?? '')) : null;
+                                    $spouseName   = $spouseForm1  ? trim(($spouseForm1->first_name  ?? '').' '.($spouseForm1->last_name  ?? '')) : null;
+                                    $displayName  = $primaryName ?: ($data->uuid ?? 'N/A');
+                                    if ($spouseName) $displayName .= ' & ' . $spouseName;
+                                @endphp
                                 <tr>
-                                    <td>{{ $data['uuid'] }}</td>
+                                    <td>{{ $displayName }}</td>
                                     {{-- <td><img src="{{ asset('images/farm/data/'.$data->icon) }}" alt=""
                                             class="thumb-sm mr-1"></td> --}}
                                     <td>
                                         <a type="button" class="btn btn-sm btn-dark text-white show-form-data"
-                                            data-id="{{ $data['id'] }}" data-uuid="{{ $data['uuid'] }}" data-toggle="modal"
+                                            data-id="{{ $data['id'] }}" data-uuid="{{ $data['uuid'] }}" data-name="{{ $displayName }}" data-toggle="modal"
                                             data-animation="bounce" data-target=".form-modal-lg">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        {{-- <a type="button" href="{{ route('admin.form.edit', $data['id']) }}"
-                                            class="btn btn-sm btn-success text-white">
-                                            <i class="fas fa-edit"></i>
+                                        <a href="{{ route('admin.form.download-pdf', $data['id']) }}"
+                                            class="btn btn-sm btn-danger text-white ml-1" title="Download PDF">
+                                            <i class="fas fa-file-pdf"></i>
                                         </a>
-                                        <a type="button" href="{{ route('admin.form.delete', $data['id']) }}"
-                                            class="btn btn-sm btn-danger text-white">
+                                        <a href="{{ route('admin.form.delete', $data['id']) }}"
+                                            class="btn btn-sm btn-outline-danger ml-1" title="Delete Form"
+                                            onclick="return confirm('Are you sure you want to delete this form? This cannot be undone.')">
                                             <i class="fas fa-trash-alt"></i>
-                                        </a> --}}
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

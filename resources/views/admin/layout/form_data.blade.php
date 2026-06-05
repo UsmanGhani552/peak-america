@@ -6,8 +6,9 @@
 <script>
     $(document).ready(function () {
         $('.show-form-data').on('click', function () {
-            var id = $(this).data('id');
+            var id   = $(this).data('id');
             var uuid = $(this).data('uuid');
+            var name = $(this).data('name') || uuid;
 
             $.ajax({
                 url: 'unassigned-form/show/' + id,
@@ -20,12 +21,16 @@
                         var formData = response.data.forms;
                         var guestId = response.data.id; // Get the ID from your response
                         var assignFormRoute = '{{ route("admin.unassigned-form.assign", ["guest_id" => ":id"]) }}'.replace(':id', guestId);
+                        var downloadPdfRoute = '/admin/form/download-pdf/' + guestId;
                         var htmlContent = `
                                 <div class="modal-header">
-                                    <h5 class="modal-title mt-0">Form Details - ${uuid}</h5>
-                                    ${window.location.pathname == '/admin/unassigned-form' ? `<a href="${assignFormRoute}" class="btn btn-success btn-sm m-auto"><i
-                                    class="fas fa-plus-square mr-2"></i>Accept</a>` : ''}
-                                    
+                                    <h5 class="modal-title mt-0">Form Details — ${name}</h5>
+                                    <div class="d-flex align-items-center" style="gap:6px;">
+                                        ${window.location.pathname == '/admin/unassigned-form' ? `<a href="${assignFormRoute}" class="btn btn-success btn-sm"><i class="fas fa-plus-square mr-1"></i>Accept</a>` : ''}
+                                        <a href="${downloadPdfRoute}" class="btn btn-danger btn-sm" title="Download PDF">
+                                            <i class="fas fa-file-pdf mr-1"></i>Download PDF
+                                        </a>
+                                    </div>
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                 </div>
                                 <div class="modal-body">`;

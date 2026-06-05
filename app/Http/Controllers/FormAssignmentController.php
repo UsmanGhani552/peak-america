@@ -18,7 +18,7 @@ class FormAssignmentController extends Controller
                 ->pluck('guest_id')
                 ->toArray();
 
-            $guestsData = Guest::whereIn('id', $assignedGuestIds)->get();
+            $guestsData = Guest::whereIn('id', $assignedGuestIds)->with('multiStepForm1')->get();
             if (!$guestsData) {
                 return ResponseTrait::error("No guests found.", null, 404);
             }

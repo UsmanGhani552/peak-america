@@ -7,6 +7,7 @@ use App\Http\Controllers\MultiStepFormController;
 use App\Models\FormAssignment;
 use App\Models\Guest;
 use App\Traits\ResponseTrait;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 use function Laravel\Prompts\select;
@@ -18,7 +19,7 @@ class FormController extends Controller
         try {
             $formRelationNames = MultiStepFormController::getFormNames();
             $assignedGuestIds = FormAssignment::pluck('guest_id')->toArray();
-            $guestsData = Guest::whereNotIn('id', $assignedGuestIds)->select('id','uuid')->get()->filter(function ($element) use ($formRelationNames) {
+            $guestsData = Guest::whereNotIn('id', $assignedGuestIds)->with('multiStepForm1')->get()->filter(function ($element) use ($formRelationNames) {
                 foreach ($formRelationNames as $name) {
                     if (count($element[$name]) == 0){
                         return false;
@@ -74,7 +75,7 @@ class FormController extends Controller
     public function allForms() {
         try {
             $formRelationNames = MultiStepFormController::getFormNames();
-            $guestsData = Guest::with('formAssigned.user')->get()
+            $guestsData = Guest::with('formAssigned.user', 'multiStepForm1')->get()
             ->filter(function ($element) use ($formRelationNames) {
                 foreach ($formRelationNames as $name) {
                     if (count($element[$name]) == 0){
@@ -91,6 +92,44 @@ class FormController extends Controller
             return ResponseTrait::error('Form assignments failed due to: ' . $th->getMessage(), null, 422);
         }
         return view('admin.all-forms.index', ['guestsData' => $guestsData]);
+    }
+
+    public function delete($id)
+    {
+        try {
+            $guest = Guest::findOrFail($id);
+            $guest->multiStepForm1()->delete();
+            $guest->multiStepForm2_1()->delete();
+            $guest->multiStepForm2_2()->delete();
+            $guest->multiStepForm3()->delete();
+            $guest->multiStepForm4()->delete();
+            $guest->multiStepForm5()->delete();
+            $guest->multiStepForm6()->delete();
+            $guest->note()->delete();
+            $guest->formAssigned()->delete();
+            $guest->delete();
+            return redirect()->back()->with('success', 'Form deleted successfully.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Failed to delete form: ' . $th->getMessage());
+        }
+    }
+
+    public function downloadPdf($id)
+    {
+        try {
+            $relations = MultiStepFormController::getRelations();
+            $guest = Guest::with($relations)
+                ->with('note')
+                ->findOrFail($id);
+            $formData = MultiStepFormController::formateForm($guest, $relations);
+
+            $pdf = Pdf::loadView('admin.pdf.form', compact('formData'))
+                ->setPaper('a4', 'portrait');
+
+            return $pdf->download('form-' . ($formData['uuid'] ?? $id) . '.pdf');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Failed to generate PDF: ' . $th->getMessage());
+        }
     }
 
 }
