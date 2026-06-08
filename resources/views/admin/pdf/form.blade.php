@@ -8,145 +8,178 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 11px;
-            color: #222;
-            background: #fff;
+            font-family: DejaVu Sans, "Helvetica Neue", Arial, sans-serif;
+            font-size: 12px;
+            color: #1f2937;
+            background: #eef2f7;
+            line-height: 1.45;
         }
 
-        /* ── Header ─────────────────────────────────────────── */
+        p { margin: 0; }
+
         .header {
-            background: #1a3c5e;
+            background: #0f4c81;
             color: #fff;
-            padding: 18px 24px;
-            margin-bottom: 20px;
+            padding: 22px 24px;
+            margin-bottom: 24px;
+            border-radius: 16px;
+            box-shadow: 0 14px 32px rgba(15, 77, 129, 0.14);
         }
-        .header h1 { font-size: 20px; margin-bottom: 4px; }
-        .header p  { font-size: 11px; opacity: 0.85; }
-        .header-meta {
-            margin-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            padding-top: 8px;
-        }
+        .header h1 { font-size: 22px; margin-bottom: 6px; letter-spacing: 0.02em; }
+        .header p { font-size: 12px; color: #f1f5fb; }
+        .header-meta { margin-top: 14px; border-top: 1px solid #ffffff; padding-top: 12px; }
         .header-meta table { width: 100%; }
-        .header-meta td { font-size: 11px; padding: 2px 0; color: #e0eaf6; }
+        .header-meta td { font-size: 11px; padding: 4px 0; color: #eaf2ff; }
         .header-meta td strong { color: #fff; }
 
-        /* ── Section titles ──────────────────────────────────── */
+        .section-card {
+            background: #ffffff;
+            border: 1px solid #dbe5ef;
+            border-radius: 14px;
+            padding: 18px 20px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+        }
+
         .step-title {
-            background: #2563eb;
-            color: #fff;
-            padding: 7px 12px;
+            display: inline-flex;
+            align-items: center;
+            background: #eff6ff;
+            color: #0f4c81;
+            padding: 10px 14px;
             font-size: 13px;
-            font-weight: bold;
-            margin: 20px 0 10px 0;
-            border-radius: 3px;
+            font-weight: 700;
+            border-radius: 999px;
+            margin-bottom: 16px;
+            border: 1px solid #c7ddff;
         }
 
-        /* ── Two-column layout (You / Spouse) ───────────────── */
-        .columns { width: 100%; }
-        .col-header {
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-            background: #f1f5f9;
-            padding: 5px;
-            border: 1px solid #d1d5db;
-            margin-bottom: 4px;
-        }
-
-        /* ── Generic info table ──────────────────────────────── */
-        table.info-table {
+        .columns {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .col-header {
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            background: #f8fafc;
+            padding: 10px;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
             margin-bottom: 10px;
         }
+
+        table.info-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 14px;
+        }
         table.info-table td {
-            padding: 5px 8px;
-            border: 1px solid #e2e8f0;
+            padding: 10px 10px;
+            border-bottom: 1px solid #eef2f7;
             vertical-align: top;
         }
         table.info-table td.label {
             background: #f8fafc;
-            font-weight: bold;
-            width: 40%;
-            color: #374151;
+            font-weight: 700;
+            width: 38%;
+            color: #111827;
+            border-right: 1px solid #e2e8f0;
         }
 
-        /* ── Data table (expenses / Q&A) ─────────────────────── */
         table.data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 6px;
-            margin-bottom: 12px;
+            margin-top: 10px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 0 1px #e8edf3;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        table.data-table th,
+        table.data-table td {
+            padding: 10px 12px;
         }
         table.data-table th {
-            background: #1a3c5e;
+            background: #0f4c81;
             color: #fff;
-            padding: 6px 8px;
             text-align: left;
             font-size: 11px;
+            font-weight: 700;
+            border-bottom: 1px solid #e2e8f0;
         }
         table.data-table td {
-            padding: 5px 8px;
-            border: 1px solid #e2e8f0;
-            vertical-align: top;
+            background: #ffffff;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 11px;
+            color: #334155;
         }
         table.data-table tr:nth-child(even) td { background: #f8fafc; }
+        table.data-table tr:last-child td { border-bottom: none; }
 
-        /* ── Documents list ──────────────────────────────────── */
-        .doc-list { list-style: none; padding: 0; }
+        .doc-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+        }
         .doc-list li {
-            padding: 4px 8px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 11px;
-        }
-
-        /* ── Note box ────────────────────────────────────────── */
-        .note-box {
-            background: #fef9c3;
-            border-left: 4px solid #ca8a04;
-            padding: 7px 10px;
-            margin-bottom: 10px;
-            font-size: 11px;
-        }
-
-        /* ── Property card ───────────────────────────────────── */
-        .property-card {
-            border: 1px solid #d1d5db;
-            padding: 8px 10px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-radius: 10px;
             margin-bottom: 8px;
-            border-radius: 3px;
+            font-size: 11px;
+            color: #1f2937;
+            border: 1px solid #e2e8f0;
+        }
+
+        .note-box {
+            background: #eef6ff;
+            border-left: 5px solid #3b82f6;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            font-size: 11px;
+            color: #102a43;
+            border-radius: 10px;
+        }
+
+        .property-card {
+            border: 1px solid #e2e8f0;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            background: #f8fbff;
         }
         .property-card h4 {
-            font-size: 12px;
-            color: #1a3c5e;
-            margin-bottom: 4px;
+            font-size: 13px;
+            color: #0f4c81;
+            margin-bottom: 8px;
             text-transform: capitalize;
         }
 
-        /* ── Sub-section title ───────────────────────────────── */
         .sub-title {
-            font-size: 11px;
-            font-weight: bold;
-            background: #e0eaf6;
-            padding: 4px 8px;
-            margin: 10px 0 4px 0;
-            border-left: 3px solid #2563eb;
+            font-size: 12px;
+            font-weight: 700;
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 8px 12px;
+            margin: 16px 0 10px;
+            border-left: 5px solid #2563eb;
+            border-radius: 8px;
         }
 
-        /* ── Footer ──────────────────────────────────────────── */
         .footer {
-            margin-top: 30px;
-            border-top: 1px solid #d1d5db;
-            padding-top: 8px;
+            margin-top: 32px;
+            padding-top: 18px;
             text-align: center;
             font-size: 10px;
-            color: #6b7280;
+            color: #64748b;
         }
 
-        /* ── Page-break helper ───────────────────────────────── */
         .page-break { page-break-before: always; }
+        @page { margin: 20mm; }
     </style>
 </head>
 <body>
@@ -190,6 +223,7 @@
 
         {{-- Step heading --}}
         <div class="step-title">{{ $stepNames[$step] ?? 'Step '.$step }}</div>
+        <div class="section-card">
 
         {{-- Note --}}
         @if($note)
@@ -437,6 +471,7 @@
 
         @endif
 
+        </div>
     @endforeach
 
     {{-- ══════════════════════════════════════════════════════
